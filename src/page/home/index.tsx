@@ -1,7 +1,9 @@
 import { Button } from "flowbite-react"
+import { useTranslation } from "react-i18next";
 
 export const Home = () => {
+  const { t } = useTranslation();
   return (
-    <Button color="failure">Click me</Button>
+    <div>Home</div>
   )
 }

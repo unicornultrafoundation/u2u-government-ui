@@ -6,7 +6,7 @@ interface ProvidersProps {
 
 const Providers = ({children}: ProvidersProps) => {
   return (
-    <>children</>
+    <>{children}</>
   )
 }
 
