@@ -1,12 +1,16 @@
+import { Web3ReactProvider } from "@web3-react/core"
 import { ReactNode } from "react"
+import { getLibrary } from "./utils"
 
 interface ProvidersProps {
   children: ReactNode
 }
 
-const Providers = ({children}: ProvidersProps) => {
+const Providers = ({ children }: ProvidersProps) => {
   return (
-    <>{children}</>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      {children}
+    </Web3ReactProvider>
   )
 }
 
