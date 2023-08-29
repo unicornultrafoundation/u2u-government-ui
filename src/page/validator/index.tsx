@@ -1,6 +1,12 @@
+import { ValidatorRegistration } from "./registration"
+
 export const Validator = () => {
 
   return (
-    <div>Validator</div>
+    <div>
+      <div className="flex justify-center">
+        <ValidatorRegistration />
+      </div>
+    </div>
   )
 }

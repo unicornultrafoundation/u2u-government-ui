@@ -1,4 +1,3 @@
-import DesktopLogo from "../../images/desktop-logo.png"
 import { StakingLogo } from "./staking-logo"
 import bookIcon from "../../images/icons/book.svg"
 import bookActiveIcon from "../../images/icons/book-active.svg"
