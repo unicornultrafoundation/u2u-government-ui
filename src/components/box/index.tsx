@@ -1,13 +1,13 @@
 import { ReactNode, useMemo } from "react"
 import { classNames } from "../../utils"
 
-const boxType = {
+export const boxType = {
   primary: "primary",
   transparent: "transparent",
   gradient: "gradient"
 }
 
-type BoxVariant = typeof boxType[keyof typeof boxType];
+export type BoxVariant = typeof boxType[keyof typeof boxType];
 
 export const boxScale = {
   sm: "sm",

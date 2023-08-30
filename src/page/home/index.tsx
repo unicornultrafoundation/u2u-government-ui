@@ -5,7 +5,7 @@ export const Home = () => {
   const { t } = useTranslation();
   return (
     <div>
-      <Box className="flex items-center justify-center gap-12">
+      <Box className="flex items-center justify-around gap-12">
         <div className="mx-4">
           <div className="text-base font-medium text-gray">{t('Total Supply (U2U)')}</div>
           <div className="text-2xl text-black font-bold">10B U2U</div>

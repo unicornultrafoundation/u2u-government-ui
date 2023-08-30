@@ -38,19 +38,15 @@ const navs: NavProps[] = [
   }
 ]
 
-
 export const LeftBar = () => {
-
   const [navActive, setNavActive] = useState<NavProps>(navs[0])
   const navigate = useNavigate()
-
   const handleClick = (index: number) => {
     setNavActive(navs[index])
     navigate(navs[index].link)
   }
-
   return (
-    <div className="px-[59px] py-[29px] w-[300px] bg-lightGray h-screen border-r-2 border-gray">
+    <div className="px-[59px] py-[29px] w-[400px] bg-white min-h-screen border-r-2 border-lightGray">
       <StakingLogo />
       <div className="mt-[70px]">
         {
