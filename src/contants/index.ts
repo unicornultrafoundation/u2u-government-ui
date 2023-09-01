@@ -8,6 +8,8 @@ export const EXPLORER_LINK = "https://testnet.u2uscan.xyz"
 export const STAKING_CONTRACT_ADDRESS = "0xfc00face00000000000000000000000000000000"
 export const GAS_LIMIT_HARD = 1000000
 
+export const CHAIN_SUBGRAPH_URL = "http://localhost:8000/subgraphs/name/u2u/sfc-subgraph"
+
 
 
 export const FAST_REFRESH_INTERVAL = 5000

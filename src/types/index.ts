@@ -1,3 +1,4 @@
+export * from "./data"
 export interface DelegateParams {
   toValidatorID: number
   amount: number
