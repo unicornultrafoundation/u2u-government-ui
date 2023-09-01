@@ -1,5 +1,8 @@
 import { ButtonHTMLAttributes, useMemo } from "react";
 import { classNames } from "../../utils/string";
+import { useAuth } from "../../hooks";
+import { ConnectorNames } from "../../utils";
+import { useWeb3React } from "@web3-react/core";
 
 export const buttonType = {
   primary: "primary",
@@ -77,11 +80,11 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 
     const heightClass = () => {
       switch (scale) {
-        case buttonScale.lg:
+        case buttonScale.sm:
           return 'py-1 px-2'
         case buttonScale.md:
           return 'py-2 px-4'
-        case buttonScale.sm:
+        case buttonScale.lg:
           return 'py-3 px-5'
       }
     }
@@ -89,7 +92,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const radiusClass = () => {
       switch (scale) {
         case buttonScale.lg:
-          return 'rounded-2xl'
+          return 'rounded-[40px]'
         case buttonScale.md:
           return 'rounded-[20px]'
         case buttonScale.sm:
@@ -112,13 +115,29 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
       colorClass(),
       heightClass(),
       radiusClass(),
-      borderClass()
+      borderClass(),
+      className
       )
-  },[scale, variant])
+  },[scale, variant, className])
 
   return (
     <button className={buttonClasses} disabled={disabled} {...rest}>
       {children}
     </button>
+  )
+}
+
+export const ConnectWalletButton = ({className, scale = buttonScale.lg}: {
+  className?: string
+  scale?: ButtonScale
+}) => {
+  const { login } = useAuth()
+  const { account } = useWeb3React()
+  const connect = () => {
+    login(ConnectorNames.Injected)
+  }
+  if (account) return <></>
+  return (
+    <Button className={classNames("w-full", className)} scale={scale} onClick={connect}>Connect Wallet</Button>
   )
 }

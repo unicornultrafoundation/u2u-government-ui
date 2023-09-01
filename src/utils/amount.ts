@@ -22,3 +22,24 @@ export const formatThousandDelimiter = (value: string | number) => {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return parts.join('.')
 }
+
+
+export const removeTrailingZeros = (value: any) => {
+  const regEx1 = /^[0]+/;
+  const regEx2 = /[0]+$/;
+  const regEx3 = /[.]$/;
+
+  const valueInString = value.toString();
+
+  let after = valueInString.replace(regEx1, '');  // Remove leading 0's
+
+  if (after.indexOf('.') > -1) {
+    after = after.replace(regEx2, '');  // Remove trailing 0's
+  }
+  after = after.replace(regEx3, '');  // Remove trailing decimal
+
+  if (after.indexOf('.') === 0) {
+    after = '0' + after
+  }
+  return after ? after : '0';
+};

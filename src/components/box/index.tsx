@@ -38,7 +38,7 @@ export const Box = ({
         case variant === boxType.transparent:
           return "bg-transparent"
         case variant === boxType.gradient:
-          return "bg-gradient-to-br from-cyan to-white"
+          return "bg-gradient-to-br from-cyan to-[#EBFCFB]"
         default:
           return ``
       }
@@ -51,11 +51,11 @@ export const Box = ({
     const heightClass = () => {
       switch (scale) {
         case boxScale.lg:
-          return 'p-[12px]'
+          return 'p-[24px]'
         case boxScale.md:
           return 'p-[16px]'
         case boxScale.sm:
-          return 'p-[24px]'
+          return 'p-[12px]'
       }
     }
 
