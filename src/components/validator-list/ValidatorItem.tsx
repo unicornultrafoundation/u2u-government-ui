@@ -6,6 +6,7 @@ import { useMemo } from "react"
 import { bigFormatEther } from "../../utils"
 import { RenderNumberFormat } from "../text"
 import ArrowIcon from "../../images/icons/arrow-left.png"
+import { useNavigate } from "react-router-dom"
 
 interface ValidatorItemProps {
   validator: Validator
@@ -21,6 +22,8 @@ export const ValidatorItem = ({
     votingPower,
     delegations
   } = useMemo(() => validator, [validator])
+
+  const navigate = useNavigate()
 
   return (
     <Box className="max-w-[400px]">
@@ -46,7 +49,10 @@ export const ValidatorItem = ({
           <div className="text-sm font-bold text-black">{delegations?.length}</div>
         </div>
         <div className="mt-4">
-          <Button variant={buttonType.secondary} className="rounded-lg flex items-center gap-2">
+          <Button 
+          onClick={() => navigate(`/validator/${valId}`)}
+          variant={buttonType.secondary} 
+          className="rounded-lg flex items-center gap-2">
             <span>View Detail</span>
             <img src={ArrowIcon} alt="u2u" />
           </Button>

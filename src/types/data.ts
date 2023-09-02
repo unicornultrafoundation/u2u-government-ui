@@ -10,6 +10,7 @@ export interface StakingStats {
 
 export interface Validator {
   valId: string
+  name: string
   auth: string
   createdEpoch: string
   createdTime: string
@@ -34,6 +35,7 @@ export interface Validation {
 export interface Delegation {
   id: string
   validatorId: string
+  delegatorAddress: string
   delegator: Delegator
   stakedAmount: BigNumber
 } 

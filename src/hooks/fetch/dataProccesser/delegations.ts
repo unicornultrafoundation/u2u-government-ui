@@ -7,6 +7,7 @@ export const delegation  = (data: any): Delegation => {
     id: data.id,
     validatorId: data.validatorId,
     delegator: data.delegator.id,
-    stakedAmount: BigNumber.from(data.stakedAmount | 0)
+    delegatorAddress: data.delegator.address,
+    stakedAmount: BigNumber.from(data.stakedAmount)
   }
 }

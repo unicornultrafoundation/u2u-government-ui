@@ -6,6 +6,7 @@ export const validator  = (data: any): Validator => {
   if (!data) return {} as Validator
   return {
     valId: data.validatorId,
+    name: `Validator ${data.validatorId}`,
     auth: data.auth || "",
     createdEpoch: data.createdEpoch || "",
     createdTime: data.createdTime || "",

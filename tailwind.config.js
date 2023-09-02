@@ -24,7 +24,10 @@ module.exports = {
           1: "#EEEEEE"
         },
         lightGray: "#E0E0E0",
-        gray: "#878787"
+        gray: {
+          DEFAULT: "#878787",
+          1: "#E2E2E2"
+        }
       }
     },
   },

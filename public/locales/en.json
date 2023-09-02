@@ -13,5 +13,9 @@
   "Stake Ratio": "Stake Ratio",
   "Avg.APR": "Avg.APR",
   "Countries": "Countries",
-  "Register": "Register"
+  "Register": "Register",
+  "Validator detail": "Validator detail",
+  "Commission": "Commission",
+  "Total Stake Amount (U2U)": "Total Stake Amount (U2U)",
+  "Total Delegator": "Total Delegator"
 }
