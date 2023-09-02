@@ -4,7 +4,8 @@ import { classNames } from "../../utils"
 export const boxType = {
   primary: "primary",
   transparent: "transparent",
-  gradient: "gradient"
+  gradient: "gradient",
+  gradient2: "gradient2"
 }
 
 export type BoxVariant = typeof boxType[keyof typeof boxType];
@@ -32,13 +33,15 @@ export const Box = ({
 
   const boxClasses = useMemo(() => {
     const backgroundClass = () => {
-      switch (true) {
-        case variant === boxType.primary:
+      switch (variant) {
+        case boxType.primary:
           return "bg-light-1"
-        case variant === boxType.transparent:
+        case boxType.transparent:
           return "bg-transparent"
-        case variant === boxType.gradient:
-          return "bg-gradient-to-br from-cyan to-[#EBFCFB]"
+        case boxType.gradient:
+          return "bg-gradient-to-br from-cyan to-[#EBFCFB]" 
+        case boxType.gradient2:
+          return "bg-gradient-to-br from-[#75FDDE] to-[#6885FB]"
         default:
           return ``
       }

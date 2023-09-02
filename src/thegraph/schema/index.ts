@@ -28,6 +28,12 @@ const VALIDATOR_GQL = `
           delegations {${DELEGATIONS_GQL}}
 `
 
+const VALIDATIONS_GQL = `
+        id
+        validatorId {${VALIDATOR_GQL}}
+        stakedAmount
+`
+
 export const Schema = () => {
   return {
     STAKING_STATS: gql`
@@ -53,6 +59,19 @@ export const Schema = () => {
           validatorId: $valId
         }) 
           {${VALIDATOR_GQL}}
+      }
+    `,
+    DELEGATOR_DETAIL: gql`
+      query DelegatorDetail($delegatorAddress: String!) {
+            delegators(where:{
+            address: $delegatorAddress
+            }) {
+              id
+              address
+              stakedAmount
+              createdOn
+              validations {${VALIDATIONS_GQL}}
+            }
       }
     `
   }

@@ -28,8 +28,8 @@ export interface Validator {
 
 export interface Validation {
   id: string
-  validatorId: string
-  stakedAmount: number
+  validator: Validator
+  stakedAmount: BigNumber
 }
 
 export interface Delegation {
@@ -43,7 +43,7 @@ export interface Delegation {
 export interface Delegator {
   id: string
   address: string
-  stakedAmount: number
+  stakedAmount: BigNumber
   createdOn: number
   validations?: Validation[]
 }

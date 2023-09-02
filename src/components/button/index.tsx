@@ -7,7 +7,8 @@ import { useWeb3React } from "@web3-react/core";
 export const buttonType = {
   primary: "primary",
   secondary: "secondary",
-  light: "light"
+  light: "light",
+  transparent: "transparent"
 }
 
 export type ButtonVariant = typeof buttonType[keyof typeof buttonType];
@@ -42,13 +43,15 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 
   const buttonClasses = useMemo(() => {
     const backgroundClass = () => {
-      switch (true) {
-        case variant === buttonType.primary:
+      switch (variant) {
+        case buttonType.primary:
           return "bg-green"
-        case variant === buttonType.secondary:
+        case buttonType.secondary:
           return "bg-white"
-        case variant === buttonType.light:
+        case buttonType.light:
           return "bg-light"
+        case buttonType.transparent:
+          return "bg-transparent"
         default:
           return ``
       }
@@ -70,6 +73,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
         case buttonType.primary:
           return "text-white";
         case buttonType.secondary:
+        case buttonType.transparent:
           return "text-green"
         case buttonType.light:
           return "text-green"
@@ -92,9 +96,9 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const radiusClass = () => {
       switch (scale) {
         case buttonScale.lg:
-          return 'rounded-[40px]'
+          return 'rounded-2xl'
         case buttonScale.md:
-          return 'rounded-[20px]'
+          return 'rounded-xl'
         case buttonScale.sm:
           return 'rounded-lg'
       }
@@ -103,6 +107,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const borderClass = () => {
       switch (variant) {
         case buttonType.secondary:
+        case buttonType.transparent:
           return "border border-green"
         default:
           return ""

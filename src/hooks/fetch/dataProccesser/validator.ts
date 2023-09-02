@@ -1,6 +1,6 @@
 import { BigNumber } from "ethers"
 import { Validator } from "../../../types"
-import { delegation } from "./delegations"
+import { delegation } from "./delegation"
 
 export const validator  = (data: any): Validator => {  
   if (!data) return {} as Validator
