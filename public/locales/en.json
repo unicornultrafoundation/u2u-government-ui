@@ -6,5 +6,11 @@
   "Staked Amount (U2U)": "Staked Amount (U2U)",
   "Voting Power (%)": "Voting Power (%)",
   "Delegators": "Delegators",
-  "Validator List": "Validator List"
+  "Validator List": "Validator List",
+  "Validator": "Validator",
+  "Validatiors": "Validatiors",
+  "Total U2U  Staked": "Total U2U  Staked",
+  "Stake Ratio": "Stake Ratio",
+  "Avg.APR": "Avg.APR",
+  "Countries": "Countries"
 }

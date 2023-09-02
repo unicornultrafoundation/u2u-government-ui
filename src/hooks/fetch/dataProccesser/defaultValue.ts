@@ -5,6 +5,6 @@ export const defaultStakingStats: StakingStats = {
   totalSelfStaked: Zero_Bi,
   totalDelegated: Zero_Bi,
   totalStaked: Zero_Bi,
-  totalValidator: Zero_Bi,
-  totalDelegator: Zero_Bi
+  totalValidator: 0,
+  totalDelegator: 0
 }

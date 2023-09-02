@@ -8,8 +8,8 @@ export const stakingStats = (data: any): StakingStats => {
     totalSelfStaked: BigNumber.from(data.totalSelfStaked || 0),
     totalDelegated: BigNumber.from(data.totalDelegated || 0),
     totalStaked: BigNumber.from(data.totalStaked || 0),
-    totalValidator: BigNumber.from(data.totalValidator || 0),
-    totalDelegator: BigNumber.from(data.totalDelegator || 0)
+    totalValidator: Number(data.totalValidator || 0),
+    totalDelegator: Number(data.totalDelegator || 0)
   }
 }
 

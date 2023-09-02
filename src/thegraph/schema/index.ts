@@ -31,6 +31,7 @@ export const Schema = () => {
           downTime
           lockedUntil
           lockDays
+          votingPower
           delegations {
             id
             validatorId

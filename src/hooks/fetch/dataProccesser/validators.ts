@@ -17,7 +17,7 @@ export const validator  = (data: any): Validator => {
     downTime: data.downTime,
     lockedUntil: data.lockedUntil,
     lockDays: data.lockDays,
-    votingPower: BigNumber.from(data.votingPower || 0),
+    votingPower: data.votingPower ? Number(data.votingPower) / 100 : 0,
     delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : []
   }
 }

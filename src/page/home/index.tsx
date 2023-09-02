@@ -13,7 +13,7 @@ export const Home = () => {
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
 
   return (
-    <div className="pb-10">
+    <div>
       <Box className="flex items-center justify-around gap-12">
         <div className="mx-4">
           <div className="text-base font-medium text-gray">{t('Total Supply (U2U)')}</div>
@@ -62,7 +62,7 @@ export const Home = () => {
         <StakingCalculator validators={validators} balance={balance} />
       </div>
       <div className="flex justify-between items-center mb-6 mt-10">
-        <div className="text-[26px]">{`${t('Validator List')}`}</div>
+        <div className="text-[26px]">{`${t('Validator List')} (${stakingStats.totalValidator})`}</div>
         <div className="text-base inline text-green font-medium cursor-pointer flex items-center gap-2">
           See more
           <img src={ArrowIcon} alt="u2u" />

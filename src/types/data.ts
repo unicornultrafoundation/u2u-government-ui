@@ -4,8 +4,8 @@ export interface StakingStats {
   totalSelfStaked: BigNumber
   totalDelegated: BigNumber
   totalStaked: BigNumber
-  totalValidator: BigNumber
-  totalDelegator: BigNumber
+  totalValidator: number
+  totalDelegator: number
 }
 
 export interface Validator {
@@ -22,7 +22,7 @@ export interface Validator {
   lockedUntil?: string
   lockDays?: string
   delegations?: Delegation[]
-  votingPower?: BigNumber
+  votingPower?: number
 }
 
 export interface Validation {

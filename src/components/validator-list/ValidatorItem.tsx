@@ -23,7 +23,7 @@ export const ValidatorItem = ({
   } = useMemo(() => validator, [validator])
 
   return (
-    <Box className="max-w-[350px]">
+    <Box className="max-w-[400px]">
       <div className="grid grid-cols-2 gap-2 text-left p-4">
         <div className="mt-4">
           <div className="text-sm font-medium text-gray">{t('Validator Name')}</div>
@@ -38,7 +38,7 @@ export const ValidatorItem = ({
         <div className="mt-4">
           <div className="text-sm font-medium text-gray">{t('Voting Power (%)')}</div>
           <div className="text-sm font-bold text-black">
-            <RenderNumberFormat amount={bigFormatEther(votingPower || 0)} className="mr-2" fractionDigits={2} />
+            <RenderNumberFormat amount={(votingPower)} className="mr-2" fractionDigits={2} />
           </div>
         </div>
         <div className="mt-4">

@@ -5,11 +5,11 @@ export const shortenDisplayNumber = (value: string | number, prefix: string = ''
   let valueInStr = String(value)
   const _value = Number(value)
   if (_value >= 1e9) {
-    valueInStr = String((_value / 1e9).toFixed(2)) + 'B'
+    valueInStr = String((_value / 1e9).toFixed(2)) + ' B'
   } else if (_value >= 1e6) {
-    valueInStr = String((_value / 1e6).toFixed(2)) + 'M'
+    valueInStr = String((_value / 1e6).toFixed(2)) + ' M'
   } else if (_value >= 1e4) {
-    valueInStr = String((_value / 1e3).toFixed(2)) + 'K'
+    valueInStr = String((_value / 1e3).toFixed(2)) + ' K'
   } else {
     valueInStr = String((_value).toFixed(fractionDigits))
   }
