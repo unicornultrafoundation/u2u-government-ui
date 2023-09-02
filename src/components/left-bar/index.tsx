@@ -1,4 +1,4 @@
-import { StakingLogo } from "./staking-logo"
+import { StakingLogo } from "./StakingLogo"
 import bookIcon from "../../images/icons/book.svg"
 import bookActiveIcon from "../../images/icons/book-active.svg"
 import peopleIcon from "../../images/icons/people.svg"

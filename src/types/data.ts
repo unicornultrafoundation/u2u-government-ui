@@ -22,6 +22,7 @@ export interface Validator {
   lockedUntil?: string
   lockDays?: string
   delegations?: Delegation[]
+  votingPower?: BigNumber
 }
 
 export interface Validation {
@@ -34,7 +35,7 @@ export interface Delegation {
   id: string
   validatorId: string
   delegator: Delegator
-  stakedAmount: number
+  stakedAmount: BigNumber
 } 
 
 export interface Delegator {

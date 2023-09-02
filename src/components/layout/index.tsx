@@ -24,7 +24,7 @@ export const Layout = ({ children }: Props) => {
       <LeftBar></LeftBar>
       <div className="w-full px-5">
         <Header />
-        <div className="py-6">{children}</div>
+        <div className="p-8">{children}</div>
       </div>
     </div>
   )

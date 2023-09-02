@@ -1,5 +1,10 @@
 {
   "Connect Wallet": "Connect Wallet",
   "Validator Register": "Validator Register",
-  "Total Supply (U2U)": "Total Supply (U2U)"
+  "Total Supply (U2U)": "Total Supply (U2U)",
+  "Validator Name": "Validator Name",
+  "Staked Amount (U2U)": "Staked Amount (U2U)",
+  "Voting Power (%)": "Voting Power (%)",
+  "Delegators": "Delegators",
+  "Validator List": "Validator List"
 }

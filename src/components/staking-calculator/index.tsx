@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { useBalance, useDelegate, useFetchAllValidator } from "../../hooks"
+import { useDelegate } from "../../hooks"
 import { Box } from "../box"
 import { Button, ConnectWalletButton, buttonScale } from "../button"
 import { Input, Select, SelectOption } from "../form"
@@ -7,18 +7,22 @@ import { RenderNumberFormat } from "../text"
 import { DelegateParams, Validator } from "../../types"
 import { useWeb3React } from "@web3-react/core"
 
-export const StakingCalculator = () => {
+interface StakingCalculatorProps {
+  validators: Validator[]
+  balance: string
+}
+
+export const StakingCalculator = ({
+  validators,
+  balance
+}: StakingCalculatorProps) => {
 
   const [selection, setSelection] = useState<SelectOption[]>([])
   const [selected, setSelected] = useState<SelectOption>({} as SelectOption)
   const [amount, setAmount] = useState("0")
   const { account } = useWeb3React()
 
-  const { validators } = useFetchAllValidator()
-  const { balance } = useBalance()
   const { degegate } = useDelegate()
-
-
 
   useEffect(() => {
     if (validators.length > 0) {
@@ -51,7 +55,7 @@ export const StakingCalculator = () => {
   }, [amount, selected])
 
   return (
-    <div className="w-[700px]">
+    <div className="w-[550px]">
       <Box variant="gradient">
         <div className="px-4 py-4 text-left">
           <div className="text-2xl text-black-2 font-medium mb-2">Staking Calculator</div>
@@ -84,6 +88,28 @@ export const StakingCalculator = () => {
             placeholder="Select validator"
             selected={selected} />
           <div className="w-full h-[1px] bg-lightGray px-4 my-6"></div>
+          <div className="mb-6">
+            <div className="flex justify-between">
+              <div className="text-sm text-black">APR(%)</div>
+              <div className="text-sm text-black">NaN U2U</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-sm text-black">30 days</div>
+              <div className="text-sm text-black">NaN U2U</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-sm text-black">90 days</div>
+              <div className="text-sm text-black">NaN U2U</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-sm text-black">180 days</div>
+              <div className="text-sm text-black">NaN U2U</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-sm text-black">365 days</div>
+              <div className="text-sm text-black">NaN U2U</div>
+            </div>
+          </div>
           <div className="flex justify-center">
             {
               account ? (

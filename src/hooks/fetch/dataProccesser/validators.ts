@@ -1,7 +1,8 @@
 import { BigNumber } from "ethers"
 import { Validator } from "../../../types"
+import { delegation } from "./delegations"
 
-export const validator  = (data: any): Validator => {
+export const validator  = (data: any): Validator => {  
   if (!data) return {} as Validator
   return {
     valId: data.validatorId,
@@ -16,6 +17,7 @@ export const validator  = (data: any): Validator => {
     downTime: data.downTime,
     lockedUntil: data.lockedUntil,
     lockDays: data.lockDays,
-    delegations: []
+    votingPower: BigNumber.from(data.votingPower || 0),
+    delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : []
   }
 }

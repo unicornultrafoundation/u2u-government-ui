@@ -57,9 +57,9 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const fontClass = () => {
       switch (scale) {
         case buttonScale.sm:
-          return 'text-xs font-semibold'
+          return 'text-xs font-medium'
         case buttonScale.md:
-          return 'text-sm font-semibold'
+          return 'text-sm font-medium'
         case buttonScale.lg:
           return 'text-md font-semibold'
       }

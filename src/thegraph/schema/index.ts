@@ -1,7 +1,6 @@
 import { gql } from "@apollo/client"
 
 export const Schema = () => {
-
   return {
     STAKING_STATS: gql`
       query StakingStats {
@@ -30,6 +29,16 @@ export const Schema = () => {
           active
           online
           downTime
+          lockedUntil
+          lockDays
+          delegations {
+            id
+            validatorId
+            delegator {
+              id
+            }
+            stakedAmount
+          }
         }
       }
     `

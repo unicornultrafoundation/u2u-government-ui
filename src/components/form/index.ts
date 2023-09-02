@@ -1,2 +1,2 @@
-export * from "./input"
-export * from "./select"
+export * from "./Input"
+export * from "./Select"
