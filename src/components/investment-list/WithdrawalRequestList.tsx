@@ -79,7 +79,7 @@ export const WithdrawalRequestList = ({
             {
               headers.map((header: Header, index: number) => {
                 return (
-                  <Th index={index} length={headers.length}>
+                  <Th index={index} length={headers.length} key={index}>
                     <div className={`${index === headers.length - 1 ? "text-right" : ""}`}>
                       <div className={`text-base font-normal`}>{header.name}</div>
                       {
@@ -96,7 +96,7 @@ export const WithdrawalRequestList = ({
           {
             withdrawalRequests.map((row: WithdrawalRequest, index: number) => {
               return (
-                <tr>
+                <tr key={index}>
                   <Td index={index} className={`text-green ${index === withdrawalRequests.length - 1 ? "rounded-bl-lg" : ""}`}>
                     {row.wrId}
                   </Td>

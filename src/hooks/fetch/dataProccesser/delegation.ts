@@ -8,6 +8,7 @@ export const delegation  = (data: any): Delegation => {
     validatorId: data.validatorId,
     delegator: data.delegator.id,
     delegatorAddress: data.delegator.address,
-    stakedAmount: BigNumber.from(data.stakedAmount)
+    stakedAmount: BigNumber.from(data.stakedAmount),
+    totalClaimedRewards: BigNumber.from(data.totalClaimedRewards)
   }
 }

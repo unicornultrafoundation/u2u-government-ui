@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { useBalance, useFetchValidator } from "../../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, shortenDisplayNumber, truncate } from "../../../utils";
-import { Box, DelegationList, StakingCalculator } from "../../../components";
+import { Box, DelegationList, RenderNumberFormat, StakingCalculator } from "../../../components";
 
 export const ValidatorDetails = () => {
 
@@ -49,7 +49,9 @@ export const ValidatorDetails = () => {
         </div>
         <div className="mx-4">
           <div className="text-xs text-gray">{t('Voting Power (%)')}</div>
-          <div className="text-base text-black font-bold">{votingPower}</div>
+          <div className="text-base text-black font-bold">
+            <RenderNumberFormat amount={(votingPower)} className="mr-2" fractionDigits={2} />
+          </div>
         </div>
         <div className="mx-4">
           <div className="text-xs text-gray">{t('Total Delegator')}</div>

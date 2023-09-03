@@ -19,6 +19,7 @@ export interface Validator {
   delegatedAmount: BigNumber
   selfStakedAmount: BigNumber
   totalStakedAmount: BigNumber
+  totalClaimedRewards: BigNumber
   downTime?: string
   lockedUntil?: string
   lockDays?: string
@@ -38,6 +39,7 @@ export interface Delegation {
   delegatorAddress: string
   delegator: Delegator
   stakedAmount: BigNumber
+  totalClaimedRewards: BigNumber
 } 
 
 export interface Delegator {
@@ -46,6 +48,7 @@ export interface Delegator {
   stakedAmount: BigNumber
   createdOn: number
   validations?: Validation[]
+  totalClaimedRewards: BigNumber
 }
 
 export interface WithdrawalRequest {

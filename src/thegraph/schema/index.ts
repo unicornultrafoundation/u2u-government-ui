@@ -8,6 +8,7 @@ const DELEGATIONS_GQL = `
             address
           }
           stakedAmount  
+          totalClaimedRewards
       `;
 const VALIDATOR_GQL = `
           id
@@ -25,6 +26,7 @@ const VALIDATOR_GQL = `
           lockedUntil
           lockDays
           votingPower
+          totalClaimedRewards
           delegations {${DELEGATIONS_GQL}}
 `
 
@@ -70,6 +72,7 @@ export const Schema = () => {
               address
               stakedAmount
               createdOn
+              totalClaimedRewards
               validations {${VALIDATIONS_GQL}}
             }
       }

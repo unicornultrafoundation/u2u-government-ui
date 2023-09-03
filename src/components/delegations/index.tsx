@@ -17,7 +17,7 @@ const headers: Header[] = [
     subName: "(U2U)"
   },
   {
-    name: "Rewards",
+    name: "Claimed Rewards",
     subName: "(U2U)"
   }
 ]
@@ -34,9 +34,8 @@ export const DelegationList = ({ delegations }: DelegationListProps) => {
           <tr>
             {
               headers.map((header: Header, index: number) => {
-                console.log(index, index, headers.length)
                 return (
-                  <Th index={index} length={headers.length}>
+                  <Th index={index} length={headers.length} key={index}>
                     <div className={`${index === 1 ? "text-right" : ""}`}>
                       <div className={`text-lg font-normal`}>{header.name}</div>
                       {
@@ -53,12 +52,14 @@ export const DelegationList = ({ delegations }: DelegationListProps) => {
           {
             delegations.map((row: Delegation, index: number) => {
               return (
-                <tr>
+                <tr key={index}>
                   <Td index={index} className={`text-green ${index === delegations.length - 1 ? "rounded-bl-lg" : ""}`}>{truncate({ str: row.delegatorAddress })}</Td>
                   <Td index={index} className="text-right text-base font-medium">
-                    <RenderNumberFormat amount={bigFormatEther(row.stakedAmount)} />
+                    <RenderNumberFormat amount={bigFormatEther(row.stakedAmount)} fractionDigits={2} />
                   </Td>
-                  <Td index={index} className={`text-right font-medium ${index === delegations.length - 1 ? "rounded-br-lg" : ""}`}>NaN</Td>
+                  <Td index={index} className={`text-right font-medium ${index === delegations.length - 1 ? "rounded-br-lg" : ""}`}>
+                    <RenderNumberFormat amount={bigFormatEther(row.totalClaimedRewards)} fractionDigits={2} />
+                  </Td>
                 </tr>
               )
             })

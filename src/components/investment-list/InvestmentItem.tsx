@@ -7,9 +7,10 @@ import ArrowIcon from "../../images/icons/arrow-left.png"
 import { RenderNumberFormat } from "../text"
 import { Button, buttonType } from "../button"
 import { UndelegateComponent } from "./action/Undelegate"
-import { useClaimRewards, useFetchWithdrawRequest, useRestakeRewards } from "../../hooks"
+import { useClaimRewards, useFetchWithdrawRequest, usePendingReward, useRestakeRewards } from "../../hooks"
 import { WithdrawalRequestList } from "./WithdrawalRequestList"
 import { toastDanger, toastSuccess } from "../toast"
+import { useNavigate } from "react-router-dom"
 
 interface InvestmentItemProps {
   validation: Validation
@@ -34,6 +35,9 @@ export const InvestmentItem = ({
   const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, Number(valId))
   const {claimRewards} = useClaimRewards()
   const { restake } = useRestakeRewards()
+  
+  const navigate = useNavigate()
+  const { pendingRewards } = usePendingReward(delegator, Number(valId))
 
   const onClaimedRewards = useCallback(async () => {
     if (!valId) return;
@@ -88,7 +92,7 @@ export const InvestmentItem = ({
               <div className="font-medium text-lg text-black">{name}</div>
               <div className="text-sm font-bold text-green">{truncate({ str: auth })}</div>
             </div>
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate(`/validator/${valId}`)}>
               <span className="text-green text-sm">{t('View Detail')}</span>
               <img src={ArrowIcon} alt="u2u" className="w-[20px] h-[20px]" />
             </div>
@@ -108,7 +112,9 @@ export const InvestmentItem = ({
 
         <Box className="max-w-[400px] py-6 px-10 text-center">
           <div className="text-gray text-xl">{t('Claimable (U2U)')}</div>
-          <div className="text-black text-xl font-medium">NaN</div>
+          <div className="text-black text-xl font-medium">
+          <RenderNumberFormat amount={pendingRewards} className="mr-2" />
+          </div>
           <div className="grid grid-cols-2 mt-10 gap-4">
             <Button variant={buttonType.transparent} onClick={() => onClaimedRewards()}>{t('Claim')}</Button>
             <Button onClick={() => onRestakedRewards()}>{t('Re-Stake')}</Button>

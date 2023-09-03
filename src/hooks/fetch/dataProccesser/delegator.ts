@@ -9,6 +9,7 @@ export const delegator  = (data: any): Delegator => {
     address: data.address,
     stakedAmount: BigNumber.from(data.stakedAmount),
     createdOn: Number(data.createdOn),
-    validations: data.validations && data.validations.length > 0 ? data.validations.map((i: any) => validation(i)) : []
+    validations: data.validations && data.validations.length > 0 ? data.validations.map((i: any) => validation(i)) : [],
+    totalClaimedRewards: BigNumber.from(data.totalClaimedRewards)
   }
 }

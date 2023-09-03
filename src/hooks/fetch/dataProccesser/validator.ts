@@ -15,10 +15,11 @@ export const validator  = (data: any): Validator => {
     delegatedAmount: BigNumber.from(data.delegatedAmount || 0),
     selfStakedAmount: BigNumber.from(data.selfStaked || 0),
     totalStakedAmount: BigNumber.from(data.totalStakedAmount || 0),
+    totalClaimedRewards: BigNumber.from(data.totalClaimedRewards || 0),
     downTime: data.downTime,
     lockedUntil: data.lockedUntil,
     lockDays: data.lockDays,
-    votingPower: data.votingPower ? Number(data.votingPower) / 100 : 0,
+    votingPower: data.votingPower ? Number(data.votingPower) / 10000 : 0,
     delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : []
   }
 }
