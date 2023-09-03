@@ -3,6 +3,7 @@ import { delegator } from "./delegator"
 import { stakingStats } from "./stats"
 import { validation } from "./validation"
 import { validator } from "./validator"
+import { withdrawalRequest } from "./withdrawalRequest"
 export * from "./defaultValue"
 
 export const DataProcessor = {
@@ -10,5 +11,6 @@ export const DataProcessor = {
   validator,
   delegator,
   delegation,
-  validation
+  validation,
+  withdrawalRequest
 }

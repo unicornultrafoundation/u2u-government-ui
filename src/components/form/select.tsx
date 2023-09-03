@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef, useCallback, useEffect, useMemo, useState } from "react";
+import { ReactNode, forwardRef, useCallback, useMemo, useState } from "react";
 import { classNames } from "../../utils";
 
 export type SelectOption = { value: any, label: string, disabled?: boolean }
@@ -11,6 +11,7 @@ export interface SelectProps {
   prependIcon?: ReactNode
   placeholder?: string
   selected?: SelectOption | any
+  setSelected?: (s: SelectOption | any | undefined) => void
 }
 
 export const Select = forwardRef<any, SelectProps>((
@@ -20,12 +21,11 @@ export const Select = forwardRef<any, SelectProps>((
     prependIcon = null,
     placeholder = '',
     selected,
+    setSelected,
     onChange,
   }: SelectProps, forwardRef) => {
   const [showOptions, setShowOptions] = useState(false)
-  const [selectedOption, setSelected] = useState<SelectOption | any | undefined>()
-  const isSelected = useMemo(() => selectedOption !== undefined, [selectedOption])
-
+  const isSelected = useMemo(() => selected !== undefined, [selected])
   const selectClasses = useMemo(() => {
     const defaultClass = 'w-full'
     return classNames(
@@ -40,20 +40,11 @@ export const Select = forwardRef<any, SelectProps>((
 
   const handleSelect = useCallback((option: SelectOption) => {
     if (!options || !option) return
-
-    setSelected(option)
+    setSelected && setSelected(option)
     setShowOptions(false)
     onChange && onChange(option)
+    // eslint-disable-next-line
   }, [onChange, options])
-
-  useEffect(() => {
-    if (selected?.value) {
-      setSelected(selected)
-    } else {
-      const _selected = options.find(o => o.value === selected);
-      setSelected(_selected);
-    }
-  }, [selected, options])
 
   return (
     <div className={classNames("relative", className)} ref={forwardRef}>
@@ -69,23 +60,11 @@ export const Select = forwardRef<any, SelectProps>((
         <div className="flex-1 text-base tracking-[0.2px] rounded-lg bg-white py-3 px-6 cursor-pointer min-h-[50px]">
           {
             isSelected ? (
-              <span className="text-gray">{selectedOption?.label}</span>
+              <span className="text-gray">{selected?.label}</span>
             ) : (
               <span className="text-gray">{placeholder}</span>
             )
           }
-        </div>
-
-        <div className="select-append">
-          {/* <span className=""> */}
-            {/* <Image
-              className={classNames("transition-all", showOptions ? 'rotate-180' : 'rotate-0')}
-              width={20}
-              height={20}
-              src={chevronDownIcon}
-              alt=""
-            /> */}
-          {/* </span> */}
         </div>
       </div>
       {

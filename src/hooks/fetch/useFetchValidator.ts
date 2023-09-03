@@ -6,7 +6,7 @@ import { DataProcessor } from "./dataProccesser"
 
 export const useFetchValidator = (valId: number) => {
   const [validator, setValidator] = useState<Validator>({} as Validator)
-  const { slowRefresh } = useRefresh()
+  const { fastRefresh } = useRefresh()
   useEffect(() => {
     if (!valId) return
     (async () => {
@@ -15,7 +15,7 @@ export const useFetchValidator = (valId: number) => {
         setValidator(DataProcessor.validator(data.validators[0]))
       }
     })()
-  }, [slowRefresh, valId])
+  }, [fastRefresh, valId])
   return {
     validator
   }

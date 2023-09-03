@@ -6,7 +6,6 @@ export interface DelegateParams {
 
 export interface UnDelegateParams {
   toValidatorID: number
-  wrID: number
   amount: number
 }
 

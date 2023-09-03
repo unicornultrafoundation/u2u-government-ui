@@ -6,7 +6,7 @@ import { DataProcessor } from "./dataProccesser"
 
 export const useFetchDelegator = (delAddress: string) => {
   const [delegator, setDelegator] = useState<Delegator>({} as Delegator)
-  const { slowRefresh } = useRefresh()
+  const { fastRefresh } = useRefresh()
   useEffect(() => {
     if(!delAddress) return
     (async() => {
@@ -15,7 +15,7 @@ export const useFetchDelegator = (delAddress: string) => {
         setDelegator(DataProcessor.delegator(data?.delegators[0]));
       }
     })()
-  }, [slowRefresh, delAddress])
+  }, [fastRefresh, delAddress])
   return {
     delegator
   }

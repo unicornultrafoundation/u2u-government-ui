@@ -6,6 +6,8 @@ import { Input, Select, SelectOption } from "../form"
 import { RenderNumberFormat } from "../text"
 import { DelegateParams, Validator } from "../../types"
 import { useWeb3React } from "@web3-react/core"
+import { toastDanger, toastSuccess } from "../toast"
+import { useTranslation } from "react-i18next"
 
 interface StakingCalculatorProps {
   validators: Validator[]
@@ -17,9 +19,10 @@ export const StakingCalculator = ({
   balance
 }: StakingCalculatorProps) => {
 
+  const { t } = useTranslation()
   const [selection, setSelection] = useState<SelectOption[]>([])
   const [selected, setSelected] = useState<SelectOption>({} as SelectOption)
-  const [amount, setAmount] = useState("0")
+  const [amount, setAmount] = useState("")
   const { account } = useWeb3React()
 
   const { degegate } = useDelegate()
@@ -40,17 +43,25 @@ export const StakingCalculator = ({
 
 
   const onDelegate = useCallback(async () => {
-    if (!amount || !selected) return; 
+    if (!amount || !selected) return;
     const params: DelegateParams = {
       toValidatorID: selected.value.valId,
       amount: Number(amount)
     }
     try {
-      const tx = await degegate(params)
-      console.log("tx: ", tx);
+      const { status, transactionHash } = await degegate(params)
+      if (status === 1) {
+        const msg = `Congratulation! Your amount has been delegated.`
+        toastSuccess(msg, t('Success'))
+      } else {
+        toastDanger('Sorry! Delegate failed', t('Error'))
+      }
+      console.log("Delegate tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
+      toastDanger('Sorry! Delegate failed', t('Error'))
     }
+    setAmount('')
     // eslint-disable-next-line
   }, [amount, selected])
 
@@ -70,6 +81,7 @@ export const StakingCalculator = ({
               value={amount}
               type="number"
               label="Staking amount"
+              placeholder={"Ex: 10000"}
               onChange={(e) => {
                 const value = e.target.value
                 setAmount(value)
@@ -86,6 +98,7 @@ export const StakingCalculator = ({
           <Select
             options={selection}
             placeholder="Select validator"
+            setSelected={setSelected}
             selected={selected} />
           <div className="w-full h-[1px] bg-lightGray px-4 my-6"></div>
           <div className="mb-6">

@@ -6,7 +6,7 @@ import { Validator } from "../../types"
 
 export const useFetchAllValidator = () => {
   const [validators, setValidators] = useState<Validator[]>([])
-  const { slowRefresh } = useRefresh()
+  const { fastRefresh } = useRefresh()
   useEffect(() => {
     (async () => {
       const { data } = await QueryService.queryValidators()
@@ -16,7 +16,7 @@ export const useFetchAllValidator = () => {
         }))
       }
     })()
-  }, [slowRefresh])
+  }, [fastRefresh])
   return {
     validators
   }

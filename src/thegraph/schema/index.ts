@@ -73,6 +73,21 @@ export const Schema = () => {
               validations {${VALIDATIONS_GQL}}
             }
       }
+    `,
+    WITHDRAWALREQUEST: gql`
+      query WithdrawalRequest($delegatorAddress: String!, $validatorId: Int!) {
+        withdrawalRequests (where:{
+          delegatorAddress: $delegatorAddress
+          validatorId: $validatorId
+        }) {
+          id
+          delegatorAddress
+          validatorId
+          wrID
+          time
+          unbondingAmount
+        }
+      }
     `
   }
 }

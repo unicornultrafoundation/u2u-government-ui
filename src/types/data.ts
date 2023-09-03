@@ -47,3 +47,13 @@ export interface Delegator {
   createdOn: number
   validations?: Validation[]
 }
+
+export interface WithdrawalRequest {
+  wrId: string
+  delegatorAddress: string
+  validatorId: string
+  unbondTime: number
+  unbondingAmount: BigNumber
+  withdrawalTime: number;
+  withdrawableAmount: BigNumber
+}

@@ -6,7 +6,7 @@ import { useRefresh } from "../useRefresh"
 
 export const useFetchStakingStats = () => {
     const [stakingStats, setStakingStats] = useState<StakingStats>(defaultStakingStats)
-    const { slowRefresh } = useRefresh()
+    const { fastRefresh } = useRefresh()
     useEffect(() => {
       (async() => {
         const {data} = await QueryService.queryStakingStats()
@@ -14,7 +14,7 @@ export const useFetchStakingStats = () => {
           setStakingStats(DataProcessor.stakingStats(data?.stakings[0]));
         }
       })()
-    }, [slowRefresh])
+    }, [fastRefresh])
     return {
       stakingStats
     }

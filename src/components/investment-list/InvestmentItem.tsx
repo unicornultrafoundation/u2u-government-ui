@@ -1,31 +1,82 @@
 import { useTranslation } from "react-i18next"
-import { Validation } from "../../types"
+import { ClaimRewardsParams, RestakeRewardsParams, Validation } from "../../types"
 import { Box } from "../box"
-import { useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { bigFormatEther, truncate } from "../../utils"
 import ArrowIcon from "../../images/icons/arrow-left.png"
 import { RenderNumberFormat } from "../text"
-import { Button, buttonScale, buttonType } from "../button"
+import { Button, buttonType } from "../button"
+import { UndelegateComponent } from "./action/Undelegate"
+import { useClaimRewards, useFetchWithdrawRequest, useRestakeRewards } from "../../hooks"
+import { WithdrawalRequestList } from "./WithdrawalRequestList"
+import { toastDanger, toastSuccess } from "../toast"
 
 interface InvestmentItemProps {
   validation: Validation
+  delegator: string
 }
 
 export const InvestmentItem = ({
-  validation
+  validation,
+  delegator
 }: InvestmentItemProps) => {
-
   const { t } = useTranslation()
-
   const {
     validator,
     stakedAmount
-  } = useMemo(() => validation, [validation])
-
+  } = useMemo(() => validation, [validation])  
   const {
     name,
-    auth
+    auth,
+    valId
   } = useMemo(() => validator, [validator])
+  const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
+  const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, Number(valId))
+  const {claimRewards} = useClaimRewards()
+  const { restake } = useRestakeRewards()
+
+  const onClaimedRewards = useCallback(async () => {
+    if (!valId) return;
+    const params: ClaimRewardsParams = {
+      toValidatorID: Number(valId),
+    }
+    try {
+      const { status, transactionHash } = await claimRewards(params)
+      if (status === 1) {
+        const msg = `Congratulation! Claim rewards success`
+        toastSuccess(msg, t('Success'))
+      } else {
+        toastDanger('Sorry! Claim rewards failed', t('Error'))
+      }
+      console.log("Claim rewards tx: ", transactionHash)
+    } catch (error) {
+      console.log("error: ", error);
+      toastDanger('Sorry! Claim rewards failed', t('Error'))
+    }
+    // eslint-disable-next-line 
+  }, [valId, t])
+
+  const onRestakedRewards = useCallback(async () => {
+    if (!valId) return;
+    const params: RestakeRewardsParams = {
+      toValidatorID: Number(valId),
+    }
+    try {
+      const { status, transactionHash } = await restake(params)
+      if (status === 1) {
+        const msg = `Congratulation! Restake rewards success`
+        toastSuccess(msg, t('Success'))
+      } else {
+        toastDanger('Sorry! Restake rewards failed', t('Error'))
+      }
+      console.log("Claim rewards tx: ", transactionHash)
+    } catch (error) {
+      console.log("error: ", error);
+      toastDanger('Sorry! Restake rewards failed', t('Error'))
+    }
+    // eslint-disable-next-line 
+  }, [valId, t])
+  
 
   return (
     <div>
@@ -50,36 +101,33 @@ export const InvestmentItem = ({
               <RenderNumberFormat amount={bigFormatEther(stakedAmount)} className="mr-2" fractionDigits={2} />
             </div>
             <div>
-              <Button variant={buttonType.transparent}>{t('Undelegate')}</Button>
+              <Button onClick={() => setIsOpenUndelegateModal(true)} variant={buttonType.transparent}>{t('Undelegate')}</Button>
             </div>
           </div>
         </Box>
-      </div>
-      <div className="grid grid-cols-2 gap-6 mt-4 text-center">
-        <Box className="py-6 px-10">
+
+        <Box className="max-w-[400px] py-6 px-10 text-center">
           <div className="text-gray text-xl">{t('Claimable (U2U)')}</div>
           <div className="text-black text-xl font-medium">NaN</div>
           <div className="grid grid-cols-2 mt-10 gap-4">
-            <Button scale={buttonScale.lg} variant={buttonType.transparent}>{t('Claim')}</Button>
-            <Button scale={buttonScale.lg}>{t('Re-Stake')}</Button>
+            <Button variant={buttonType.transparent} onClick={() => onClaimedRewards()}>{t('Claim')}</Button>
+            <Button onClick={() => onRestakedRewards()}>{t('Re-Stake')}</Button>
           </div>
         </Box>
-        <Box className="py-6 px-10">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="text-gray text-xl">{t('Unbonding (U2U)')}</div>
-              <div className="text-black text-xl font-medium">NaN</div>
-            </div>
-            <div>
-              <div className="text-gray text-xl">{t('Withdrawable (U2U)')}</div>
-              <div className="text-black text-xl font-medium">NaN</div>
-            </div>
-          </div>
-          <div className="mt-10">
-            <Button scale={buttonScale.lg} variant={buttonType.transparent} className="w-full">{t('Claim')}</Button>
-          </div>
-        </Box>
+
       </div>
+      {
+        withdrawalRequests && withdrawalRequests.length > 0 ? (
+          <div className="mt-4">
+          <WithdrawalRequestList  withdrawalRequests={withdrawalRequests}/>
+          </div>
+        ) : <></>
+      }
+      <UndelegateComponent
+        validation={validation}
+        isOpenModal={isOpenUndelegateModal}
+        setIsOpenModal={setIsOpenUndelegateModal}
+      />
     </div>
   )
 }

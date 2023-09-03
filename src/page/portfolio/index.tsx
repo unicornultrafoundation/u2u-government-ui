@@ -14,9 +14,7 @@ export const Portfolio = () => {
 
   const { delegator } = useFetchDelegator(account || "")
 
-  console.log("delegator::::", delegator);
-
-  const { validations } = useMemo(() => delegator, [delegator])
+  const { validations, address: delegatorAddr } = useMemo(() => delegator, [delegator])
 
   return (
     <div className="text-left">
@@ -24,7 +22,7 @@ export const Portfolio = () => {
       <div className="text-base text-gray">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste tempora quibusdam corporis illo commodi consectetur dignissimos! Aliquam mollitia aut officiis ipsam corporis assumenda cum alias sequi dolores! Veritatis, recusandae optio!</div>
       <div>
         {
-          validations && validations.length > 0 ? <MyInvestmentList validations={validations} /> : <></>
+          validations && validations.length > 0 ? <MyInvestmentList validations={validations} delegator={delegatorAddr} /> : <></>
         }
       </div>
       <div className="mt-20">
