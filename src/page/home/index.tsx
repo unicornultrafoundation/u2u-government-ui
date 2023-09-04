@@ -1,16 +1,20 @@
 import { useTranslation } from "react-i18next";
-import { Box, Button, RenderNumberFormat, StakingCalculator, ValidatorList, buttonScale } from "../../components";
-import { useBalance, useFetchAllValidator, useFetchStakingStats } from "../../hooks";
+import { Box, Button, StakingCalculator, ValidatorList, buttonScale } from "../../components";
+import { useBalance, useFetchAllValidator, useFetchStakingStats, useTotalSupply } from "../../hooks";
 import { useMemo } from "react";
-import { bigFormatEther } from "../../utils";
-import ArrowIcon from "../../images/icons/arrow-left.png"
+import { bigFormatEther, shortenDisplayNumber } from "../../utils";
+// import ArrowIcon from "../../images/icons/arrow-left.png"
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
   const { t } = useTranslation();
   const { stakingStats } = useFetchStakingStats()
   const { validators } = useFetchAllValidator()
   const { balance } = useBalance()
+  const { supply } = useTotalSupply()
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
+
+  const navigate = useNavigate()
 
   return (
     <div>
@@ -25,7 +29,9 @@ export const Home = () => {
         </div>
         <div className="mx-4">
           <div className="text-base font-medium text-gray">{t('Circulating Supply (U2U)')}</div>
-          <div className="text-2xl text-black font-bold">NaN</div>
+          <div className="text-2xl text-black font-bold">
+            {shortenDisplayNumber(supply)}
+          </div>
         </div>
         <div className="mx-4">
           <div className="text-base font-medium text-gray">{t('Epoch Reward (U2U)')}</div>
@@ -36,9 +42,8 @@ export const Home = () => {
         <div>
           <div className="font-bold text-base text-gray">Total staked amount (U2U)</div>
           <div className="font-bold text-black text-[40px]">
-            <RenderNumberFormat amount={bigFormatEther(totalStaked)} className="mr-2" fractionDigits={2} />
+            {shortenDisplayNumber(bigFormatEther(totalStaked))}
           </div>
-          <div className="text-lg font-semibold text-gray">Stake Ratio: <span className="text-black">NaN</span></div>
         </div>
         <div>
           <div className="font-bold text-base text-gray">Total staked market value (USD)</div>
@@ -53,8 +58,8 @@ export const Home = () => {
           <div className="text-base text-gray text-center">Delegators are rewarded for helping to validate the network. They do this by delegating their stake to validator nodes. </div>
           <div className="text-2xl text-black-2 text-center mt-10">Epoch Reward</div>
           <div className="text-base text-gray text-center">Reward from the Reserve to incentivize Validators to join us in securing the network. This reward will be distributed at end of Epoch, which last 24h each</div>
-          <div className="mt-10">
-            <Button scale={buttonScale.lg} className="w-[500px]">Become a Validator</Button>
+          <div className="mt-10 flex justify-center">
+            <Button scale={buttonScale.lg} className="w-[500px]" onClick={() => navigate("/validator/register")}>Become a Validator</Button>
           </div>
         </div>
       </Box>
@@ -63,10 +68,10 @@ export const Home = () => {
       </div>
       <div className="flex justify-between items-center mb-6 mt-10">
         <div className="text-[26px]">{`${t('Validator List')} (${stakingStats.totalValidator})`}</div>
-        <div className="text-base inline text-green font-medium cursor-pointer flex items-center gap-2">
+        {/* <div className="text-base inline text-green font-medium cursor-pointer flex items-center gap-2">
           See more
           <img src={ArrowIcon} alt="u2u" />
-        </div>
+        </div> */}
       </div>
       <div>
         <ValidatorList validators={validators} />

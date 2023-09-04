@@ -2,8 +2,9 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom"
 import { useBalance, useFetchValidator } from "../../../hooks";
 import { useMemo } from "react";
-import { bigFormatEther, shortenDisplayNumber, truncate } from "../../../utils";
+import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "../../../utils";
 import { Box, DelegationList, RenderNumberFormat, StakingCalculator } from "../../../components";
+import { VALIDATOR_COMMISSION } from "../../../contants";
 
 export const ValidatorDetails = () => {
 
@@ -33,13 +34,15 @@ export const ValidatorDetails = () => {
           <div className="text-base text-gray">Validator ID</div>
           <div className="text-base text-green font-bold">{valId}</div>
           <div className="text-base text-gray">Validator Auth</div>
-          <div className="text-base text-green font-bold">{truncate({ str: auth })}</div>
+          <div className="text-base text-green font-bold">
+            <a href={exploreAddress(auth)} target="_blank" rel="noopener noreferrer">{truncate({ str: auth })}</a>
+          </div>
         </div>
       </div>
       <Box className="flex items-center justify-around gap-12 mt-4">
         <div className="mx-4">
-          <div className="text-xs text-gray">{t('Commission')}</div>
-          <div className="text-base text-black font-bold">NaN</div>
+          <div className="text-xs text-gray">{t('Commission %')}</div>
+          <div className="text-base text-black font-bold">{VALIDATOR_COMMISSION}</div>
         </div>
         <div className="mx-4">
           <div className="text-xs text-gray">{t('Total Stake Amount (U2U)')}</div>

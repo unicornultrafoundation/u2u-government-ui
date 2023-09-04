@@ -22,6 +22,8 @@ export const UndelegateComponent = ({
 }: UndelegateComponentProps) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState('')
+  const [amountErr, setAmountErr] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const { undegegate } = useUndelegate()
 
@@ -32,8 +34,22 @@ export const UndelegateComponent = ({
 
   const { valId } = useMemo(() => validator, [validator])
 
+  const validateAmount = useCallback((value: any) => {
+    if (!value) {
+      setAmountErr(t('This field is required'));
+      return false;
+    } 
+    if (Number(value) > Number(bigFormatEther(stakedAmount))) {
+      setAmountErr(t('Your U2U staked not enough'));
+      return false;
+    }
+    setAmountErr("")
+    return true;
+  }, [stakedAmount, t])
+
   const onUnDelegate = useCallback(async () => {
-    if (!amount || !valId) return; 
+    if (!validateAmount(amount) || !valId) return; 
+    setIsLoading(true)
     const params: UnDelegateParams = {
       toValidatorID: Number(valId),
       amount: Number(amount)
@@ -52,6 +68,7 @@ export const UndelegateComponent = ({
     } catch (error) {
       console.log("error: ", error);
     }
+    setIsLoading(false)
     // eslint-disable-next-line
   }, [amount, valId])
 
@@ -68,9 +85,13 @@ export const UndelegateComponent = ({
           className="w-full"
           value={amount}
           type="number"
-          label="Staking amount"
+          label="Undelegate amount"
+          placeholder="Ex: 1000"
+          error={!!amountErr}
+          errorMessage={amountErr}
           onChange={(e) => {
             const value = e.target.value
+            validateAmount(value)
             setAmount(value)
           }}
         />
@@ -79,6 +100,7 @@ export const UndelegateComponent = ({
         <Button
           scale={buttonScale.lg}
           onClick={() => onUnDelegate()}
+          loading={isLoading}
           className="w-full">{t('Undelegate')}</Button>
         <Button
           scale={buttonScale.lg}

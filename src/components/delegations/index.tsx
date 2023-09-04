@@ -1,5 +1,5 @@
 import { Delegation } from "../../types";
-import { bigFormatEther, truncate } from "../../utils";
+import { bigFormatEther, exploreAddress, truncate } from "../../utils";
 import { Tbody, Td, Th, Thead } from "../table"
 import { RenderNumberFormat } from "../text";
 
@@ -53,7 +53,9 @@ export const DelegationList = ({ delegations }: DelegationListProps) => {
             delegations.map((row: Delegation, index: number) => {
               return (
                 <tr key={index}>
-                  <Td index={index} className={`text-green ${index === delegations.length - 1 ? "rounded-bl-lg" : ""}`}>{truncate({ str: row.delegatorAddress })}</Td>
+                  <Td index={index} className={`text-green ${index === delegations.length - 1 ? "rounded-bl-lg" : ""}`}>
+                    <a href={exploreAddress(row.delegatorAddress)} target="_blank" rel="noopener noreferrer">{truncate({ str: row.delegatorAddress })}</a>
+                  </Td>
                   <Td index={index} className="text-right text-base font-medium">
                     <RenderNumberFormat amount={bigFormatEther(row.stakedAmount)} fractionDigits={2} />
                   </Td>

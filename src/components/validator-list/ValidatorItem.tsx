@@ -49,12 +49,14 @@ export const ValidatorItem = ({
           <div className="text-sm font-bold text-black">{delegations?.length}</div>
         </div>
         <div className="mt-4">
-          <Button 
-          onClick={() => navigate(`/validator/${valId}`)}
-          variant={buttonType.secondary} 
-          className="rounded-lg flex items-center gap-2">
-            <span>View Detail</span>
-            <img src={ArrowIcon} alt="u2u" />
+          <Button
+            onClick={() => navigate(`/validator/${valId}`)}
+            variant={buttonType.secondary}
+            className="rounded-lg">
+            <div className="flex items-center gap-2">
+              <span>View Detail</span>
+              <img src={ArrowIcon} alt="u2u" />
+            </div>
           </Button>
         </div>
       </div>

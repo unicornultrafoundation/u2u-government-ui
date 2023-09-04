@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, useCallback } from "react";
 import { classNames } from "../../utils";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -21,22 +21,24 @@ export const Input: React.FC<InputProps> = (props) => {
 		appendAction,
 		error,
 		errorMessage,
-    className,
-    type = "text",
+		className,
+		type = "text",
 		label = "",
 		...rest
 	} = props
-
-  const inputClasses = classNames(
-		"border-0 bg-white rounded-lg focus:border focus:border-green focus:outline-none focus:ring-0 text-base py-3 px-6", 
-		className)
+	
+	const inputClasses = useCallback(() => {
+		const base = "bg-white rounded-lg focus:border focus:outline-none focus:ring-0 text-base py-3 px-6"
+		const border = error ? "focus:border-error border border-error" : "focus:border-green border-0"
+		return classNames(base, border, className)
+	}, [className, error])
 
 	return (
 		<div>
 			<div className="w-full relative">
 				{label && <div className="text-base text-gray mb-3">{label}</div>}
 				<input
-          className={inputClasses}
+					className={inputClasses()}
 					type={type}
 					value={value}
 					placeholder={placeholder || '0.0'}
@@ -47,7 +49,7 @@ export const Input: React.FC<InputProps> = (props) => {
 					{append}
 				</div>
 			</div>
-			{/* {error && <ErrorMessage message={errorMessage} />} */}
+			{error && <div className="text-sm text-error italic mt-1">{errorMessage}</div>}
 		</div>
 	)
 }

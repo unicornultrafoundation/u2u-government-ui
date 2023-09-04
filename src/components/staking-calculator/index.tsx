@@ -8,6 +8,7 @@ import { DelegateParams, Validator } from "../../types"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../toast"
 import { useTranslation } from "react-i18next"
+import { AmountSelection, SuggestionOptions } from "./AmountSelection"
 
 interface StakingCalculatorProps {
   validators: Validator[]
@@ -16,16 +17,22 @@ interface StakingCalculatorProps {
 
 export const StakingCalculator = ({
   validators,
-  balance
+  balance: u2uBalance
 }: StakingCalculatorProps) => {
 
   const { t } = useTranslation()
+  // Local state
   const [selection, setSelection] = useState<SelectOption[]>([])
   const [selected, setSelected] = useState<SelectOption>({} as SelectOption)
   const [amount, setAmount] = useState("")
-  const { account } = useWeb3React()
+  const [amountErr, setAmountErr] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
+  const { account } = useWeb3React()
   const { degegate } = useDelegate()
+  const adjustedFeeU2U = 0.1 // 0.1 U2U
+
 
   useEffect(() => {
     if (validators.length > 0) {
@@ -40,10 +47,56 @@ export const StakingCalculator = ({
     }
   }, [validators])
 
+  const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
+    try {
+        if (option === suggestOp || Number(u2uBalance) < adjustedFeeU2U) {
+            setSuggestOp(SuggestionOptions.NONE)
+            setAmount('')
+            validateAmount('')
+        } else {
+            setSuggestOp(option)
+            let amountCalculated = 0;
+            switch (option) {
+                case SuggestionOptions.TWENTY_FIVE:
+                    amountCalculated = Number(u2uBalance) / 4;
+                    break
+                case SuggestionOptions.FIFTY:
+                    amountCalculated = Number(u2uBalance) / 2;
+                    break
+                case SuggestionOptions.SEVENTY_FIVE:
+                    amountCalculated = Number(u2uBalance) / 4 * 3;
+                    break
+                case SuggestionOptions.MAX:
+                    amountCalculated = Number(u2uBalance) - adjustedFeeU2U
+                    break
+            }
+            setAmount(amountCalculated.toString());
+            validateAmount(amountCalculated)
+        }
+    } catch (error) {
+        console.error(error)
+    }
+    // eslint-disable-next-line
+}, [u2uBalance , suggestOp])
+
+
+  const validateAmount = useCallback((value: any) => {
+    if (!value) {
+      setAmountErr(t('This field is required'));
+      return false;
+    } 
+    if (Number(value) > Number(u2uBalance)) {
+      setAmountErr(t('Not enough U2U to send'));
+      return false;
+    }
+    setAmountErr("")
+    return true
+  }, [u2uBalance, t])
 
 
   const onDelegate = useCallback(async () => {
-    if (!amount || !selected) return;
+    if (!validateAmount(amount) || !selected) return;
+    setIsLoading(true)
     const params: DelegateParams = {
       toValidatorID: selected.value.valId,
       amount: Number(amount)
@@ -62,6 +115,7 @@ export const StakingCalculator = ({
       toastDanger('Sorry! Delegate failed', t('Error'))
     }
     setAmount('')
+    setIsLoading(false)
     // eslint-disable-next-line
   }, [amount, selected])
 
@@ -72,7 +126,7 @@ export const StakingCalculator = ({
           <div className="text-2xl text-black-2 font-medium mb-2">Staking Calculator</div>
           <div className="text-base text-gray">Your Balance:</div>
           <div className="text-base text-green">
-            <RenderNumberFormat amount={balance} className="mr-2" />
+            <RenderNumberFormat amount={u2uBalance} className="mr-2" />
             U2U
           </div>
           <div className="mt-6">
@@ -82,18 +136,19 @@ export const StakingCalculator = ({
               type="number"
               label="Staking amount"
               placeholder={"Ex: 10000"}
+              error={!!amountErr}
+              errorMessage={amountErr}
+              onInput={() => {
+                setSuggestOp(SuggestionOptions.NONE)
+              }}
               onChange={(e) => {
                 const value = e.target.value
+                validateAmount(value)
                 setAmount(value)
               }}
             />
           </div>
-          <div className="grid grid-cols-4 gap-4 mt-4">
-            <button className="text-sm rounded-lg bg-silver py-2 cursor-pointer text-gray">25%</button>
-            <button className="text-sm rounded-lg bg-silver py-2 cursor-pointer text-gray">50%</button>
-            <button className="text-sm rounded-lg bg-silver py-2 cursor-pointer text-gray">75%</button>
-            <button className="text-sm rounded-lg bg-silver py-2 cursor-pointer text-gray">100%</button>
-          </div>
+          <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
           <div className="text-base text-gray mb-3 mt-4">Validator</div>
           <Select
             options={selection}
@@ -126,7 +181,7 @@ export const StakingCalculator = ({
           <div className="flex justify-center">
             {
               account ? (
-                <Button className="w-full" scale={buttonScale.lg} onClick={onDelegate}>Delegate</Button>
+                <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>Delegate</Button>
               ) : (
                 <ConnectWalletButton />
               )

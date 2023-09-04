@@ -3,7 +3,7 @@ import { Box, ValidatorList } from "../../components"
 import { useFetchAllValidator, useFetchStakingStats } from "../../hooks"
 import { useMemo } from "react"
 import { bigFormatEther, shortenDisplayNumber } from "../../utils"
-import ArrowIcon from "../../images/icons/arrow-left.png"
+// import ArrowIcon from "../../images/icons/arrow-left.png"
 
 export const Validator = () => {
 
@@ -56,10 +56,10 @@ export const Validator = () => {
       </div>
       <div className="flex justify-between items-center mb-6 mt-10">
         <div className="text-[26px]">{`${t('Validator List')} (${totalValidator})`}</div>
-        <div className="text-base inline text-green font-medium cursor-pointer flex items-center gap-2">
+        {/* <div className="text-base inline text-green font-medium cursor-pointer flex items-center gap-2">
           See more
           <img src={ArrowIcon} alt="u2u" />
-        </div>
+        </div> */}
       </div>
       <div>
         <ValidatorList validators={validators} />

@@ -27,7 +27,8 @@ export interface ButtonProps {
   scale?: ButtonScale,
   disabled?: boolean,
   wide?: boolean,
-  className?: string
+  className?: string,
+  loading?: boolean
 }
 
 
@@ -38,6 +39,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
   wide,
   disabled,
   className,
+  loading,
   ...rest
 }) => {
 
@@ -64,7 +66,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
         case buttonScale.md:
           return 'text-sm font-medium'
         case buttonScale.lg:
-          return 'text-md font-semibold'
+          return 'text-lg font-semibold'
       }
     }
 
@@ -115,6 +117,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     }
 
     return classNames(
+      "flex items-center justify-center",
       backgroundClass(),
       fontClass(),
       colorClass(),
@@ -126,8 +129,9 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
   },[scale, variant, className])
 
   return (
-    <button className={buttonClasses} disabled={disabled} {...rest}>
-      {children}
+    <button className={buttonClasses} disabled={disabled || loading} {...rest}>
+        {loading && <i className="fa fa-spinner fa-spin mr-2"></i>}
+        {children}
     </button>
   )
 }

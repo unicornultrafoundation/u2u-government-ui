@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import { ClaimRewardsParams, RestakeRewardsParams, Validation } from "../../types"
 import { Box } from "../box"
 import { useCallback, useMemo, useState } from "react"
-import { bigFormatEther, truncate } from "../../utils"
+import { bigFormatEther, exploreAddress, truncate } from "../../utils"
 import ArrowIcon from "../../images/icons/arrow-left.png"
 import { RenderNumberFormat } from "../text"
 import { Button, buttonType } from "../button"
@@ -22,21 +22,26 @@ export const InvestmentItem = ({
   delegator
 }: InvestmentItemProps) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
   const {
     validator,
     stakedAmount
-  } = useMemo(() => validation, [validation])  
+  } = useMemo(() => validation, [validation])
   const {
     name,
     auth,
     valId
   } = useMemo(() => validator, [validator])
+
+  // Local state
   const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
+  const [isClaimRewardsLoading, setIsClaimRewardsLoading] = useState(false)
+  const [isRestakeLoading, setIsRestakeLoading] = useState(false)
+
   const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, Number(valId))
-  const {claimRewards} = useClaimRewards()
+  const { claimRewards } = useClaimRewards()
   const { restake } = useRestakeRewards()
-  
-  const navigate = useNavigate()
   const { pendingRewards } = usePendingReward(delegator, Number(valId))
 
   const onClaimedRewards = useCallback(async () => {
@@ -45,6 +50,7 @@ export const InvestmentItem = ({
       toValidatorID: Number(valId),
     }
     try {
+      setIsClaimRewardsLoading(true)
       const { status, transactionHash } = await claimRewards(params)
       if (status === 1) {
         const msg = `Congratulation! Claim rewards success`
@@ -57,6 +63,7 @@ export const InvestmentItem = ({
       console.log("error: ", error);
       toastDanger('Sorry! Claim rewards failed', t('Error'))
     }
+    setIsClaimRewardsLoading(false)
     // eslint-disable-next-line 
   }, [valId, t])
 
@@ -66,6 +73,7 @@ export const InvestmentItem = ({
       toValidatorID: Number(valId),
     }
     try {
+      setIsRestakeLoading(true)
       const { status, transactionHash } = await restake(params)
       if (status === 1) {
         const msg = `Congratulation! Restake rewards success`
@@ -78,9 +86,10 @@ export const InvestmentItem = ({
       console.log("error: ", error);
       toastDanger('Sorry! Restake rewards failed', t('Error'))
     }
+    setIsRestakeLoading(false)
     // eslint-disable-next-line 
   }, [valId, t])
-  
+
 
   return (
     <div>
@@ -90,7 +99,9 @@ export const InvestmentItem = ({
           <div className="flex justify-between mt-4">
             <div>
               <div className="font-medium text-lg text-black">{name}</div>
-              <div className="text-sm font-bold text-green">{truncate({ str: auth })}</div>
+              <div className="text-sm font-bold text-green">
+                <a href={exploreAddress(auth)} target="_blank" rel="noopener noreferrer">{truncate({ str: auth })}</a>
+              </div>
             </div>
             <div className="flex items-center cursor-pointer" onClick={() => navigate(`/validator/${valId}`)}>
               <span className="text-green text-sm">{t('View Detail')}</span>
@@ -113,11 +124,11 @@ export const InvestmentItem = ({
         <Box className="max-w-[400px] py-6 px-10 text-center">
           <div className="text-gray text-xl">{t('Claimable (U2U)')}</div>
           <div className="text-black text-xl font-medium">
-          <RenderNumberFormat amount={pendingRewards} className="mr-2" />
+            <RenderNumberFormat amount={pendingRewards} className="mr-2" />
           </div>
           <div className="grid grid-cols-2 mt-10 gap-4">
-            <Button variant={buttonType.transparent} onClick={() => onClaimedRewards()}>{t('Claim')}</Button>
-            <Button onClick={() => onRestakedRewards()}>{t('Re-Stake')}</Button>
+            <Button loading={isClaimRewardsLoading} variant={buttonType.transparent} onClick={() => onClaimedRewards()}>{t('Claim')}</Button>
+            <Button loading={isRestakeLoading} onClick={() => onRestakedRewards()}>{t('Re-Stake')}</Button>
           </div>
         </Box>
 
@@ -125,7 +136,7 @@ export const InvestmentItem = ({
       {
         withdrawalRequests && withdrawalRequests.length > 0 ? (
           <div className="mt-4">
-          <WithdrawalRequestList  withdrawalRequests={withdrawalRequests}/>
+            <WithdrawalRequestList withdrawalRequests={withdrawalRequests} />
           </div>
         ) : <></>
       }
