@@ -1,91 +1,102 @@
 import { useCallback, useMemo, useState } from "react"
 import { Modal } from "../../modal"
 import { useTranslation } from "react-i18next"
-import { Input } from "../../form"
+import { Input, Select, SelectOption } from "../../form"
 import { Button, buttonScale, buttonType } from "../../button"
-import { UnDelegateParams, Validation } from "../../../types"
+import { RelockStakeParams, Validation } from "../../../types"
 import { RenderNumberFormat } from "../../text"
-import { bigFormatEther } from "../../../utils"
-import { useUndelegate } from "../../../hooks"
+import { useGetUnlockedStake, useRelockStake } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
+import { durationOptions } from "../../../contants"
 
-interface UndelegateComponentProps {
+interface RelockStakeModalProps {
   validation: Validation
   isOpenModal: boolean
   setIsOpenModal: (open: boolean) => void
+  delegator: string
 }
 
-export const UndelegateComponent = ({
+export const RelockStakeModal = ({
   validation,
   isOpenModal,
-  setIsOpenModal
-}: UndelegateComponentProps) => {
+  setIsOpenModal,
+  delegator
+}: RelockStakeModalProps) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState('')
   const [amountErr, setAmountErr] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-
-  const { undegegate } = useUndelegate()
-
+  const [selected, setSelected] = useState<SelectOption>(durationOptions[0])
+  const { relockStake } = useRelockStake()
   const {
-    stakedAmount,
     validator
   } = useMemo(() => validation, [validation])
 
   const { valId } = useMemo(() => validator, [validator])
+  const { unlockedStake } = useGetUnlockedStake(delegator, Number(valId))
+
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
       setAmountErr(t('This field is required'));
       return false;
-    } 
-    if (Number(value) > Number(bigFormatEther(stakedAmount))) {
+    }
+    if (Number(value) > Number(unlockedStake)) {
       setAmountErr(t('Your U2U staked not enough'));
       return false;
     }
     setAmountErr("")
     return true;
-  }, [stakedAmount, t])
+  }, [unlockedStake, t])
 
-  const onUnDelegate = useCallback(async () => {
-    if (!validateAmount(amount) || !valId) return; 
+  const onReLockStake = useCallback(async () => {
+    if (!validateAmount(amount) || !valId || !selected) return;
     setIsLoading(true)
-    const params: UnDelegateParams = {
+    const params: RelockStakeParams = {
       toValidatorID: Number(valId),
+      lockupDuration: selected.value,
       amount: Number(amount)
     }
     try {
-      const {status, transactionHash} = await undegegate(params)
+      const { status, transactionHash } = await relockStake(params)
       if (status === 1) {
-        const msg = `Congratulation! Your staked amount has been undelegated.`
+        const msg = `Congratulation! Your staked amount has been locked.`
         toastSuccess(msg, t('Success'))
         setIsOpenModal(false)
         setAmount('')
       } else {
-        toastDanger('Sorry! Undelegate failed', t('Error'))
+        toastDanger('Sorry! Relock stake failed', t('Error'))
       }
-      console.log("UnDelegate tx: ", transactionHash)
+      console.log("Lock tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
+      toastDanger('Sorry! Relock stake failed', t('Error'))
     }
     setIsLoading(false)
     // eslint-disable-next-line
-  }, [amount, valId])
+  }, [amount, valId, selected])
 
   return (
     <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
-      <div className="text-2xl text-black-2 mb-2">{t('Undelegate')}</div>
-      <div className="text-base text-gray">Your staked:</div>
+      <div className="text-2xl text-black-2 mb-2">{t('Re-Lock Stake')}</div>
+      <div className="text-base text-gray">Available lock amount:</div>
       <div className="text-base text-green">
-        <RenderNumberFormat amount={bigFormatEther(stakedAmount)} className="mr-2" fractionDigits={2} />
+        <RenderNumberFormat amount={unlockedStake} className="mr-2" fractionDigits={2} />
         U2U
       </div>
-      <div className="mt-6">
+
+      <div className="text-base text-gray mb-3 mt-6">Validator</div>
+      <Select
+        options={durationOptions}
+        placeholder="Select validator"
+        setSelected={setSelected}
+        selected={selected} />
+      <div className="mt-4">
         <Input
           className="w-full"
           value={amount}
           type="number"
-          label="Undelegate amount"
+          label="Lock amount"
           placeholder="Ex: 1000"
           error={!!amountErr}
           errorMessage={amountErr}
@@ -99,9 +110,9 @@ export const UndelegateComponent = ({
       <div className="mt-10">
         <Button
           scale={buttonScale.lg}
-          onClick={() => onUnDelegate()}
+          onClick={() => onReLockStake()}
           loading={isLoading}
-          className="w-full">{t('Undelegate')}</Button>
+          className="w-full">{t('Lock Stake')}</Button>
         <Button
           scale={buttonScale.lg}
           variant={buttonType.secondary}

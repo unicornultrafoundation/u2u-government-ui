@@ -26,3 +26,20 @@ export interface CreateValidatorParams {
   pubkey: string
   amount: number
 }
+
+export interface LockStakeParams {
+  toValidatorID: number
+  lockupDuration: number
+  amount: number
+}
+
+export interface RelockStakeParams {
+  toValidatorID: number
+  lockupDuration: number
+  amount: number
+}
+
+export interface UnlockStakeParams {
+  toValidatorID: number
+  amount: number
+}

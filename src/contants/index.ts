@@ -1,8 +1,10 @@
+import { SelectOption } from "../components/form";
+
 export * from "./abi"
 
 export const POLLING_INTERVAL = 12000;
 export const connectorLocalStorageKey = "connectorId";
-export const U2U_CHAINID_MAINET =  Number(process.env.REACT_APP_U2U_CHAINID_MAINET || 2484);
+export const U2U_CHAINID_MAINET = Number(process.env.REACT_APP_U2U_CHAINID_MAINET || 2484);
 export const NODE_RPC = process.env.REACT_APP_NODE_RPC as string || "https://rpc-nebulas-testnet.uniultra.xyz"
 export const EXPLORER_LINK = process.env.REACT_APP_EXPLORER_LINK as string || "https://testnet.u2uscan.xyz"
 export const CHAIN_SUBGRAPH_URL = process.env.REACT_APP_CHAIN_SUBGRAPH_URL as string || "http://localhost:8000/subgraphs/name/u2u/sfc-subgraph"
@@ -18,4 +20,13 @@ export const SLOW_REFRESH_INTERVAL = 60000
 
 
 export const WITHDRAWAL_PERIOD_TIME = 604800
+
+export const durationOptions: SelectOption[] = [
+  { label: "14 day", value: 8467200 },
+  { label: "30 day", value: 18144000 },
+  { label: "60 day", value: 36288000 },
+  { label: "90 day", value: 54432000 },
+  { label: "180 day", value: 108864000 },
+  { label: "365 day", value: 220752000 },
+]
 

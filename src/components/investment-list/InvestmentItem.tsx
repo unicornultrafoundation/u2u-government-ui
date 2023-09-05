@@ -6,11 +6,14 @@ import { bigFormatEther, exploreAddress, truncate } from "../../utils"
 import ArrowIcon from "../../images/icons/arrow-left.png"
 import { RenderNumberFormat } from "../text"
 import { Button, buttonType } from "../button"
-import { UndelegateComponent } from "./action/Undelegate"
+import { UndelegateModal } from "./action/UndelegateModal"
 import { useClaimRewards, useFetchWithdrawRequest, usePendingReward, useRestakeRewards } from "../../hooks"
 import { WithdrawalRequestList } from "./WithdrawalRequestList"
 import { toastDanger, toastSuccess } from "../toast"
 import { useNavigate } from "react-router-dom"
+import { LockStakeModal } from "./action/LockStakeModal"
+import { RelockStakeModal } from "./action/RelockStakeModal"
+import { UnlockStakeModal } from "./action/UnlockStakeModal"
 
 interface InvestmentItemProps {
   validation: Validation
@@ -36,13 +39,19 @@ export const InvestmentItem = ({
 
   // Local state
   const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
+  const [isOpenLockStakeModal, setIsOpenLockStakeModal] = useState(false)
+  const [isOpenRelockStakeModal, setIsOpenRelockStakeModal] = useState(false)
+  const [isOpenUnlockStakeModal, setIsOpenUnlockStakeModal] = useState(false)
   const [isClaimRewardsLoading, setIsClaimRewardsLoading] = useState(false)
   const [isRestakeLoading, setIsRestakeLoading] = useState(false)
 
   const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, Number(valId))
+  // const { isLockedUp } = useIsLockedUp(delegator, Number(valId))
+
   const { claimRewards } = useClaimRewards()
   const { restake } = useRestakeRewards()
   const { pendingRewards } = usePendingReward(delegator, Number(valId))
+
 
   const onClaimedRewards = useCallback(async () => {
     if (!valId) return;
@@ -116,7 +125,15 @@ export const InvestmentItem = ({
               <RenderNumberFormat amount={bigFormatEther(stakedAmount)} className="mr-2" fractionDigits={2} />
             </div>
             <div>
-              <Button onClick={() => setIsOpenUndelegateModal(true)} variant={buttonType.transparent}>{t('Undelegate')}</Button>
+              <Button
+                onClick={() => setIsOpenUndelegateModal(true)}
+                variant={buttonType.transparent}
+                className="mb-2 w-[120px]">{t('Undelegate')}
+              </Button>
+              <Button
+                className="w-[120px]"
+                onClick={() => setIsOpenLockStakeModal(true)}
+              >{t('Lock Stake')}</Button>
             </div>
           </div>
         </Box>
@@ -132,6 +149,18 @@ export const InvestmentItem = ({
           </div>
         </Box>
 
+        <Box className="max-w-[400px] py-6 px-10 text-center">
+          <div className="text-gray text-xl">{t('Locked (U2U)')}</div>
+          <div className="text-black text-xl font-medium">
+            <RenderNumberFormat amount={0} className="mr-2" />
+          </div>
+          <div className="grid grid-cols-2 mt-10 gap-4">
+            <Button
+              variant={buttonType.transparent} onClick={() => setIsOpenRelockStakeModal(true)}>{t('Re-Lock')}</Button>
+            <Button onClick={() => setIsOpenUnlockStakeModal(true)}>{t('Un-Lock')}</Button>
+          </div>
+        </Box>
+
       </div>
       {
         withdrawalRequests && withdrawalRequests.length > 0 ? (
@@ -140,11 +169,28 @@ export const InvestmentItem = ({
           </div>
         ) : <></>
       }
-      <UndelegateComponent
+      <UndelegateModal
         validation={validation}
         isOpenModal={isOpenUndelegateModal}
         setIsOpenModal={setIsOpenUndelegateModal}
       />
+      <LockStakeModal
+        delegator={delegator}
+        validation={validation}
+        isOpenModal={isOpenLockStakeModal}
+        setIsOpenModal={setIsOpenLockStakeModal}
+      />
+      <RelockStakeModal
+        delegator={delegator}
+        validation={validation}
+        isOpenModal={isOpenRelockStakeModal}
+        setIsOpenModal={setIsOpenRelockStakeModal}
+      />
+      <UnlockStakeModal 
+       delegator={delegator}
+       validation={validation}
+       isOpenModal={isOpenUnlockStakeModal}
+       setIsOpenModal={setIsOpenUnlockStakeModal}/>
     </div>
   )
 }

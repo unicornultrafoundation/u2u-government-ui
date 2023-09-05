@@ -7,6 +7,6 @@ export const validation  = (data: any): Validation => {
   return {
     id: data.id,
     stakedAmount: BigNumber.from(data.stakedAmount),
-    validator: validator(data.validatorId)
+    validator: validator(data.validator)
   }
 }

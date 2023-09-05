@@ -6,7 +6,7 @@ import { useStakingContract } from "./useContract"
 export const usePendingReward = (delegatorAddress: string, validatorId: number) => {
   const stakingContract = useStakingContract()
   const [pendingRewards, setPendingRewards] = useState("")
-  const {mediumRefresh} = useRefresh()
+  const {fastRefresh} = useRefresh()
   useEffect(() => {
       (async() => {
           if (!delegatorAddress || !validatorId) return;
@@ -17,7 +17,7 @@ export const usePendingReward = (delegatorAddress: string, validatorId: number) 
             
           }
       })()
-  }, [delegatorAddress, stakingContract, validatorId, mediumRefresh]);
+  }, [delegatorAddress, stakingContract, validatorId, fastRefresh]);
   return {
     pendingRewards
   }

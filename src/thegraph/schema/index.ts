@@ -32,7 +32,7 @@ const VALIDATOR_GQL = `
 
 const VALIDATIONS_GQL = `
         id
-        validatorId {${VALIDATOR_GQL}}
+        validator {${VALIDATOR_GQL}}
         stakedAmount
 `
 

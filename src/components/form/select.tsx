@@ -72,7 +72,7 @@ export const Select = forwardRef<any, SelectProps>((
           <ul
             tabIndex={-1}
             role="listbox"
-            className="max-h-96 p-2 bg-light w-full focus:outline-none overflow-auto absolute shadow-modal rounded-xl top-[60px] left-0 z-50"
+            className="max-h-[200px] p-2 bg-light w-full focus:outline-none overflow-auto absolute shadow-modal rounded-xl top-[60px] left-0 z-[1000]"
             aria-orientation="vertical"
           >
             {
