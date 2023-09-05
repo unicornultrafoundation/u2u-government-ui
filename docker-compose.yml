@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  proxy:
+    image: nginx
+    container_name: proxy
+    volumes:
+      - ../proxy:/etc/nginx/templates
+    environment:
+      FRONT_PROXY_PASS: ${FRONT_PROXY_PASS:-http://frontend:3000}
+    ports:
+      - "80:80"
+  frontend:
+    image: u2u/staking-fe
+    build:
+      context: .
+    ports:
+      - 3000:3000
