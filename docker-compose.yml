@@ -12,5 +12,6 @@ services:
       - "80:80"
   frontend:
     image: u2u/staking-fe
+    container_name: staking-fe
     build:
       context: .
