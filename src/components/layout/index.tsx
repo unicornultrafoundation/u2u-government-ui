@@ -4,6 +4,7 @@ import { Header } from "../header"
 import { useAuth } from "../../hooks";
 import { connectorLocalStorageKey } from "../../contants";
 import { ConnectorNames } from "../../utils";
+import { isMobile } from 'mobile-device-detect';
 
 interface Props {
   children: ReactNode
@@ -21,10 +22,14 @@ export const Layout = ({ children }: Props) => {
   }, [])
   return (
     <div className="flex">
-      <LeftBar></LeftBar>
-      <div className="w-full px-5">
-        <Header />
-        <div className="p-8 pb-10">{children}</div>
+      {!isMobile && <LeftBar />}
+      <div className="w-full">
+        <div className="w-full">
+          <Header />
+        </div>
+        <div className="px-5">
+          <div className="p-8 pb-10">{children}</div>
+        </div>
       </div>
     </div>
   )

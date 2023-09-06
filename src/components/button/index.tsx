@@ -100,7 +100,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
         case buttonScale.lg:
           return 'rounded-2xl'
         case buttonScale.md:
-          return 'rounded-xl'
+          return 'rounded-[32px]'
         case buttonScale.sm:
           return 'rounded-lg'
       }

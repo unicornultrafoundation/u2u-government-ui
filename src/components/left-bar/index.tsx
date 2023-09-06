@@ -9,7 +9,7 @@ import { useCallback } from "react"
 import { useNavigate } from "react-router"
 import { useLocation } from "react-router-dom"
 
-interface NavProps {
+export interface NavProps {
   id: string
   name: string
   icon: any
@@ -17,7 +17,7 @@ interface NavProps {
   link: string
 }
 
-const navs: NavProps[] = [
+export const navs: NavProps[] = [
   {
     id: "home",
     name: "Home",
