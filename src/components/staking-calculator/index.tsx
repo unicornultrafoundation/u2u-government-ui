@@ -121,8 +121,9 @@ export const StakingCalculator = ({
 
   return (
     <div className="w-[550px]">
-      <Box variant="gradient">
-        <div className="px-4 py-4 text-left">
+      <Box variant="gradient" className="pb-10">          
+        <div className="md:hidden w-[50px] h-[2px] bg-green mb-4 mt-6"></div>  
+        <div className="md:px-4 md:py-4 text-left">
           <div className="text-2xl text-black-2 font-medium mb-2">Staking Calculator</div>
           <div className="text-base text-gray">Your Balance:</div>
           <div className="text-base text-green">

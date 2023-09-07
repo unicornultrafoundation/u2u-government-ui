@@ -18,46 +18,48 @@ export const Home = () => {
 
   return (
     <div>
-      <Box className="flex items-center justify-around gap-12">
-        <div className="mx-4">
-          <div className="text-base font-medium text-gray">{t('Total Supply (U2U)')}</div>
-          <div className="text-2xl text-black font-bold">10B U2U</div>
+      <Box className="flex flex-wrap items-center md:justify-around md:gap-12 gap-y-6 text-left md:text-center">
+        <div className="w-6/12 md:w-fit md:mx-4 text-left">
+          <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Total Supply (U2U)')}</div>
+          <div className="md:text-2xl text-sm text-black font-bold">10B U2U</div>
         </div>
-        <div className="mx-4">
-          <div className="text-base font-medium text-gray">{t('Market Cap (USD)')}</div>
-          <div className="text-2xl text-black font-bold">NaN</div>
+        <div className="w-6/12 md:w-fit md:mx-4">
+          <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Market Cap (USD)')}</div>
+          <div className="md:text-2xl text-sm text-black font-bold">NaN</div>
         </div>
-        <div className="mx-4">
-          <div className="text-base font-medium text-gray">{t('Circulating Supply (U2U)')}</div>
-          <div className="text-2xl text-black font-bold">
+        <div className="w-6/12 md:w-fit md:mx-4">
+          <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Circulating Supply (U2U)')}</div>
+          <div className="md:text-2xl text-sm text-black font-bold">
             {shortenDisplayNumber(supply)}
           </div>
         </div>
-        <div className="mx-4">
-          <div className="text-base font-medium text-gray">{t('Epoch Reward (U2U)')}</div>
-          <div className="text-2xl text-black font-bold">NaN</div>
+        <div className="w-6/12 md:w-fit md:mx-4">
+          <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Epoch Reward (U2U)')}</div>
+          <div className="md:text-2xl text-sm text-black font-bold">NaN</div>
         </div>
       </Box>
-      <Box className="flex items-start justify-center gap-16 mt-10" variant="transparent">
-        <div>
-          <div className="font-bold text-base text-gray">Total staked amount (U2U)</div>
-          <div className="font-bold text-black text-[40px]">
+      <Box className="md:flex items-start justify-center gap-16 text-left md:text-center my-10" variant="transparent">
+        <div className="md:hidden w-[50px] h-[2px] bg-green mb-8"></div>
+        <div className="mb-6">
+          <div className="md:font-bold text-sm md:text-base text-gray">Total staked amount (U2U)</div>
+          <div className="font-bold text-black text-[36px] md:text-[40px]">
             {shortenDisplayNumber(bigFormatEther(totalStaked))}
           </div>
         </div>
         <div>
-          <div className="font-bold text-base text-gray">Total staked market value (USD)</div>
-          <div className="font-bold text-black text-[40px]">NaN</div>
+          <div className="md:font-bold text-sm md:text-base text-gray">Total staked market value (USD)</div>
+          <div className="font-bold text-black text-[36px] md:text-[40px]">NaN</div>
         </div>
       </Box>
       <Box variant="gradient">
-        <div className="py-[32px]">
-          <div className="text-[26px] text-black-2 text-center">Validators form the backbone of U2U’s network.</div>
-          <div className="text-base text-gray text-center">By processing transactions and participating in consensus, each validator helps make U2U the most censorship resistant and highest-performance blockchain network in the world.</div>
-          <div className="text-2xl text-black-2 text-center mt-10">Delegators</div>
-          <div className="text-base text-gray text-center">Delegators are rewarded for helping to validate the network. They do this by delegating their stake to validator nodes. </div>
-          <div className="text-2xl text-black-2 text-center mt-10">Epoch Reward</div>
-          <div className="text-base text-gray text-center">Reward from the Reserve to incentivize Validators to join us in securing the network. This reward will be distributed at end of Epoch, which last 24h each</div>
+        <div className="md:py-[32px] py-10 md:text-center text-left">
+          <div className="md:hidden w-[50px] h-[2px] bg-green mb-6"></div>
+          <div className="text-[26px] text-black-2">Validators form the backbone of U2U’s network.</div>
+          <div className="text-base text-gray">By processing transactions and participating in consensus, each validator helps make U2U the most censorship resistant and highest-performance blockchain network in the world.</div>
+          <div className="text-2xl text-black-2 mt-10">Delegators</div>
+          <div className="text-base text-gray">Delegators are rewarded for helping to validate the network. They do this by delegating their stake to validator nodes. </div>
+          <div className="text-2xl text-black-2 mt-10">Epoch Reward</div>
+          <div className="text-base text-gray">Reward from the Reserve to incentivize Validators to join us in securing the network. This reward will be distributed at end of Epoch, which last 24h each</div>
           <div className="mt-10 flex justify-center">
             <Button scale={buttonScale.lg} className="w-[500px]" onClick={() => navigate("/validator/register")}>Become a Validator</Button>
           </div>

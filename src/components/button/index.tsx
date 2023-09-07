@@ -98,7 +98,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const radiusClass = () => {
       switch (scale) {
         case buttonScale.lg:
-          return 'rounded-2xl'
+          return 'rounded-[48px]'
         case buttonScale.md:
           return 'rounded-[32px]'
         case buttonScale.sm:

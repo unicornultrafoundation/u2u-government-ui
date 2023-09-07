@@ -28,7 +28,7 @@ interface DelegationListProps {
 
 export const DelegationList = ({ delegations }: DelegationListProps) => {
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
       <table className="w-full">
         <Thead>
           <tr>

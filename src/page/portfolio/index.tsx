@@ -27,12 +27,12 @@ export const Portfolio = () => {
       </div>
       <div className="mt-20">
         <Box variant={boxType.gradient2}>
-          <div className="px-[90px] py-6 flex items-center justify-between">
+          <div className="md:px-[90px] py-6 md:flex items-center justify-between">
             <div className="text-[26px] text-black">
               <div>The more you staking,</div>
               <div>the more rewards you get!</div>
             </div>
-            <div>
+            <div className="mt-6 md:mt-0">
               <Button
                 variant={buttonType.transparent}
                 scale={buttonScale.lg}

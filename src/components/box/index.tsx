@@ -54,11 +54,11 @@ export const Box = ({
     const heightClass = () => {
       switch (scale) {
         case boxScale.lg:
-          return 'p-[24px]'
+          return 'md:p-[24px] p-6'
         case boxScale.md:
-          return 'p-[16px]'
+          return 'md:p-[16px] p-4'
         case boxScale.sm:
-          return 'p-[12px]'
+          return 'md:p-[12px] p-2'
       }
     }
 
