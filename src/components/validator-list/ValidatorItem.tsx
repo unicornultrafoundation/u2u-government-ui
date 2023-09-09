@@ -27,7 +27,7 @@ export const ValidatorItem = ({
 
   const navigate = useNavigate()
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
-  const votingPower = useMemo(() => !totalStakedAmount.isZero() && !totalStaked.isZero() && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])  
+  const votingPower = useMemo(() => totalStakedAmount && !totalStakedAmount.isZero() && totalStaked && !totalStaked.isZero() && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])  
 
   return (
     <Box className="max-w-[400px]">

@@ -27,7 +27,7 @@ export const ValidatorDetails = () => {
   } = useMemo(() => validator, [validator])
 
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
-  const votingPower = useMemo(() => totalStakedAmount && totalStaked && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])  
+  const votingPower = useMemo(() => !!totalStakedAmount && !totalStakedAmount.isZero() && totalStaked && !totalStaked.isZero() && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])
 
   if (!validator) return <></>
 
