@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom"
 import { LockStakeModal } from "./action/LockStakeModal"
 import { RelockStakeModal } from "./action/RelockStakeModal"
 import { UnlockStakeModal } from "./action/UnlockStakeModal"
+import { BigNumber } from "ethers"
 
 interface InvestmentItemProps {
   validation: Validation
@@ -41,7 +42,13 @@ export const InvestmentItem = ({
     valId
   } = useMemo(() => validator, [validator])
 
-  const actualStakedAmount = useMemo(() => stakedAmount && lockedAmount && stakedAmount.sub(lockedAmount), [stakedAmount, lockedAmount])
+  const actualStakedAmount = useMemo(() => {
+    if (stakedAmount && !stakedAmount.isZero()) {
+      return stakedAmount.sub(lockedAmount || BigNumber.from(0))
+    }
+    return BigNumber.from(0)
+  }, [stakedAmount, lockedAmount])
+  
   // Local state
   const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
   const [isOpenLockStakeModal, setIsOpenLockStakeModal] = useState(false)
