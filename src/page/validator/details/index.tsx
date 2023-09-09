@@ -1,13 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom"
-import { useBalance, useFetchStakingStats, useFetchValidator } from "../../../hooks";
+import { useBalance, useFetchValidator } from "../../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "../../../utils";
 import { Box, DelegationList, RenderNumberFormat, StakingCalculator } from "../../../components";
 import { VALIDATOR_COMMISSION } from "../../../contants";
 import { isMobile } from "mobile-device-detect";
-import { BigNumber } from "ethers";
-
 
 export const ValidatorDetails = () => {
 
@@ -15,19 +13,15 @@ export const ValidatorDetails = () => {
   const { validatorId } = useParams()
   const { balance } = useBalance()
   const { validator } = useFetchValidator(Number(validatorId))
-  const { stakingStats } = useFetchStakingStats()
-
   const {
     name,
     valId,
     auth,
     totalStakedAmount,
     delegations,
-    active
+    active,
+    votingPower
   } = useMemo(() => validator, [validator])
-
-  const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
-  const votingPower = useMemo(() => !!totalStakedAmount && !totalStakedAmount.isZero() && totalStaked && !totalStaked.isZero() && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])
 
   if (!validator) return <></>
 

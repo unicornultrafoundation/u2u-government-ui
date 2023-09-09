@@ -92,6 +92,7 @@ export const RelockStakeModal = ({
         options={durationOptions}
         placeholder="Select validator"
         setSelected={setSelected}
+        onChange={(option) => setSelected(option)}
         selected={selected} />
       <div className="mt-4">
         <Input

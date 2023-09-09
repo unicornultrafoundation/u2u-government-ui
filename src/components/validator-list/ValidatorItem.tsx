@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { StakingStats, Validator } from "../../types"
+import { Validator } from "../../types"
 import { Box } from "../box"
 import { Button, buttonType } from "../button"
 import { useMemo } from "react"
@@ -7,27 +7,23 @@ import { bigFormatEther } from "../../utils"
 import { RenderNumberFormat } from "../text"
 import ArrowIcon from "../../images/icons/arrow-left.png"
 import { useNavigate } from "react-router-dom"
-import { BigNumber } from "ethers"
 
 interface ValidatorItemProps {
   validator: Validator
-  stakingStats: StakingStats
 }
 
 export const ValidatorItem = ({
-  validator,
-  stakingStats
+  validator
 }: ValidatorItemProps) => {
   const { t } = useTranslation()
   const {
     valId,
     totalStakedAmount,
-    delegations
+    delegations,
+    votingPower
   } = useMemo(() => validator, [validator])
 
   const navigate = useNavigate()
-  const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
-  const votingPower = useMemo(() => totalStakedAmount && !totalStakedAmount.isZero() && totalStaked && !totalStaked.isZero() && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])  
 
   return (
     <Box className="max-w-[400px]">

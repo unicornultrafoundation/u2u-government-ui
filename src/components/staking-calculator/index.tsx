@@ -24,7 +24,7 @@ export const StakingCalculator = ({
   const { t } = useTranslation()
   // Local state
   const [selection, setSelection] = useState<SelectOption[]>([])
-  const [selected, setSelected] = useState<SelectOption>({} as SelectOption)
+  const [selected, setSelected] = useState<SelectOption | undefined>(undefined)
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -40,12 +40,15 @@ export const StakingCalculator = ({
       let _options = validators.map((v: Validator, index: number) => {
         return {
           value: v,
-          label: `Validator ${v.valId}`
+          label: `Validator ${v.valId ? v.valId : ''} (${v.votingPower  ? ((v.votingPower / 10000).toFixed(2)) : ''}%)`
         } as SelectOption
       })
       setSelection(_options)
-      setSelected(_options[0])
+      if (!selected || !selected.value || !selected.value.valId) {
+        setSelected(_options[0])
+      }
     }
+    // eslint-disable-next-line
   }, [validators])
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
@@ -87,7 +90,7 @@ export const StakingCalculator = ({
       return false;
     }
     if (Number(value) > Number(u2uBalance)) {
-      setAmountErr(t('Not enough U2U to send'));
+      setAmountErr(t('Insufficient balance'));
       return false;
     }
     setAmountErr("")
@@ -155,10 +158,12 @@ export const StakingCalculator = ({
           <Select
             options={selection}
             placeholder="Select validator"
-            setSelected={setSelected}
+            onChange={(option: any) =>{
+              setSelected(option)
+            }}
             selected={selected} />
           <div className="w-full h-[1px] bg-lightGray px-4 my-6"></div>
-          <APRCalculator amount={Number(amount)} validator={selected.value} />
+          <APRCalculator amount={Number(amount)} validator={selected && selected.value} />
           <div className="flex justify-center">
             {
               account ? (

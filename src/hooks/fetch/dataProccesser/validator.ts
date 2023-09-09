@@ -2,7 +2,7 @@ import { BigNumber } from "ethers"
 import { Validator } from "../../../types"
 import { delegation } from "./delegation"
 
-export const validator  = (data: any): Validator => {  
+export const validator  = (data: any, totalStaked: BigNumber): Validator => {  
   if (!data) return {} as Validator
   return {
     valId: data.validatorId,
@@ -19,7 +19,7 @@ export const validator  = (data: any): Validator => {
     downTime: data.downTime,
     lockedUntil: data.lockedUntil,
     lockDays: data.lockDays,
-    votingPower: 0,
+    votingPower: totalStaked ? Number(BigNumber.from(data.totalStakedAmount).mul(BigNumber.from(1000000)).div(totalStaked)) : 0,
     delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : []
   }
 }
