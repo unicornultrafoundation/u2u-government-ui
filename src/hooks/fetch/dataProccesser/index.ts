@@ -1,5 +1,6 @@
 import { delegation } from "./delegation"
 import { delegator } from "./delegator"
+import { lockedStake } from "./lockedStake"
 import { stakingStats } from "./stats"
 import { validation } from "./validation"
 import { validator } from "./validator"
@@ -12,5 +13,6 @@ export const DataProcessor = {
   delegator,
   delegation,
   validation,
-  withdrawalRequest
+  withdrawalRequest,
+  lockedStake
 }

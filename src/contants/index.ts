@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import { SelectOption } from "../components/form";
 
 export * from "./abi"
@@ -19,14 +20,16 @@ export const MEDIUM_REFRESH_INTERVAL = 20000
 export const SLOW_REFRESH_INTERVAL = 60000
 
 
-export const WITHDRAWAL_PERIOD_TIME = 604800
+export const WITHDRAWAL_PERIOD_TIME = Number(process.env.REACT_APP_WITHDRAWAL_PERIOD_TIME || 604800)
+
+export const epochTime = BigNumber.from(420);
+export const DecimalBigNumber = BigNumber.from("1000000000000000000")
 
 export const durationOptions: SelectOption[] = [
   { label: "14 day", value: 8467200 },
   { label: "30 day", value: 18144000 },
   { label: "60 day", value: 36288000 },
   { label: "90 day", value: 54432000 },
-  { label: "180 day", value: 108864000 },
-  { label: "365 day", value: 220752000 },
+  { label: "180 day", value: 108864000 }
 ]
 

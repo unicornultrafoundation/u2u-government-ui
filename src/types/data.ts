@@ -57,6 +57,21 @@ export interface WithdrawalRequest {
   validatorId: string
   unbondTime: number
   unbondingAmount: BigNumber
-  withdrawalTime: number;
-  withdrawableAmount: BigNumber
+  withdrawalAbleTime: number
+  withdrawable: boolean
+  withdrawalAmount: BigNumber
+  undelegateHash: string
+  withdrawalHash: string
+  withdrawalTime: number
+  withdrawal: boolean
+}
+
+export interface LockedStake {
+  delegator: string
+  validatorId: string
+  duration: number
+  endTime: number
+  lockedAmount: BigNumber
+  penalty: BigNumber
+  isLockedUp: boolean
 }

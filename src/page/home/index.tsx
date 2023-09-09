@@ -13,7 +13,6 @@ export const Home = () => {
   const { balance } = useBalance()
   const { supply } = useTotalSupply()
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
-
   const navigate = useNavigate()
 
   return (
@@ -76,7 +75,7 @@ export const Home = () => {
         </div> */}
       </div>
       <div>
-        <ValidatorList validators={validators} />
+        <ValidatorList validators={validators} stakingStats={stakingStats} />
       </div>
     </div>
   )

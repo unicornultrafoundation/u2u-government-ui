@@ -17,3 +17,39 @@ export const truncate = ({ str, headCount = 10, tailCount = 4 }: {
 
 
 export const exploreAddress = (_address: string): string => `${EXPLORER_LINK}/address/${_address}`
+export const exploreTransaction = (_address: string): string => `${EXPLORER_LINK}/tx/${_address}`
+
+
+
+export const millisecondToDay = (time: number) => {
+	if (!time) return '-'
+	const timeInSeconds = Math.floor(time / 1000);
+	const days = Math.floor((timeInSeconds / 86400))
+	const hours = Math.floor((timeInSeconds % 86400) / 3600)
+	const minutes = Math.floor((timeInSeconds % 3600) / 60)
+	const seconds = timeInSeconds - days*86400 - hours * 3600 - minutes * 60;
+
+	const hourString = hours ? `${hours} hr${hours > 1 ? 's' : ''}` : '';
+	const minuteString = minutes ? `${minutes} min${minutes > 1 ? 's' : ''}` : '';
+	const secondString = seconds ? `${seconds} sec${seconds > 1 ? 's' : ''}` : '';
+	const daysString = days ? `${days} day${days > 1 ? 's' : ''}` : '';
+
+	if(daysString) {
+			return `${daysString}`
+	}
+	if(hourString) {
+			return `${hourString}`
+	}
+	if(minuteString) {
+			return `${minuteString}`
+	}
+	return `${secondString}`
+};
+
+export const dateToUTCString = (time: any) => {
+	const d = new Date(time);
+	return d.toUTCString()
+}
+
+
+export const nowTime = () => (new Date()).getTime();

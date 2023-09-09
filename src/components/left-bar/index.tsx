@@ -8,8 +8,8 @@ import homeActiveIcon from "../../images/icons/home-active.svg"
 import { useCallback } from "react"
 import { useNavigate } from "react-router"
 import { useLocation } from "react-router-dom"
-// import AppStore from "../../images/appstore.png"
-// import GgPlay from "../../images/ggplay.png"
+import AppStore from "../../images/appstore.png"
+import GgPlay from "../../images/ggplay.png"
 
 export interface NavProps {
   id: string
@@ -80,11 +80,11 @@ export const LeftBar = () => {
         }
       </div>
       <div className="absolute bottom-0 left-0 p-6 w-full">
-        {/* <div className="text-left text-sm font-semibold mb-2">Download U2U Wallet</div>
-        <div className="flex item-center justify-between gap-2">
-          <img src={GgPlay} alt="u2u" />
-          <img src={AppStore} alt="u2u"/>
-        </div> */}
+        <div className="text-left text-sm font-semibold mb-2">Download U2U Wallet</div>
+        <div className="flex item-center justify-between gap-2 mb-6">
+          <img src={GgPlay} alt="u2u" className="w-6/12" />
+          <img src={AppStore} alt="u2u" className="w-6/12"/>
+        </div>
         <div className="text-left text-sm font-semibold mb-2">Find us on:</div>
         <div className="flex item-center justify-between">
           <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">

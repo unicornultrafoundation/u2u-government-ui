@@ -9,6 +9,7 @@ import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../toast"
 import { useTranslation } from "react-i18next"
 import { AmountSelection, SuggestionOptions } from "./AmountSelection"
+import { APRCalculator } from "./APRCalculator"
 
 interface StakingCalculatorProps {
   validators: Validator[]
@@ -49,42 +50,42 @@ export const StakingCalculator = ({
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-        if (option === suggestOp || Number(u2uBalance) < adjustedFeeU2U) {
-            setSuggestOp(SuggestionOptions.NONE)
-            setAmount('')
-            validateAmount('')
-        } else {
-            setSuggestOp(option)
-            let amountCalculated = 0;
-            switch (option) {
-                case SuggestionOptions.TWENTY_FIVE:
-                    amountCalculated = Number(u2uBalance) / 4;
-                    break
-                case SuggestionOptions.FIFTY:
-                    amountCalculated = Number(u2uBalance) / 2;
-                    break
-                case SuggestionOptions.SEVENTY_FIVE:
-                    amountCalculated = Number(u2uBalance) / 4 * 3;
-                    break
-                case SuggestionOptions.MAX:
-                    amountCalculated = Number(u2uBalance) - adjustedFeeU2U
-                    break
-            }
-            setAmount(amountCalculated.toString());
-            validateAmount(amountCalculated)
+      if (option === suggestOp || Number(u2uBalance) < adjustedFeeU2U) {
+        setSuggestOp(SuggestionOptions.NONE)
+        setAmount('')
+        validateAmount('')
+      } else {
+        setSuggestOp(option)
+        let amountCalculated = 0;
+        switch (option) {
+          case SuggestionOptions.TWENTY_FIVE:
+            amountCalculated = Number(u2uBalance) / 4;
+            break
+          case SuggestionOptions.FIFTY:
+            amountCalculated = Number(u2uBalance) / 2;
+            break
+          case SuggestionOptions.SEVENTY_FIVE:
+            amountCalculated = Number(u2uBalance) / 4 * 3;
+            break
+          case SuggestionOptions.MAX:
+            amountCalculated = Number(u2uBalance) - adjustedFeeU2U
+            break
         }
+        setAmount(amountCalculated.toString());
+        validateAmount(amountCalculated)
+      }
     } catch (error) {
-        console.error(error)
+      console.error(error)
     }
     // eslint-disable-next-line
-}, [u2uBalance , suggestOp])
+  }, [u2uBalance, suggestOp])
 
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
       setAmountErr(t('This field is required'));
       return false;
-    } 
+    }
     if (Number(value) > Number(u2uBalance)) {
       setAmountErr(t('Not enough U2U to send'));
       return false;
@@ -121,8 +122,8 @@ export const StakingCalculator = ({
 
   return (
     <div className="w-[550px]">
-      <Box variant="gradient" className="pb-10">          
-        <div className="md:hidden w-[50px] h-[2px] bg-green mb-4 mt-6"></div>  
+      <Box variant="gradient" className="pb-10">
+        <div className="md:hidden w-[50px] h-[2px] bg-green mb-4 mt-6"></div>
         <div className="md:px-4 md:py-4 text-left">
           <div className="text-2xl text-black-2 font-medium mb-2">Staking Calculator</div>
           <div className="text-base text-gray">Your Balance:</div>
@@ -157,28 +158,7 @@ export const StakingCalculator = ({
             setSelected={setSelected}
             selected={selected} />
           <div className="w-full h-[1px] bg-lightGray px-4 my-6"></div>
-          <div className="mb-6">
-            <div className="flex justify-between">
-              <div className="text-sm text-black">APR(%)</div>
-              <div className="text-sm text-black">NaN U2U</div>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-sm text-black">30 days</div>
-              <div className="text-sm text-black">NaN U2U</div>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-sm text-black">90 days</div>
-              <div className="text-sm text-black">NaN U2U</div>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-sm text-black">180 days</div>
-              <div className="text-sm text-black">NaN U2U</div>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-sm text-black">365 days</div>
-              <div className="text-sm text-black">NaN U2U</div>
-            </div>
-          </div>
+          <APRCalculator amount={Number(amount)} validator={selected.value} />
           <div className="flex justify-center">
             {
               account ? (

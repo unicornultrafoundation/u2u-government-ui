@@ -1,11 +1,13 @@
-import { Validator } from "../../types"
+import { StakingStats, Validator } from "../../types"
 import { ValidatorItem } from "./ValidatorItem"
 
 interface ValidatorListProps {
   validators: Validator[]
+  stakingStats: StakingStats
 }
 export const ValidatorList = ({
-  validators
+  validators,
+  stakingStats
 }: ValidatorListProps) => {
   if (validators.length=== 0) return <></>
   return (
@@ -13,7 +15,7 @@ export const ValidatorList = ({
       {
         validators.map((v: Validator, index: number) => {
           return (
-            <ValidatorItem validator={v} key={index}/>
+            <ValidatorItem validator={v} key={index} stakingStats={stakingStats}/>
           )
         })
       }

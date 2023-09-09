@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom"
-import { useBalance, useFetchValidator } from "../../../hooks";
+import { useBalance, useFetchStakingStats, useFetchValidator } from "../../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "../../../utils";
 import { Box, DelegationList, RenderNumberFormat, StakingCalculator } from "../../../components";
 import { VALIDATOR_COMMISSION } from "../../../contants";
 import { isMobile } from "mobile-device-detect";
+import { BigNumber } from "ethers";
 
 
 export const ValidatorDetails = () => {
@@ -14,14 +15,19 @@ export const ValidatorDetails = () => {
   const { validatorId } = useParams()
   const { balance } = useBalance()
   const { validator } = useFetchValidator(Number(validatorId))
+  const { stakingStats } = useFetchStakingStats()
+
   const {
     name,
     valId,
     auth,
     totalStakedAmount,
-    votingPower,
-    delegations
+    delegations,
+    active
   } = useMemo(() => validator, [validator])
+
+  const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
+  const votingPower = useMemo(() => totalStakedAmount && totalStaked && totalStakedAmount.mul(BigNumber.from(1000000)).div(totalStaked), [totalStakedAmount, totalStaked])  
 
   if (!validator) return <></>
 
@@ -58,7 +64,7 @@ export const ValidatorDetails = () => {
               <div className="mx-4">
                 <div className="text-xs text-gray">{t('Voting Power (%)')}</div>
                 <div className="text-base text-black font-bold">
-                  <RenderNumberFormat amount={(votingPower)} className="mr-2" fractionDigits={2} />
+                  <RenderNumberFormat amount={(Number(votingPower) / 10000)} className="mr-2" fractionDigits={2} />
                 </div>
               </div>
               <div className="mx-4">
@@ -67,12 +73,14 @@ export const ValidatorDetails = () => {
               </div>
               <div className="mx-4">
                 <div className="text-xs text-gray">{t('Status')}</div>
-                <div className="text-base text-black font-bold">NaN</div>
+                <div className="text-white flex items-center mt-1">
+                  {!!active ? <div className="text-xs w-[60px] bg-green rounded-xl py-1">Active</div> : <div className="text-xs w-[70px] bg-error rounded-xl py-1">Deactive</div>}
+                </div>
               </div>
-              <div className="mx-4">
+              {/* <div className="mx-4">
                 <div className="text-xs text-gray">{t('Uptime (%)')}</div>
                 <div className="text-base text-black font-bold">NaN</div>
-              </div>
+              </div> */}
             </Box>
           </div>
         ) : (

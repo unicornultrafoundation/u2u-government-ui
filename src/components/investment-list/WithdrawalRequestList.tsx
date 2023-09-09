@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { WithdrawParams, WithdrawalRequest } from "../../types";
-import { bigFormatEther } from "../../utils";
+import { bigFormatEther, dateToUTCString, exploreTransaction, millisecondToDay, nowTime, truncate } from "../../utils";
 import { Button, buttonScale } from "../button";
 import { Tbody, Td, Th, Thead } from "../table"
 import { RenderNumberFormat } from "../text";
@@ -19,17 +19,18 @@ const headers: Header[] = [
     name: "WrID"
   },
   {
-    name: "Unbonded Time",
-  },
-  {
     name: "Unbonded Amount",
     subName: "(U2U)"
   },
   {
-    name: "Withdrawable Time",
+    name: "Withdrawable",
   },
   {
-    name: "Withdrawable Amount",
+    name: "Withdrawal Amount",
+    subName: "(U2U)"
+  },
+  {
+    name: "Withdrawal Tx",
     subName: "(U2U)"
   },
   {
@@ -47,8 +48,7 @@ export const WithdrawalRequestList = ({
   const { t } = useTranslation()
 
   const { withdraw } = useWidthdraw()
-
-
+  
   const onWithdraw = useCallback(async (valId: number, wrId: number) => {
     if (!valId || !wrId) return;
     const params: WithdrawParams = {
@@ -73,6 +73,7 @@ export const WithdrawalRequestList = ({
 
   return (
     <div className="w-full overflow-x-auto">
+      <div className="text-[26px] mb-4">{`${t('Withdraw Requested')}`}</div>
       <table className="w-full">
         <Thead>
           <tr>
@@ -97,24 +98,37 @@ export const WithdrawalRequestList = ({
             withdrawalRequests.map((row: WithdrawalRequest, index: number) => {
               return (
                 <tr key={index}>
-                  <Td index={index} className={`text-green ${index === withdrawalRequests.length - 1 ? "rounded-bl-lg" : ""}`}>
-                    {row.wrId}
-                  </Td>
-                  <Td index={index} className="text-base font-medium">
-                    {row.unbondTime}
+                  <Td index={index} className={`${index === withdrawalRequests.length - 1 ? "rounded-bl-lg" : ""}`}>
+                    <div className="text-green">
+                      <a href={exploreTransaction(row.undelegateHash)} target="_blank" rel="noopener noreferrer">{row.wrId}
+                      </a>
+                    </div>
+                    {dateToUTCString(row.unbondTime)}
                   </Td>
                   <Td index={index} className="text-base font-medium">
                     <RenderNumberFormat amount={bigFormatEther(row.unbondingAmount)} />
                   </Td>
                   <Td index={index} className="text-base font-medium">
-                    {row.withdrawalTime}
+                    {nowTime() < row.withdrawalAbleTime ? millisecondToDay(row.withdrawalAbleTime - nowTime()) : '0s'}
                   </Td>
                   <Td index={index} className="text-base font-medium">
-                    <RenderNumberFormat amount={bigFormatEther(row.withdrawableAmount)} />
+                    <RenderNumberFormat amount={bigFormatEther(row.withdrawalAmount)} />
                   </Td>
-                  <Td index={index} className="text-right text-base font-medium">
+                  <Td index={index} className="text-base font-medium">
+                    {row.withdrawalTime > 0 && (
+                      <>
+                        <div className="text-green">
+                          <a href={exploreTransaction(row.withdrawalHash)} target="_blank" rel="noopener noreferrer">{truncate({ str: row.withdrawalHash })}</a>
+                        </div>
+                        {dateToUTCString(row.withdrawalTime)}
+                      </>
+                    )
+                    }
+                  </Td>
+
+                  <Td index={index} className={`${index === withdrawalRequests.length - 1 ? "rounded-br-lg" : ""} text-right text-base font-medium`}>
                     {
-                      !row.withdrawableAmount.isZero() && <Button onClick={() => onWithdraw(Number(row.validatorId), Number(row.wrId))} scale={buttonScale.sm}>{t('Withdraw')}</Button>
+                      row.withdrawable && !row.withdrawal && <Button onClick={() => onWithdraw(Number(row.validatorId), Number(row.wrId))} scale={buttonScale.sm}>{t('Withdraw')}</Button>
                     }
                   </Td>
                 </tr>

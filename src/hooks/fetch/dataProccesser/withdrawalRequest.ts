@@ -1,7 +1,6 @@
 import { BigNumber } from "ethers"
 import { WithdrawalRequest } from "../../../types"
 import { WITHDRAWAL_PERIOD_TIME } from "../../../contants"
-import { Zero_Bi } from "../../../utils"
 
 export const withdrawalRequest = (data: any): WithdrawalRequest => {
   if (!data) return {} as WithdrawalRequest
@@ -10,9 +9,14 @@ export const withdrawalRequest = (data: any): WithdrawalRequest => {
     wrId: data.wrID,
     delegatorAddress: data.delegatorAddress,
     validatorId: data.validatorId,
-    unbondTime: Number(data.time),
+    unbondTime: Number(data.time) * 1000,
     unbondingAmount: BigNumber.from(data.unbondingAmount),
-    withdrawalTime: Number(data.time) + WITHDRAWAL_PERIOD_TIME,
-    withdrawableAmount: _now -  Number(data.time) > WITHDRAWAL_PERIOD_TIME ? BigNumber.from(data.unbondingAmount) : Zero_Bi
+    withdrawalAbleTime: (Number(data.time) * 1000 + WITHDRAWAL_PERIOD_TIME * 1000),
+    withdrawable: _now -  Number(data.time) > WITHDRAWAL_PERIOD_TIME ? true : false,
+    withdrawalAmount: BigNumber.from(data.withdrawalAmount),
+    undelegateHash: data.hash,
+    withdrawalHash: data.withdrawHash,
+    withdrawalTime: Number(data.withdrawTime) * 1000,
+    withdrawal: !BigNumber.from(data.withdrawalAmount).isZero()
   }
 }

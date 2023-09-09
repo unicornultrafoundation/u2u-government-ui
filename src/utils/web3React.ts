@@ -1,8 +1,8 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { InjectedConnector } from "@web3-react/injected-connector";
-import { POLLING_INTERVAL } from "../contants";
+import { POLLING_INTERVAL, U2U_CHAINID_MAINET } from "../contants";
 
-const injected = new InjectedConnector({ supportedChainIds: [2484] });
+const injected = new InjectedConnector({ supportedChainIds: [U2U_CHAINID_MAINET] });
 
 export enum ConnectorNames {
     Injected = "injected"

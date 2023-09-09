@@ -62,7 +62,7 @@ export const Validator = () => {
         </div> */}
       </div>
       <div>
-        <ValidatorList validators={validators} />
+        <ValidatorList validators={validators} stakingStats={stakingStats} />
       </div>
     </div>
 

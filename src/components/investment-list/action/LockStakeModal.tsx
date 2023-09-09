@@ -5,22 +5,26 @@ import { Input, Select, SelectOption } from "../../form"
 import { Button, buttonScale, buttonType } from "../../button"
 import { LockStakeParams, Validation } from "../../../types"
 import { RenderNumberFormat } from "../../text"
-import { useGetUnlockedStake, useLockStake } from "../../../hooks"
+import { useLockStake } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
 import { durationOptions } from "../../../contants"
+import { BigNumber } from "ethers"
+import { bigFormatEther } from "../../../utils"
 
 interface LockStakeModalProps {
   validation: Validation
   isOpenModal: boolean
   setIsOpenModal: (open: boolean) => void
   delegator: string
+  actualStakedAmount: BigNumber
 }
 
 export const LockStakeModal = ({
   validation,
   isOpenModal,
   setIsOpenModal,
-  delegator
+  delegator,
+  actualStakedAmount
 }: LockStakeModalProps) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState('')
@@ -33,21 +37,19 @@ export const LockStakeModal = ({
   } = useMemo(() => validation, [validation])
 
   const { valId } = useMemo(() => validator, [validator])
-  const { unlockedStake } = useGetUnlockedStake(delegator, Number(valId))
-
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
       setAmountErr(t('This field is required'));
       return false;
     }
-    if (Number(value) > Number(unlockedStake)) {
+    if (Number(value) > Number(bigFormatEther(actualStakedAmount))) {
       setAmountErr(t('Your U2U staked not enough'));
       return false;
     }
     setAmountErr("")
     return true;
-  }, [unlockedStake, t])
+  }, [actualStakedAmount, t])
 
   const onLockStake = useCallback(async () => {
     if (!validateAmount(amount) || !valId || !selected) return;
@@ -81,7 +83,7 @@ export const LockStakeModal = ({
       <div className="text-2xl text-black-2 mb-2">{t('Lock Stake')}</div>
       <div className="text-base text-gray">Available lock amount:</div>
       <div className="text-base text-green">
-        <RenderNumberFormat amount={unlockedStake} className="mr-2" fractionDigits={2} />
+        <RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-2" fractionDigits={2} />
         U2U
       </div>
 

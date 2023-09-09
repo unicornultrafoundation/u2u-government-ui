@@ -11,7 +11,6 @@ export const useIsLockedUp = (delegatorAddress: string, validatorId: number) => 
           if (!delegatorAddress || !validatorId) return;
           try {
             const _isTrue = await stakingContract.isLockedUp(delegatorAddress, validatorId)
-            console.log("_isTrue", _isTrue);
             setIsLockedUp(_isTrue)
           } catch (error) {
             console.log(error);

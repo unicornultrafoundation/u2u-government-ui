@@ -25,7 +25,6 @@ const VALIDATOR_GQL = `
           downTime
           lockedUntil
           lockDays
-          votingPower
           totalClaimedRewards
           delegations {${DELEGATIONS_GQL}}
 `
@@ -35,6 +34,8 @@ const VALIDATIONS_GQL = `
         validator {${VALIDATOR_GQL}}
         stakedAmount
 `
+
+
 
 export const Schema = () => {
   return {
@@ -82,14 +83,40 @@ export const Schema = () => {
         withdrawalRequests (where:{
           delegatorAddress: $delegatorAddress
           validatorId: $validatorId
-        }) {
+        }) { 
           id
+          hash
+          delegatorAddress
+          validatorId
           delegatorAddress
           validatorId
           wrID
           time
           unbondingAmount
+          withdrawHash
+          hash
+          withdrawalAmount
+          withdrawTime
         }
+      }
+    `,
+    LOCKE_STAKE: gql`
+      query LockedUp($delegatorAddress: String!) {
+        lockedUps (where:{
+            delegator: $delegatorAddress
+          }) {
+            delegator {
+              id
+            }
+            validator {
+              id
+            }
+            duration
+            lockedAmount
+            unlockedAmount
+            penalty
+            endTime
+          }
       }
     `
   }

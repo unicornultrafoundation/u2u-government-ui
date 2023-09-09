@@ -1,4 +1,6 @@
 import U2U from "../../images/unicorn-ultra.png"
+import AppStore from "../../images/appstore.png"
+import GgPlay from "../../images/ggplay.png"
 
 export const Footer = () => {
   return (
@@ -6,6 +8,11 @@ export const Footer = () => {
       <div className="p-6 w-full bg-[#F4FAFA]">
         <div className="my-8">
           <img src={U2U} alt="" />
+        </div>
+        <div className="text-left text-sm font-semibold mb-2">Download U2U Wallet</div>
+        <div className="flex item-center justify-between gap-2 mb-6">
+          <img src={GgPlay} alt="u2u" className="w-6/12" />
+          <img src={AppStore} alt="u2u" className="w-6/12"/>
         </div>
         <div className="text-left text-sm font-semibold mb-2">Find us on:</div>
         <div className="flex item-center justify-between">

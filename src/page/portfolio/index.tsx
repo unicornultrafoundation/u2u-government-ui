@@ -4,6 +4,7 @@ import { useBalance, useFetchAllValidator, useFetchDelegator } from "../../hooks
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import ArrowLeftIcon from "../../images/icons/arrow-left-black.png"
+import { useNavigate } from "react-router-dom"
 
 export const Portfolio = () => {
 
@@ -11,6 +12,7 @@ export const Portfolio = () => {
   const { account } = useWeb3React()
   const { validators } = useFetchAllValidator()
   const { balance } = useBalance()
+  const navigator = useNavigate()
 
   const { delegator } = useFetchDelegator(account || "")
 
@@ -37,6 +39,7 @@ export const Portfolio = () => {
                 variant={buttonType.transparent}
                 scale={buttonScale.lg}
                 className="border-black flex items-center gap-3 px-6"
+                onClick={() => navigator("/validator")}
               >
                 <span className="text-black text-base">{t('View Validator Reward')}</span>
                 <img src={ArrowLeftIcon} alt="u2u" />

@@ -8,17 +8,20 @@ import { RenderNumberFormat } from "../../text"
 import { bigFormatEther } from "../../../utils"
 import { useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
+import { BigNumber } from "ethers"
 
 interface UndelegateModalProps {
   validation: Validation
   isOpenModal: boolean
   setIsOpenModal: (open: boolean) => void
+  actualStakedAmount: BigNumber
 }
 
 export const UndelegateModal = ({
   validation,
   isOpenModal,
-  setIsOpenModal
+  setIsOpenModal,
+  actualStakedAmount
 }: UndelegateModalProps) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState('')
@@ -28,7 +31,6 @@ export const UndelegateModal = ({
   const { undegegate } = useUndelegate()
 
   const {
-    stakedAmount,
     validator
   } = useMemo(() => validation, [validation])
 
@@ -39,13 +41,13 @@ export const UndelegateModal = ({
       setAmountErr(t('This field is required'));
       return false;
     } 
-    if (Number(value) > Number(bigFormatEther(stakedAmount))) {
+    if (Number(value) > Number(bigFormatEther(actualStakedAmount))) {
       setAmountErr(t('Your U2U staked not enough'));
       return false;
     }
     setAmountErr("")
     return true;
-  }, [stakedAmount, t])
+  }, [actualStakedAmount, t])
 
   const onUnDelegate = useCallback(async () => {
     if (!validateAmount(amount) || !valId) return; 
@@ -77,7 +79,7 @@ export const UndelegateModal = ({
       <div className="text-2xl text-black-2 mb-2">{t('Undelegate')}</div>
       <div className="text-base text-gray">Your staked:</div>
       <div className="text-base text-green">
-        <RenderNumberFormat amount={bigFormatEther(stakedAmount)} className="mr-2" fractionDigits={2} />
+        <RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-2" fractionDigits={2} />
         U2U
       </div>
       <div className="mt-6">

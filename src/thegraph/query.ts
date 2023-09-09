@@ -35,10 +35,20 @@ const queryWithdrawalRequest = (delegator: string, validatorId: number) => apoll
   fetchPolicy: "no-cache"
 })
 
+const queryLockedStake = (delegator: string) => apolloClient.query({
+  query: Schema().LOCKE_STAKE,
+  variables: {
+    delegatorAddress: delegator
+  },
+  fetchPolicy: "no-cache"
+})
+
+
 export const QueryService = {
   queryValidators,
   queryStakingStats,
   queryValidatorDetail,
   queryDelegatorDetail,
-  queryWithdrawalRequest
+  queryWithdrawalRequest,
+  queryLockedStake
 }

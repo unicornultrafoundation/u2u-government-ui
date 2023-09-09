@@ -3,23 +3,26 @@ import { Modal } from "../../modal"
 import { useTranslation } from "react-i18next"
 import { Input } from "../../form"
 import { Button, buttonScale, buttonType } from "../../button"
-import { UnlockStakeParams, Validation } from "../../../types"
+import { LockedStake, UnlockStakeParams, Validation } from "../../../types"
 import { RenderNumberFormat } from "../../text"
 import { useUnlockStake } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
+import { bigFormatEther, dateToUTCString } from "../../../utils"
 
 interface UnlockStakeModalProps {
   validation: Validation
   isOpenModal: boolean
   setIsOpenModal: (open: boolean) => void
   delegator: string
+  lockedStake: LockedStake
 }
 
 export const UnlockStakeModal = ({
   validation,
   isOpenModal,
   setIsOpenModal,
-  delegator
+  delegator,
+  lockedStake
 }: UnlockStakeModalProps) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState('')
@@ -32,8 +35,8 @@ export const UnlockStakeModal = ({
 
   const { valId } = useMemo(() => validator, [validator])
 
-  // TODO:
-  const lockedStake = 0
+  const { lockedAmount, endTime } = useMemo(() => lockedStake, [lockedStake])
+
 
 
   const validateAmount = useCallback((value: any) => {
@@ -41,13 +44,13 @@ export const UnlockStakeModal = ({
       setAmountErr(t('This field is required'));
       return false;
     }
-    if (Number(value) > Number(lockedStake)) {
+    if (Number(value) > Number(bigFormatEther(lockedAmount))) {
       setAmountErr(t('Your U2U staked not enough'));
       return false;
     }
     setAmountErr("")
     return true;
-  }, [lockedStake, t])
+  }, [lockedAmount, t])
 
   const onLockStake = useCallback(async () => {
     if (!validateAmount(amount) || !valId) return;
@@ -78,11 +81,14 @@ export const UnlockStakeModal = ({
   return (
     <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
       <div className="text-2xl text-black-2 mb-2">{t('Unlock Stake')}</div>
-      <div className="text-base text-gray">Locked amount:</div>
-      <div className="text-base text-green">
-        <RenderNumberFormat amount={lockedStake} className="mr-2" fractionDigits={2} />
-        U2U
+      <div className="flex gap-2">
+        <div className="text-base text-gray">Locked amount:</div>
+        <div className="text-base text-green">
+          <RenderNumberFormat amount={lockedAmount && bigFormatEther(lockedAmount)} className="mr-2" fractionDigits={2} />
+          U2U
+        </div>
       </div>
+      <div className="text-base text-gray">Endtime: {dateToUTCString(endTime)}</div>
       <div className="mt-4">
         <Input
           className="w-full"

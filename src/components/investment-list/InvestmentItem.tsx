@@ -2,12 +2,12 @@ import { useTranslation } from "react-i18next"
 import { ClaimRewardsParams, RestakeRewardsParams, Validation } from "../../types"
 import { Box } from "../box"
 import { useCallback, useMemo, useState } from "react"
-import { bigFormatEther, exploreAddress, truncate } from "../../utils"
+import { bigFormatEther, dateToUTCString, exploreAddress, truncate } from "../../utils"
 import ArrowIcon from "../../images/icons/arrow-left.png"
 import { RenderNumberFormat } from "../text"
 import { Button, buttonType } from "../button"
 import { UndelegateModal } from "./action/UndelegateModal"
-import { useClaimRewards, useFetchWithdrawRequest, usePendingReward, useRestakeRewards } from "../../hooks"
+import { useClaimRewards, useFetchLockedStake, useFetchWithdrawRequest, usePendingReward, useRestakeRewards } from "../../hooks"
 import { WithdrawalRequestList } from "./WithdrawalRequestList"
 import { toastDanger, toastSuccess } from "../toast"
 import { useNavigate } from "react-router-dom"
@@ -27,6 +27,10 @@ export const InvestmentItem = ({
   const { t } = useTranslation()
   const navigate = useNavigate()
 
+  const { lockedStake } = useFetchLockedStake(delegator)
+
+  const { lockedAmount, endTime, isLockedUp } = useMemo(() => lockedStake, [lockedStake])
+
   const {
     validator,
     stakedAmount
@@ -37,6 +41,7 @@ export const InvestmentItem = ({
     valId
   } = useMemo(() => validator, [validator])
 
+  const actualStakedAmount = useMemo(() => stakedAmount && lockedAmount && stakedAmount.sub(lockedAmount), [stakedAmount, lockedAmount])
   // Local state
   const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
   const [isOpenLockStakeModal, setIsOpenLockStakeModal] = useState(false)
@@ -46,7 +51,6 @@ export const InvestmentItem = ({
   const [isRestakeLoading, setIsRestakeLoading] = useState(false)
 
   const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, Number(valId))
-  // const { isLockedUp } = useIsLockedUp(delegator, Number(valId))
 
   const { claimRewards } = useClaimRewards()
   const { restake } = useRestakeRewards()
@@ -122,7 +126,7 @@ export const InvestmentItem = ({
           <div className="text-lg text-gray">{t('Staked (U2U)')}</div>
           <div className="flex justify-between mt-4">
             <div className="text-lg text-black font-medium">
-              <RenderNumberFormat amount={bigFormatEther(stakedAmount)} className="mr-2" fractionDigits={2} />
+              <RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-2" fractionDigits={2} />
             </div>
             <div>
               <Button
@@ -130,10 +134,13 @@ export const InvestmentItem = ({
                 variant={buttonType.transparent}
                 className="mb-2 w-[120px]">{t('Undelegate')}
               </Button>
-              <Button
-                className="w-[120px]"
-                onClick={() => setIsOpenLockStakeModal(true)}
-              >{t('Lock Stake')}</Button>
+              {
+                !isLockedUp &&
+                <Button
+                  className="w-[120px]"
+                  onClick={() => setIsOpenLockStakeModal(true)}
+                >{t('Lock Stake')}</Button>
+              }
             </div>
           </div>
         </Box>
@@ -148,18 +155,27 @@ export const InvestmentItem = ({
             <Button loading={isRestakeLoading} onClick={() => onRestakedRewards()}>{t('Re-Stake')}</Button>
           </div>
         </Box>
-
-        <Box className="max-w-[400px] py-6 px-10 text-center">
-          <div className="text-gray text-xl">{t('Locked (U2U)')}</div>
-          <div className="text-black text-xl font-medium">
-            <RenderNumberFormat amount={0} className="mr-2" />
-          </div>
-          <div className="grid grid-cols-2 mt-10 gap-4">
-            <Button
-              variant={buttonType.transparent} onClick={() => setIsOpenRelockStakeModal(true)}>{t('Re-Lock')}</Button>
-            <Button onClick={() => setIsOpenUnlockStakeModal(true)}>{t('Un-Lock')}</Button>
-          </div>
-        </Box>
+        {
+          isLockedUp && (
+            <Box className="max-w-[400px] py-6 px-10 text-center">
+              <div className="flex gap-2">
+                <div className="text-gray text-base text-left">{t('Locked (U2U): ')}</div>
+                <div className="text-black text-base font-medium">
+                  <RenderNumberFormat amount={lockedAmount && bigFormatEther(lockedAmount)} className="mr-2" />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="text-gray text-base">{t('End time: ')}</div>
+                <div className="text-black text-base font-medium"> {dateToUTCString(endTime)}</div>
+              </div>
+              <div className="grid grid-cols-2 mt-10 gap-4">
+                <Button
+                  variant={buttonType.transparent} onClick={() => setIsOpenRelockStakeModal(true)}>{t('Re-Lock')}</Button>
+                <Button onClick={() => setIsOpenUnlockStakeModal(true)}>{t('Un-Lock')}</Button>
+              </div>
+            </Box>
+          )
+        }
 
       </div>
       {
@@ -173,24 +189,28 @@ export const InvestmentItem = ({
         validation={validation}
         isOpenModal={isOpenUndelegateModal}
         setIsOpenModal={setIsOpenUndelegateModal}
+        actualStakedAmount={actualStakedAmount}
       />
       <LockStakeModal
         delegator={delegator}
         validation={validation}
         isOpenModal={isOpenLockStakeModal}
         setIsOpenModal={setIsOpenLockStakeModal}
+        actualStakedAmount={actualStakedAmount}
       />
       <RelockStakeModal
         delegator={delegator}
         validation={validation}
         isOpenModal={isOpenRelockStakeModal}
         setIsOpenModal={setIsOpenRelockStakeModal}
+        actualStakedAmount={actualStakedAmount}
       />
-      <UnlockStakeModal 
-       delegator={delegator}
-       validation={validation}
-       isOpenModal={isOpenUnlockStakeModal}
-       setIsOpenModal={setIsOpenUnlockStakeModal}/>
+      <UnlockStakeModal
+        delegator={delegator}
+        validation={validation}
+        isOpenModal={isOpenUnlockStakeModal}
+        setIsOpenModal={setIsOpenUnlockStakeModal}
+        lockedStake={lockedStake} />
     </div>
   )
 }

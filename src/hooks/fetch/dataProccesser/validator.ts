@@ -10,8 +10,8 @@ export const validator  = (data: any): Validator => {
     auth: data.auth || "",
     createdEpoch: data.createdEpoch || "",
     createdTime: data.createdTime || "",
-    active: data.active === 1,
-    online: data.online === 1,
+    active: Number(data.active) === 0,
+    online: Number(data.online) === 0,
     delegatedAmount: BigNumber.from(data.delegatedAmount || 0),
     selfStakedAmount: BigNumber.from(data.selfStaked || 0),
     totalStakedAmount: BigNumber.from(data.totalStakedAmount || 0),
@@ -19,7 +19,7 @@ export const validator  = (data: any): Validator => {
     downTime: data.downTime,
     lockedUntil: data.lockedUntil,
     lockDays: data.lockDays,
-    votingPower: data.votingPower ? Number(data.votingPower) / 10000 : 0,
+    votingPower: 0,
     delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : []
   }
 }
