@@ -1,22 +1,23 @@
-import { EXPLORER_LINK, NODE_RPC, U2U_CHAINID_MAINET } from "../contants"
+import { appConfig } from "../contants"
+
 export const setupNetwork = async () => {
   const provider = (window as WindowChain).ethereum
   if (provider) {
-    const chainId = U2U_CHAINID_MAINET
+    const chainId = appConfig.chainID
     try {
       await (provider as any).request({
         method: 'wallet_addEthereumChain',
         params: [
           {
             chainId: `0x${chainId.toString(16)}`,
-            chainName: "U2U Chain",
+            chainName: appConfig.networkName,
             nativeCurrency: {
-              name: 'U2U',
+              name: appConfig.tokenName,
               symbol: 'u2u',
               decimals: 18
             },
-            rpcUrls: [NODE_RPC],
-            blockExplorerUrls: [EXPLORER_LINK],
+            rpcUrls: [appConfig.rpc],
+            blockExplorerUrls: [appConfig.explorer],
           },
         ],
       })

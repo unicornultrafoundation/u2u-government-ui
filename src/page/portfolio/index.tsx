@@ -21,7 +21,7 @@ export const Portfolio = () => {
   return (
     <div className="text-left">
       <div className="text-[26px] font-semibold text-black-2">My Investment</div>
-      <div className="text-base text-gray">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste tempora quibusdam corporis illo commodi consectetur dignissimos! Aliquam mollitia aut officiis ipsam corporis assumenda cum alias sequi dolores! Veritatis, recusandae optio!</div>
+      <div className="text-base text-gray">This is the dashboard where you manage your staking portfolio</div>
       <div>
         {
           validations && validations.length > 0 ? <MyInvestmentList validations={validations} delegator={delegatorAddr} /> : <></>

@@ -1,6 +1,6 @@
 import { ethers } from "ethers"
 import { simpleRpcProvider } from "./web3Providers"
-import { STAKING_CONTRACT_ADDRESS, U2U_STAKING_ABI } from "../contants"
+import { U2U_STAKING_ABI, appConfig } from "../contants"
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
   const signerOrProvider = signer ?? simpleRpcProvider
@@ -8,5 +8,5 @@ const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.
 }
 
 export const getStakingContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(U2U_STAKING_ABI, STAKING_CONTRACT_ADDRESS, signer)
+  return getContract(U2U_STAKING_ABI, appConfig.stakingContract, signer)
 }

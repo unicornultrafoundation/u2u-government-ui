@@ -7,9 +7,9 @@ import { RelockStakeParams, Validation } from "../../../types"
 import { RenderNumberFormat } from "../../text"
 import { useRelockStake } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
-import { durationOptions } from "../../../contants"
 import { BigNumber } from "ethers"
 import { bigFormatEther } from "../../../utils"
+import { appConfig } from "../../../contants"
 
 interface RelockStakeModalProps {
   validation: Validation
@@ -30,7 +30,7 @@ export const RelockStakeModal = ({
   const [amount, setAmount] = useState('')
   const [amountErr, setAmountErr] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [selected, setSelected] = useState<SelectOption>(durationOptions[0])
+  const [selected, setSelected] = useState<SelectOption>(appConfig.lockStakeDuration[0])
   const { relockStake } = useRelockStake()
   const {
     validator
@@ -89,7 +89,7 @@ export const RelockStakeModal = ({
 
       <div className="text-base text-gray mb-3 mt-6">Validator</div>
       <Select
-        options={durationOptions}
+        options={appConfig.lockStakeDuration}
         placeholder="Select validator"
         setSelected={setSelected}
         onChange={(option) => setSelected(option)}

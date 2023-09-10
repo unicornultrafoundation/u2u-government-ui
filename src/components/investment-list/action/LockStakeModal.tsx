@@ -7,9 +7,9 @@ import { LockStakeParams, Validation } from "../../../types"
 import { RenderNumberFormat } from "../../text"
 import { useLockStake } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
-import { durationOptions } from "../../../contants"
 import { BigNumber } from "ethers"
 import { bigFormatEther } from "../../../utils"
+import { appConfig } from "../../../contants"
 
 interface LockStakeModalProps {
   validation: Validation
@@ -30,7 +30,7 @@ export const LockStakeModal = ({
   const [amount, setAmount] = useState('')
   const [amountErr, setAmountErr] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [selected, setSelected] = useState<SelectOption>(durationOptions[0])
+  const [selected, setSelected] = useState<SelectOption>(appConfig.lockStakeDuration[0])
   const { lockStake } = useLockStake()
   const {
     validator
@@ -89,7 +89,7 @@ export const LockStakeModal = ({
 
       <div className="text-base text-gray mb-3 mt-6">Validator</div>
       <Select
-        options={durationOptions}
+        options={appConfig.lockStakeDuration}
         placeholder="Select validator"
         onChange={(option: any) => setSelected(option)}
         selected={selected} />

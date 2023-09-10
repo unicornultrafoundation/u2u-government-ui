@@ -1,4 +1,4 @@
-import { EXPLORER_LINK } from "../contants";
+import { appConfig } from "../contants";
 
 export const classNames = (...classes: any): string => {
   return classes.filter(Boolean).join(' ')
@@ -16,8 +16,8 @@ export const truncate = ({ str, headCount = 10, tailCount = 4 }: {
 }
 
 
-export const exploreAddress = (_address: string): string => `${EXPLORER_LINK}/address/${_address}`
-export const exploreTransaction = (_address: string): string => `${EXPLORER_LINK}/tx/${_address}`
+export const exploreAddress = (_address: string): string => `${appConfig.explorer}/address/${_address}`
+export const exploreTransaction = (_address: string): string => `${appConfig.explorer}/tx/${_address}`
 
 
 

@@ -1,4 +1,4 @@
 import { ethers } from "ethers";
-import { NODE_RPC } from "../contants";
+import { appConfig } from "../contants";
 
-export const simpleRpcProvider = new ethers.providers.JsonRpcProvider(NODE_RPC)
+export const simpleRpcProvider = new ethers.providers.JsonRpcProvider(appConfig.rpc)
