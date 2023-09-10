@@ -16,7 +16,7 @@ export const useFetchLockedStake = (delAddress: string, valId: number) => {
         setLockedStake(DataProcessor.lockedStake(data?.lockedUps[0]));
       }
     })()
-  }, [fastRefresh, delAddress])
+  }, [fastRefresh, delAddress, valId])
   return {
     lockedStake
   }
