@@ -25,6 +25,7 @@ export interface Validator {
   lockDays?: string
   delegations?: Delegation[]
   votingPower?: number
+  totalDelegator: number
 }
 
 export interface Validation {

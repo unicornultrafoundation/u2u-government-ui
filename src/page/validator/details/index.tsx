@@ -20,7 +20,8 @@ export const ValidatorDetails = () => {
     totalStakedAmount,
     delegations,
     active,
-    votingPower
+    votingPower,
+    totalDelegator
   } = useMemo(() => validator, [validator])
 
   if (!validator) return <></>
@@ -63,7 +64,7 @@ export const ValidatorDetails = () => {
               </div>
               <div className="mx-4">
                 <div className="text-xs text-gray">{t('Total Delegator')}</div>
-                <div className="text-base text-black font-bold">{delegations ? delegations?.length : 0}</div>
+                <div className="text-base text-black font-bold">{totalDelegator}</div>
               </div>
               <div className="mx-4">
                 <div className="text-xs text-gray">{t('Status')}</div>
@@ -125,7 +126,7 @@ export const ValidatorDetails = () => {
       <div className="mt-16 text-left">
         <div className="text-[26px] text-black-2 mb-6 w-full">{t('Delegators')}</div>
         {
-          delegations && delegations.length > 0 ? <DelegationList delegations={delegations} /> : <></>
+          delegations && delegations.length > 0 ? <DelegationList validationId={Number(valId)} totalDelegator={totalDelegator}  /> : <></>
         }
       </div>
     </div>

@@ -27,7 +27,8 @@ module.exports = {
         lightGray: "#E0E0E0",
         gray: {
           DEFAULT: "#878787",
-          1: "#E2E2E2"
+          1: "#E2E2E2",
+          2: "#B6B6B6"
         },
         error: {
           DEFAULT: "#FF4747"

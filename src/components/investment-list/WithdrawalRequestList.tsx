@@ -4,9 +4,11 @@ import { bigFormatEther, dateToUTCString, exploreTransaction, millisecondToDay, 
 import { Button, buttonScale } from "../button";
 import { Tbody, Td, Th, Thead } from "../table"
 import { RenderNumberFormat } from "../text";
-import { useWidthdraw } from "../../hooks";
-import { useCallback } from "react";
+import { useFetchWithdrawRequest, useWidthdraw } from "../../hooks";
+import { useCallback, useEffect, useState } from "react";
 import { toastDanger, toastSuccess } from "../toast";
+import { TableLimit } from "../../contants";
+import { ChangePageParams, Pagination } from "../pagination";
 
 
 interface Header {
@@ -39,16 +41,39 @@ const headers: Header[] = [
 ]
 
 interface WithdrawalRequestListProps {
-  withdrawalRequests: WithdrawalRequest[]
+  delegator: string
+  valId: number
 }
 
 export const WithdrawalRequestList = ({
-  withdrawalRequests
+  delegator,
+  valId
 }: WithdrawalRequestListProps) => {
   const { t } = useTranslation()
-
+  const [skip, setSkip] = useState(0)
   const { withdraw } = useWidthdraw()
+  const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, valId, skip)
+
+  const [clientRecords, setClientRecord] = useState<WithdrawalRequest[]>([])
+
+  const onChangePage = async (params: ChangePageParams) => {
+    let _skip = params.page ? params.page - 1 : 0
+    setSkip(_skip)
+  }
   
+
+  useEffect(() => {
+    if (withdrawalRequests && withdrawalRequests.length > 0) {
+      if (withdrawalRequests.length > TableLimit) {
+        setClientRecord(withdrawalRequests.slice(skip, skip + TableLimit))
+      } else {
+        setClientRecord(withdrawalRequests)
+      }
+    }
+  }, [withdrawalRequests, skip])
+
+
+
   const onWithdraw = useCallback(async (valId: number, wrId: number) => {
     if (!valId || !wrId) return;
     const params: WithdrawParams = {
@@ -71,10 +96,12 @@ export const WithdrawalRequestList = ({
     // eslint-disable-next-line 
   }, [t])
 
+  if (clientRecords.length === 0) return <></>
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="text-[26px] mb-4">{`${t('Withdraw Requested')}`}</div>
-      <table className="w-full">
+      <table className="w-full mb-4">
         <Thead>
           <tr>
             {
@@ -95,10 +122,10 @@ export const WithdrawalRequestList = ({
         </Thead>
         <Tbody>
           {
-            withdrawalRequests.map((row: WithdrawalRequest, index: number) => {
+            clientRecords.map((row: WithdrawalRequest, index: number) => {
               return (
                 <tr key={index}>
-                  <Td index={index} className={`${index === withdrawalRequests.length - 1 ? "rounded-bl-lg" : ""}`}>
+                  <Td index={index} className={`${index === clientRecords.length - 1 ? "rounded-bl-lg" : ""}`}>
                     <div className="text-green">
                       <a href={exploreTransaction(row.undelegateHash)} target="_blank" rel="noopener noreferrer">{row.wrId}
                       </a>
@@ -126,7 +153,7 @@ export const WithdrawalRequestList = ({
                     }
                   </Td>
 
-                  <Td index={index} className={`${index === withdrawalRequests.length - 1 ? "rounded-br-lg" : ""} text-right text-base font-medium`}>
+                  <Td index={index} className={`${index === clientRecords.length - 1 ? "rounded-br-lg" : ""} text-right text-base font-medium`}>
                     {
                       row.withdrawable && !row.withdrawal && <Button onClick={() => onWithdraw(Number(row.validatorId), Number(row.wrId))} scale={buttonScale.sm}>{t('Withdraw')}</Button>
                     }
@@ -137,6 +164,11 @@ export const WithdrawalRequestList = ({
           }
         </Tbody>
       </table>
+      <Pagination
+        limit={TableLimit}
+        total={withdrawalRequests.length}
+        onChangePage={onChangePage}
+      />
     </div>
   )
 }

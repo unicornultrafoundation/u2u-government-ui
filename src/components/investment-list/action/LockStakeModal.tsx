@@ -65,7 +65,6 @@ export const LockStakeModal = ({
         const msg = `Congratulation! Your staked amount has been locked.`
         toastSuccess(msg, t('Success'))
         setIsOpenModal(false)
-        setAmount('')
       } else {
         toastDanger('Sorry! Lock stake failed', t('Error'))
       }
@@ -74,6 +73,7 @@ export const LockStakeModal = ({
       console.log("error: ", error);
       toastDanger('Sorry! Lock stake failed', t('Error'))
     }
+    setAmount('')
     setIsLoading(false)
     // eslint-disable-next-line
   }, [amount, valId, selected])

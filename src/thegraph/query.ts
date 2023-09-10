@@ -1,3 +1,4 @@
+import { TableLimit } from "../contants";
 import { apolloClient } from "./client";
 import { Schema } from "./schema";
 
@@ -35,13 +36,25 @@ const queryWithdrawalRequest = (delegator: string, validatorId: number) => apoll
   fetchPolicy: "no-cache"
 })
 
-const queryLockedStake = (delegator: string) => apolloClient.query({
+const queryLockedStake = (delegator: string, valIdHex: string) => apolloClient.query({
   query: Schema().LOCKE_STAKE,
   variables: {
-    delegatorAddress: delegator
+    delegatorAddress: delegator,
+    valId: valIdHex
   },
   fetchPolicy: "no-cache"
 })
+
+const queryDelegationsPagination = (valId: number, skip: number) => apolloClient.query({
+  query: Schema().DELEGATIONS_PAGINATION,
+  variables: {
+    validatorId: valId,
+    skip: skip,
+    limit: TableLimit
+  },
+  fetchPolicy: "no-cache"
+})
+
 
 
 export const QueryService = {
@@ -50,5 +63,6 @@ export const QueryService = {
   queryValidatorDetail,
   queryDelegatorDetail,
   queryWithdrawalRequest,
-  queryLockedStake
+  queryLockedStake,
+  queryDelegationsPagination
 }

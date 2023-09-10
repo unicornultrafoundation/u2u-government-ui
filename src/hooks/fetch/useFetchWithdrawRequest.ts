@@ -4,7 +4,7 @@ import { useRefresh } from "../useRefresh"
 import { QueryService } from "../../thegraph"
 import { DataProcessor } from "./dataProccesser"
 
-export const useFetchWithdrawRequest = (delegatorAddr: string, validatorId: number) => {
+export const useFetchWithdrawRequest = (delegatorAddr: string, validatorId: number, skip: number) => {
   const [wr, setWr] = useState<WithdrawalRequest[]>([])
   const { slowRefresh } = useRefresh()
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useFetchWithdrawRequest = (delegatorAddr: string, validatorId: numb
         setWr(data.withdrawalRequests.map((i: any) => DataProcessor.withdrawalRequest(i)))
       }
     })()
-  }, [slowRefresh, delegatorAddr, validatorId])
+  }, [slowRefresh, delegatorAddr, validatorId, skip])
   return {
     wr
   }

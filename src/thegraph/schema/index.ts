@@ -27,6 +27,7 @@ const VALIDATOR_GQL = `
           lockDays
           totalClaimedRewards
           delegations {${DELEGATIONS_GQL}}
+          totalDelegator
 `
 
 const VALIDATIONS_GQL = `
@@ -83,7 +84,10 @@ export const Schema = () => {
         withdrawalRequests (where:{
           delegatorAddress: $delegatorAddress
           validatorId: $validatorId
-        }) { 
+        }
+        orderBy: time
+        orderDirection: desc
+        ) { 
           id
           hash
           delegatorAddress
@@ -101,9 +105,10 @@ export const Schema = () => {
       }
     `,
     LOCKE_STAKE: gql`
-      query LockedUp($delegatorAddress: String!) {
+      query LockedUp($delegatorAddress: String!, $valId: String!) {
         lockedUps (where:{
             delegator: $delegatorAddress
+            validator: $valId
           }) {
             delegator {
               id
@@ -117,6 +122,17 @@ export const Schema = () => {
             penalty
             endTime
           }
+      }
+    `,
+    DELEGATIONS_PAGINATION: gql`
+      query Delegations($validatorId: Int!, $skip: Int!, $limit: Int!) {
+        delegations(where:{
+            validatorId: $validatorId
+        } orderBy: stakedAmount
+          orderDirection: desc  
+          first: $limit
+          skip: $skip
+        ) {${DELEGATIONS_GQL}}
       }
     `
   }

@@ -20,6 +20,7 @@ export const validator  = (data: any, totalStaked: BigNumber): Validator => {
     lockedUntil: data.lockedUntil,
     lockDays: data.lockDays,
     votingPower: totalStaked ? Number(BigNumber.from(data.totalStakedAmount).mul(BigNumber.from(1000000)).div(totalStaked)) : 0,
-    delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : []
+    delegations: data.delegations && data.delegations.length > 0 ? data.delegations.map((d: any) => delegation(d)) : [],
+    totalDelegator: Number(data.totalDelegator)
   }
 }

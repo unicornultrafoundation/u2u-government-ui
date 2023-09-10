@@ -12,6 +12,8 @@ export const SLOW_REFRESH_INTERVAL = 60000
 export const epochTime = BigNumber.from(420);
 export const DecimalBigNumber = BigNumber.from("1000000000000000000")
 
+export const TableLimit = 10;
+
 const durationOptionsMainet: SelectOption[] = [
   { label: "14 day", value: 8467200 },
   { label: "30 day", value: 18144000 },
@@ -53,7 +55,7 @@ const appConfigs: {[k: string]: AppConfig} = {
     networkName: "U2U Dev Net",
     tokenName: "U2U Dev",
     rpc: "https://rpc-devnet.uniultra.xyz/",
-    explorer: "",
+    explorer: "https://rpc-nebulas-testnet.uniultra.xyz/",
     sfcSubgraph: "http://localhost:8000/subgraphs/name/u2u/sfc-subgraph",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 600,

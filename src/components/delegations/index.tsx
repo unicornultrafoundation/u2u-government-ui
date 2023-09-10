@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Delegation } from "../../types";
 import { bigFormatEther, exploreAddress, truncate } from "../../utils";
+import { ChangePageParams, Pagination } from "../pagination";
 import { Tbody, Td, Th, Thead } from "../table"
 import { RenderNumberFormat } from "../text";
+import { useFetchDelegations } from "../../hooks";
+import { TableLimit } from "../../contants";
 
 interface Header {
   name: string;
@@ -23,10 +27,20 @@ const headers: Header[] = [
 ]
 
 interface DelegationListProps {
-  delegations: Delegation[]
+  validationId: number,
+  totalDelegator: number
 }
 
-export const DelegationList = ({ delegations }: DelegationListProps) => {
+export const DelegationList = ({ validationId, totalDelegator }: DelegationListProps) => {
+
+  const [skip, setSkip] = useState(0)
+  const { delegations } = useFetchDelegations(validationId, skip)
+
+  const onChangePage = async (params: ChangePageParams) => {
+    let _skip = params.page ? params.page - 1 : 0
+    setSkip(_skip)
+  }
+
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full">
@@ -50,7 +64,7 @@ export const DelegationList = ({ delegations }: DelegationListProps) => {
         </Thead>
         <Tbody>
           {
-            delegations.map((row: Delegation, index: number) => {
+            delegations.length > 0 && delegations.map((row: Delegation, index: number) => {
               return (
                 <tr key={index}>
                   <Td index={index} className={`text-green ${index === delegations.length - 1 ? "rounded-bl-lg" : ""}`}>
@@ -68,6 +82,11 @@ export const DelegationList = ({ delegations }: DelegationListProps) => {
           }
         </Tbody>
       </table>
+      <Pagination
+        limit={TableLimit}
+        total={totalDelegator}
+        onChangePage={onChangePage}
+      />
     </div>
   )
 }

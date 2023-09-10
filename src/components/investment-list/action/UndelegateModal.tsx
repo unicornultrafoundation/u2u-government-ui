@@ -62,7 +62,6 @@ export const UndelegateModal = ({
         const msg = `Congratulation! Your staked amount has been undelegated.`
         toastSuccess(msg, t('Success'))
         setIsOpenModal(false)
-        setAmount('')
       } else {
         toastDanger('Sorry! Undelegate failed', t('Error'))
       }
@@ -71,6 +70,7 @@ export const UndelegateModal = ({
       console.log("error: ", error);
     }
     setIsLoading(false)
+    setAmount('')
     // eslint-disable-next-line
   }, [amount, valId])
 

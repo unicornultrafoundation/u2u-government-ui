@@ -7,7 +7,7 @@ import ArrowIcon from "../../images/icons/arrow-left.png"
 import { RenderNumberFormat } from "../text"
 import { Button, buttonType } from "../button"
 import { UndelegateModal } from "./action/UndelegateModal"
-import { useClaimRewards, useFetchLockedStake, useFetchWithdrawRequest, usePendingReward, useRestakeRewards } from "../../hooks"
+import { useClaimRewards, useFetchLockedStake, usePendingReward, useRestakeRewards } from "../../hooks"
 import { WithdrawalRequestList } from "./WithdrawalRequestList"
 import { toastDanger, toastSuccess } from "../toast"
 import { useNavigate } from "react-router-dom"
@@ -28,10 +28,6 @@ export const InvestmentItem = ({
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const { lockedStake } = useFetchLockedStake(delegator)
-
-  const { lockedAmount, endTime, isLockedUp } = useMemo(() => lockedStake, [lockedStake])
-
   const {
     validator,
     stakedAmount
@@ -42,13 +38,15 @@ export const InvestmentItem = ({
     valId
   } = useMemo(() => validator, [validator])
 
+  const { lockedStake } = useFetchLockedStake(delegator, Number(valId))
+  const { lockedAmount, endTime, isLockedUp } = useMemo(() => lockedStake, [lockedStake])
+
   const actualStakedAmount = useMemo(() => {
     if (stakedAmount && !stakedAmount.isZero()) {
-      return stakedAmount.sub(lockedAmount || BigNumber.from(0))
+      return stakedAmount.sub(BigNumber.from(lockedAmount || 0))
     }
     return BigNumber.from(0)
   }, [stakedAmount, lockedAmount])
-  
   // Local state
   const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
   const [isOpenLockStakeModal, setIsOpenLockStakeModal] = useState(false)
@@ -56,8 +54,6 @@ export const InvestmentItem = ({
   const [isOpenUnlockStakeModal, setIsOpenUnlockStakeModal] = useState(false)
   const [isClaimRewardsLoading, setIsClaimRewardsLoading] = useState(false)
   const [isRestakeLoading, setIsRestakeLoading] = useState(false)
-
-  const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator, Number(valId))
 
   const { claimRewards } = useClaimRewards()
   const { restake } = useRestakeRewards()
@@ -185,13 +181,7 @@ export const InvestmentItem = ({
         }
 
       </div>
-      {
-        withdrawalRequests && withdrawalRequests.length > 0 ? (
-          <div className="mt-4">
-            <WithdrawalRequestList withdrawalRequests={withdrawalRequests} />
-          </div>
-        ) : <></>
-      }
+      <WithdrawalRequestList delegator={delegator} valId={Number(valId)} />
       <UndelegateModal
         validation={validation}
         isOpenModal={isOpenUndelegateModal}
