@@ -3,6 +3,6 @@ import { useMemo } from "react"
 import { getStakingContract } from "../utils"
 
 export const useStakingContract = () => {
-  const { library } = useWeb3React()
-  return useMemo(() => getStakingContract(library?.getSigner()), [library])
+  const { provider } = useWeb3React()
+  return useMemo(() => getStakingContract(provider?.getSigner()), [provider])
 }

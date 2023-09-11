@@ -88,5 +88,5 @@ const appConfigs: {[k: string]: AppConfig} = {
     stakingGraphql: "https://staking-graphql.uniultra.xyz/graphql"
   }
 }
-const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID || "2484";
+const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID || "39";
 export const appConfig: AppConfig = appConfigs[U2U_CHAINID]
