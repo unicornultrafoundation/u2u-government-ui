@@ -12,8 +12,13 @@ const currentEpoch = (stakingContract: ethers.Contract) => {
   return stakingContract.currentEpoch();
 }
 
+const currentEpochSnapShot = (stakingContract: ethers.Contract, epoch: number) => {
+  return stakingContract.getEpochSnapshot(epoch)
+}
+
 export const StakingFetch = {
   getEpochAccumulatedRewardPerToken,
   getEpochReceivedStake,
-  currentEpoch
+  currentEpoch,
+  currentEpochSnapShot
 }
