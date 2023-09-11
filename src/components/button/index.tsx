@@ -1,8 +1,7 @@
-import { ButtonHTMLAttributes, useMemo } from "react";
+import { ButtonHTMLAttributes, useMemo, useState } from "react";
 import { classNames } from "../../utils/string";
-import { useAuth } from "../../hooks";
-import { ConnectorNames } from "../../utils";
 import { useWeb3React } from "@web3-react/core";
+import { WalletLoginModal } from "../modal/WalletLoginModal";
 
 export const buttonType = {
   primary: "primary",
@@ -140,13 +139,17 @@ export const ConnectWalletButton = ({className, scale = buttonScale.lg}: {
   className?: string
   scale?: ButtonScale
 }) => {
-  const { login } = useAuth()
   const { account } = useWeb3React()
+
+  const [isShow, setIsShow] = useState(false)
   const connect = () => {
-    login(ConnectorNames.Injected)
+    setIsShow(true)
   }
   if (account) return <></>
   return (
-    <Button className={classNames("w-full", className)} scale={scale} onClick={connect}>Connect Wallet</Button>
+    <>
+      <Button className={classNames("w-full", className)} scale={scale} onClick={connect}>Connect Wallet</Button>
+      <WalletLoginModal isOpenModal={isShow} setIsOpenModal={setIsShow} />
+    </>
   )
 }

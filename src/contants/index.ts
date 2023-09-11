@@ -12,6 +12,8 @@ export const SLOW_REFRESH_INTERVAL = 60000
 export const epochTime = BigNumber.from(420);
 export const DecimalBigNumber = BigNumber.from("1000000000000000000")
 
+export const WALLET_CONNECT_KEY = process.env.REACT_APP_WALLET_CONNECT_KEY as string
+
 export const TableLimit = 10;
 
 const durationOptionsMainet: SelectOption[] = [
@@ -88,5 +90,5 @@ const appConfigs: {[k: string]: AppConfig} = {
     stakingGraphql: "https://staking-graphql.uniultra.xyz/graphql"
   }
 }
-const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID || "2484";
+const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID as string || "39";
 export const appConfig: AppConfig = appConfigs[U2U_CHAINID]

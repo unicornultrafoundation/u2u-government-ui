@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { Button, buttonType } from "../button"
-import { useAuth, useBalance } from "../../hooks"
-import { ConnectorNames, exploreAddress, truncate } from "../../utils"
+import { useBalance } from "../../hooks"
+import { exploreAddress, truncate } from "../../utils"
 import { useWeb3React } from "@web3-react/core"
 import MetamaskIcon from "../../images/metamask-wallet.png"
 import { RenderNumberFormat } from "../text"
@@ -10,26 +10,26 @@ import { isMobile } from 'mobile-device-detect';
 import { StakingLogo } from "../left-bar/StakingLogo"
 import MenuIcon from "../../images/icons/menu-icon.svg"
 import { NavProps, navs } from "../left-bar"
-import { useState } from "react"
-
+import { useCallback, useState } from "react"
+import { WalletLoginModal } from "../modal/WalletLoginModal"
 
 export const Header = () => {
   const { t } = useTranslation()
-  const { login } = useAuth()
   const { account } = useWeb3React()
   const { balance } = useBalance()
   const navigate = useNavigate()
-
   const [isShow, setIsShow] = useState(false)
+
+  const [isOpen, setIsOpen] = useState(false) 
 
   const handleClick = (index: number) => {
     navigate(navs[index].link)
     setIsShow(false)
   }
 
-  const connect = () => {
-    login(ConnectorNames.Injected)
-  }
+  const connect = useCallback(async () => {
+    setIsOpen(true)
+  }, [])
 
   if (isMobile) {
     return (
@@ -78,10 +78,10 @@ export const Header = () => {
             </div>
           )
         }
+        <WalletLoginModal isOpenModal={isOpen} setIsOpenModal={setIsOpen}/>
       </div>
     )
   }
-
 
   return (
     <div className="flex items-center justify-end w-full py-4 gap-4 px-5">
@@ -107,6 +107,7 @@ export const Header = () => {
           </div>
         )
       }
+      <WalletLoginModal isOpenModal={isOpen} setIsOpenModal={setIsOpen}/>
     </div>
   )
 }
