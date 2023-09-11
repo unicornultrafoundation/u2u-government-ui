@@ -78,7 +78,7 @@ const appConfigs: {[k: string]: AppConfig} = {
     tokenName: "U2U",
     rpc: "https://rpc-mainnet.uniultra.xyz/",
     explorer: "https://u2uscan.xyz",
-    sfcSubgraph: "",
+    sfcSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 604800,
     lockStakeDuration: durationOptionsMainet
