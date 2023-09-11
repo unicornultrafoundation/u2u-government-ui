@@ -33,7 +33,7 @@ export const WalletLoginModal = ({
 
   const walletConnect = useCallback(async () => {
     try {
-      login(ConnectorNames.WalletConnectV2Login)
+      await login(ConnectorNames.WalletConnectV2Login)
       setIsOpenModal(false)
     } catch (error) {
       console.log("Error:: ", error)

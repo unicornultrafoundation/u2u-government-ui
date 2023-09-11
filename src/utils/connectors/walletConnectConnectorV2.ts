@@ -1,13 +1,13 @@
 import { initializeConnector } from '@web3-react/core'
 import { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2'
-import { appConfig } from '../../contants'
+import { WALLET_CONNECT_KEY, appConfig } from '../../contants'
 
 export const [walletConnectV2, walletConnectV2Hooks] = initializeConnector<WalletConnectV2>(
   (actions) =>
     new WalletConnectV2({
       actions,
       options: {
-        projectId: "62af7afc9ea027bc1a727c14fce0f5c5",
+        projectId: WALLET_CONNECT_KEY,
         chains: [appConfig.chainID],
         showQrModal: true,
       },
