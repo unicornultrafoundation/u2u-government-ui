@@ -7,3 +7,11 @@ export const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   link: httpLink,
 })
+
+const httpStakingLink = new HttpLink({ uri: appConfig.stakingGraphql })
+
+export const apolloStakingClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: httpStakingLink,
+})
+

@@ -44,6 +44,7 @@ export interface AppConfig {
   rpc: string,
   explorer: string,
   sfcSubgraph: string,
+  stakingGraphql: string,
   withdrawPeriodTime: number,
   stakingContract: string,
   lockStakeDuration: SelectOption[]
@@ -59,7 +60,8 @@ const appConfigs: {[k: string]: AppConfig} = {
     sfcSubgraph: "http://localhost:8000/subgraphs/name/u2u/sfc-subgraph",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 600,
-    lockStakeDuration: durationOptionsDevnet
+    lockStakeDuration: durationOptionsDevnet,
+    stakingGraphql: ""
   },
   "2484" : {
     chainID: 2484,
@@ -70,7 +72,8 @@ const appConfigs: {[k: string]: AppConfig} = {
     sfcSubgraph: "https://subgraph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 604800,
-    lockStakeDuration: durationOptionsTestnet
+    lockStakeDuration: durationOptionsTestnet,
+    stakingGraphql: "https://testnet-staking-graphql.uniultra.xyz/graphql"
   },
   "39" : {
     chainID: 39,
@@ -81,7 +84,8 @@ const appConfigs: {[k: string]: AppConfig} = {
     sfcSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 604800,
-    lockStakeDuration: durationOptionsMainet
+    lockStakeDuration: durationOptionsMainet,
+    stakingGraphql: "https://staking-graphql.uniultra.xyz/graphql"
   }
 }
 const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID || "2484";

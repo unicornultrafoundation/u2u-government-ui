@@ -24,7 +24,7 @@ export const Home = () => {
         </div>
         <div className="w-6/12 md:w-fit md:mx-4">
           <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Market Cap (USD)')}</div>
-          <div className="md:text-2xl text-sm text-black font-bold">NaN</div>
+          <div className="md:text-2xl text-sm text-black font-bold">-</div>
         </div>
         <div className="w-6/12 md:w-fit md:mx-4">
           <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Circulating Supply (U2U)')}</div>
@@ -34,7 +34,7 @@ export const Home = () => {
         </div>
         <div className="w-6/12 md:w-fit md:mx-4">
           <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Epoch Reward (U2U)')}</div>
-          <div className="md:text-2xl text-sm text-black font-bold">NaN</div>
+          <div className="md:text-2xl text-sm text-black font-bold">-</div>
         </div>
       </Box>
       <Box className="md:flex items-start justify-center gap-16 text-left md:text-center my-10" variant="transparent">
@@ -47,7 +47,7 @@ export const Home = () => {
         </div>
         <div>
           <div className="md:font-bold text-sm md:text-base text-gray">Total staked market value (USD)</div>
-          <div className="font-bold text-black text-[36px] md:text-[40px]">NaN</div>
+          <div className="font-bold text-black text-[36px] md:text-[40px]">-</div>
         </div>
       </Box>
       <Box variant="gradient">

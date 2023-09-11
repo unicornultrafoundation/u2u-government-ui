@@ -134,6 +134,15 @@ export const Schema = () => {
           skip: $skip
         ) {${DELEGATIONS_GQL}}
       }
-    `
+    `,
+    STAKING_APR: gql`
+      query stakingApr($validatorId: Int!) {
+        apr0: calculateApr(
+          validatorId: $validatorId
+          amount: "1000000000000000000000"
+          duration: 0
+        )
+    }
+  `
   }
 }

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom"
-import { useBalance, useFetchValidator } from "../../../hooks";
+import { useBalance, useFetchValidator, useValidatorApr } from "../../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "../../../utils";
 import { Box, DelegationList, RenderNumberFormat, StakingCalculator } from "../../../components";
@@ -13,6 +13,8 @@ export const ValidatorDetails = () => {
   const { validatorId } = useParams()
   const { balance } = useBalance()
   const { validator } = useFetchValidator(Number(validatorId))
+  const {apr} = useValidatorApr(Number(validatorId))
+
   const {
     name,
     valId,
@@ -54,6 +56,12 @@ export const ValidatorDetails = () => {
                 <div className="text-xs text-gray">{t('Total Stake Amount (U2U)')}</div>
                 <div className="text-base text-black font-bold">
                   {totalStakedAmount ? shortenDisplayNumber(bigFormatEther(totalStakedAmount)) : 0}
+                </div>
+              </div>
+              <div className="mx-4">
+                <div className="text-xs text-gray">{t('APR (%)')}</div>
+                <div className="text-base text-black font-bold">
+                  <RenderNumberFormat amount={apr * 100} className="mr-2" fractionDigits={2} />
                 </div>
               </div>
               <div className="mx-4">

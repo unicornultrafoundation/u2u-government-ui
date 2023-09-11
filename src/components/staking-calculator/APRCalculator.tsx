@@ -1,7 +1,8 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Validator } from "../../types"
 import { RenderNumberFormat } from "../text"
+import { useValidatorApr } from "../../hooks"
 
 interface APRCalculatorProp {
   amount: number
@@ -17,44 +18,24 @@ export interface AprResult {
 }
 
 export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
-
-  // const { accumulateRewardPerEpoch } = useAPR()
-  // const [accumulateReward, setAccumulateReward] = useState(BigNumber.from(0))
-  // eslint-disable-next-line
+  const {apr} = useValidatorApr(Number(validator ? validator.valId : 0))
   const [aprResult, serAprResult] = useState<AprResult>({} as AprResult)
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (!validator || !validator.valId) return
-  //     const _accumulateReward = await accumulateRewardPerEpoch(Number(validator.valId))
-  //     setAccumulateReward(_accumulateReward)
-  //   })()
-  //   // eslint-disable-next-line
-  // }, [validator])
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (!amount || accumulateReward.isZero()) {
-  //       serAprResult({} as AprResult)
-  //       return;
-  //     }
-  //     const _amountBigNumber = BigNumber.from(ethers.utils.parseEther(amount.toString())).div(DecimalBigNumber)
-  //     const _reward = accumulateReward.mul(_amountBigNumber)
-  //     const _30days = _reward.mul(BigNumber.from(30 * 24 * 3600)).div(epochTime)
-  //     const _90days = _reward.mul(BigNumber.from(90 * 24 * 3600)).div(epochTime)
-  //     const _180days = _reward.mul(BigNumber.from(180 * 24 * 3600)).div(epochTime)
-  //     const _365days = _reward.mul(BigNumber.from(365 * 24 * 3600)).div(epochTime)
-  //     //  Calculate APR (%)
-  //     const _apr = _365days.div(_amountBigNumber).mul(BigNumber.from(100))
-  //     serAprResult({
-  //       _30days: Number(ethers.utils.formatEther(_30days)),
-  //       _90days: Number(ethers.utils.formatEther(_90days)),
-  //       _180days: Number(ethers.utils.formatEther(_180days)),
-  //       _365days: Number(ethers.utils.formatEther(_365days)),
-  //       _apr: Number(ethers.utils.formatEther(_apr))
-  //     })
-  //   })()
-  // }, [amount, accumulateReward])
+  useEffect(() => {
+    (async () => {
+      if (!amount || !apr) {
+        serAprResult({} as AprResult)
+        return;
+      }
+      serAprResult({
+        _30days: apr * amount * 30 / 365,
+        _90days: apr * amount * 90 / 365,
+        _180days: apr * amount * 180 / 365,
+        _365days: apr * amount,
+        _apr: apr * 100
+      })
+    })()
+  }, [apr, amount])
 
 
   return (

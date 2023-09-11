@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
-import { Box, ValidatorList } from "../../components"
-import { useFetchAllValidator, useFetchStakingStats } from "../../hooks"
+import { Box, RenderNumberFormat, ValidatorList } from "../../components"
+import { useFetchAllValidator, useFetchStakingStats, useValidatorApr } from "../../hooks"
 import { useMemo } from "react"
 import { bigFormatEther, shortenDisplayNumber } from "../../utils"
 // import ArrowIcon from "../../images/icons/arrow-left.png"
@@ -10,10 +10,13 @@ export const Validator = () => {
   const { t } = useTranslation()
   const { stakingStats } = useFetchStakingStats()
   const { validators } = useFetchAllValidator()
+  const {apr} = useValidatorApr(Number(1))
+
 
   const {
     totalValidator,
-    totalStaked
+    totalStaked,
+    totalDelegator
   } = useMemo(() => stakingStats, [stakingStats])
 
 
@@ -28,16 +31,22 @@ export const Validator = () => {
               <div className="text-2xl md:text-green font-medium md:font-bold">{totalValidator}</div>
             </div>
             <div className="w-6/12 md:w-fit">
+              <div className="text-gray text-base mb-2">{t('Delegators')}</div>
+              <div className="text-2xl md:text-green font-medium md:font-bold">{totalDelegator}</div>
+            </div>
+            <div className="w-6/12 md:w-fit">
               <div className="text-gray text-base mb-2">{t('Total U2U  Staked')}</div>
               <div className="text-2xl md:text-green font-medium md:font-bold">{shortenDisplayNumber(bigFormatEther(totalStaked))}</div>
             </div>
-            <div className="w-6/12 md:w-fit">
+            {/* <div className="w-6/12 md:w-fit">
               <div className="text-gray text-base mb-2">{t('Stake Ratio')}</div>
               <div className="text-2xl md:text-green font-medium md:font-bold">NaN</div>
-            </div>
+            </div> */}
             <div className="w-6/12 md:w-fit">
               <div className="text-gray text-base mb-2">{t('Avg.APR')}</div>
-              <div className="text-2xl md:text-green font-medium md:font-bold">NaN</div>
+              <div className="text-2xl md:text-green font-medium md:font-bold">
+              <RenderNumberFormat amount={apr * 100} className="mr-2" fractionDigits={2} />
+              </div>
             </div>
           </Box>
         </div>
@@ -49,7 +58,7 @@ export const Validator = () => {
             </div>
             <div className="text-left">
               <div className="text-base text-black-3">{t('Nodes')}</div>
-              <div className="text-lg font-medium text-black">3</div>
+              <div className="text-lg font-medium text-black">{totalValidator}</div>
             </div>
           </div>
         </Box>
