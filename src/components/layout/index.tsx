@@ -15,12 +15,12 @@ export const Layout = ({ children }: Props) => {
   const { login } = useAuth()
   useEffect(() => {
     try {
-      const connectorID = window.localStorage.getItem(connectorLocalStorageKey);
-      if (connectorID) {
-        (async () => {
-          await login(connectorID as ConnectorNames)
-        })()
-      } 
+        const connectorID = window.localStorage.getItem(connectorLocalStorageKey);
+        if (connectorID) {
+          (async () => {
+            await login(connectorID as ConnectorNames)
+          })()
+        }
       } catch (error) {
     }
     // eslint-disable-next-line
