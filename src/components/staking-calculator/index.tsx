@@ -132,7 +132,7 @@ export const StakingCalculator = ({
           <div className="text-base text-gray">Your Balance:</div>
           <div className="text-base text-green">
             <RenderNumberFormat amount={u2uBalance} className="mr-2" />
-            U2U
+            <span className="ml-2">U2U</span>
           </div>
           <div className="mt-6">
             <Input

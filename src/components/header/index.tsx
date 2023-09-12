@@ -93,7 +93,7 @@ export const Header = () => {
               <img src={MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
               <div>
                 <div className="text-base font-medium">
-                  <RenderNumberFormat amount={balance} className="mr-2" /> U2U
+                  <RenderNumberFormat amount={balance} /><span className="ml-2">U2U</span>
                 </div>
                 <div className="text-xs text-green">
                   <a href={exploreAddress(account)} target="_blank" rel="noopener noreferrer">{truncate({ str: account })}</a>

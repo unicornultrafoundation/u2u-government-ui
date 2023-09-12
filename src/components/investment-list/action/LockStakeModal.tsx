@@ -87,7 +87,7 @@ export const LockStakeModal = ({
         U2U
       </div>
 
-      <div className="text-base text-gray mb-3 mt-6">Validator</div>
+      <div className="text-base text-gray mb-3 mt-6">Duration</div>
       <Select
         options={appConfig.lockStakeDuration}
         placeholder="Select validator"
