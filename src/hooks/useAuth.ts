@@ -5,7 +5,7 @@ import { appConfig, connectorLocalStorageKey } from "../contants"
 export const useAuth = () => {
   const login = useCallback((connectorID: ConnectorNames) => {
     const connectors = connectorsByName[connectorID]
-    const [connector, ] = connectors
+    const [connector,] = connectors
     try {
       if (connector) {
         window.localStorage.setItem(connectorLocalStorageKey, connectorID);
@@ -13,16 +13,25 @@ export const useAuth = () => {
           if (error.code === 4902) {
             await setupNetwork()
           }
-         })
+        })
       }
     } catch (error) { }
   }, [])
 
-  const logout = useCallback((connectorID: ConnectorNames) => {
-    const connectors = connectorsByName[connectorID]
-    const [connector, ] = connectors
-    if (connector?.deactivate) {
-      void connector.deactivate()
+  const logout = useCallback(() => {
+    const connectorID = window.localStorage.getItem(connectorLocalStorageKey);
+    if (connectorID) {
+      try {
+        const connectors = connectorsByName[connectorID as ConnectorNames]
+        const [connector,] = connectors
+        if (connector?.deactivate) {
+          void connector.deactivate()
+        } else {
+          void connector.resetState()
+        }
+      } catch (error) {
+        
+      }
     }
     window.localStorage.removeItem(connectorLocalStorageKey)
   }, [])
