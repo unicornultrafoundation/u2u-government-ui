@@ -9,8 +9,11 @@ export const [walletConnectV2, walletConnectV2Hooks] = initializeConnector<Walle
       options: {
         projectId: WALLET_CONNECT_KEY,
         chains: [appConfig.chainID],
+        optionalChains: [appConfig.chainID],
         showQrModal: true,
+        rpcMap: {
+          [appConfig.chainID]: [appConfig.rpc]
+        }
       },
-      defaultChainId: appConfig.chainID
     })
 )
