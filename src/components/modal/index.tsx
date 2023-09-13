@@ -17,6 +17,7 @@ interface ModalProps {
   setIsOpen: (open: boolean) => void;
   scale?: ModalScale
   className?: string
+  onClose?: boolean;
 }
 
 export const Modal = ({
@@ -24,7 +25,8 @@ export const Modal = ({
   isOpen,
   setIsOpen,
   scale = modalScale.md,
-  className = ""
+  className = "",
+  onClose
 }: ModalProps) => {
 
   const panelClass = useCallback(() => {
@@ -56,7 +58,7 @@ export const Modal = ({
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => {}}>
+        <Dialog as="div" className="relative z-10" onClose={() => {onClose && setIsOpen(false)}}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

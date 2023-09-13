@@ -10,7 +10,7 @@ import { isMobile } from 'mobile-device-detect';
 import { StakingLogo } from "../left-bar/StakingLogo"
 import MenuIcon from "../../images/icons/menu-icon.svg"
 import { NavProps, navs } from "../left-bar"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
 
 export const Header = () => {
@@ -18,18 +18,36 @@ export const Header = () => {
   const { account, isActive } = useWeb3React()
   const { balance } = useBalance()
   const navigate = useNavigate()
-  const [isShow, setIsShow] = useState(false)
-
+  const [isShowMobileMenu, setIsShowMobileMenu] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-
   const [isShowLogout, setIsShowLogout] = useState(false)
-
   const { logout } = useAuth()
+
+  const mobileMenuRef = useRef(null);
+
 
   const handleClick = (index: number) => {
     navigate(navs[index].link)
-    setIsShow(false)
+    setIsShowMobileMenu(false)
   }
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (mobileMenuRef.current && !(mobileMenuRef.current as any).contains(event.target)) {
+        setIsShowMobileMenu(false)
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [mobileMenuRef]);
+
+  const handleOpenMenu = useCallback(() => {
+    setIsShowMobileMenu(!isShowMobileMenu)
+  }, [isShowMobileMenu])
 
   const connect = useCallback(async () => {
     setIsOpen(true)
@@ -37,7 +55,7 @@ export const Header = () => {
 
   if (isMobile) {
     return (
-      <div className="w-full">
+      <div className="w-full relative">
         {
           !isActive && (
             <div className="flex justify-center gap-4 py-2">
@@ -46,31 +64,37 @@ export const Header = () => {
             </div>
           )
         }
-        <div className="flex justify-between items-center border-y py-4 px-5">
-          <StakingLogo />
-          <img src={MenuIcon} alt="u2u" onClick={() => setIsShow(!isShow)} />
-        </div>
-        {isShow && <div className="bg-white fixed top-[120px] w-screen left-0">
-          {
-            navs.map((item: NavProps, index: number) => {
-              return (
-                <div
-                  className="flex items-center gap-2 my-3 p-3 font-semibold cursor-pointer"
-                  key={index}
-                  onClick={() => { handleClick(index) }}>
-                  <img src={item.icon} alt="_u2u" />
-                  <div className={`${"text-black-1"} text-base`} >{item.name}</div>
-                </div>
-              )
-            })
+        <div ref={mobileMenuRef}>
+          <div className="flex justify-between items-center border-y py-4 px-5">
+            <div onClick={() => setIsShowMobileMenu(false)}>
+              <StakingLogo />
+            </div>
+            <img src={MenuIcon} alt="u2u" onClick={handleOpenMenu} />
+          </div>
+          {isShowMobileMenu &&
+            <div className={`bg-white absolute w-screen left-0 ${isActive ? "top-[100px]" : "top-[150px]"}`}>
+              {
+                navs.map((item: NavProps, index: number) => {
+                  return (
+                    <div
+                      className="flex items-center gap-2 my-3 p-3 font-semibold cursor-pointer"
+                      key={index}
+                      onClick={() => { handleClick(index) }}>
+                      <img src={item.icon} alt="_u2u" />
+                      <div className={`${"text-black-1"} text-base`} >{item.name}</div>
+                    </div>
+                  )
+                })
+              }
+              {isActive && <div className="text-green gap-2 my-3 p-3 px-6 text-center font-semibold cursor-pointer"
+                onClick={() => {
+                  logout()
+                  setIsShowMobileMenu(false)
+                }}>Logout</div>}
+            </div>
           }
-          {isActive && <div className="text-green gap-2 my-3 p-3 px-6 text-center font-semibold cursor-pointer"
-            onClick={() => {
-              logout()
-              setIsShow(false)
-            }}>Logout</div>}
         </div>
-        }
+
         {
           isActive && (
             <div className="flex justify-items py-4 w-full px-5">
@@ -113,12 +137,12 @@ export const Header = () => {
                 <i className="fa fa-caret-down"></i>
               </div>
               {
-                isShowLogout && <div 
-                className="bg-green absolute top-[80px] p-3 text-sm right-0 w-[100px] rounded text-black text-center cursor-pointer"
-                onClick={() => {
-                  logout()
-                  setIsShowLogout(false)
-                }}>Logout
+                isShowLogout && <div
+                  className="bg-green absolute top-[80px] p-3 text-sm right-0 w-[100px] rounded text-black text-center cursor-pointer"
+                  onClick={() => {
+                    logout()
+                    setIsShowLogout(false)
+                  }}>Logout
                 </div>
               }
 
