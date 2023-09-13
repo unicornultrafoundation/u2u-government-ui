@@ -42,7 +42,7 @@ export const WalletLoginModal = ({
   }, [walletConnectV2])
 
   return (
-    <Modal isOpen={isOpenModal} scale="sm" setIsOpen={setIsOpenModal}>
+    <Modal isOpen={isOpenModal} scale="sm" setIsOpen={setIsOpenModal} onClose>
       <div>
         <div className="text-2xl text-black-2 mb-10">{t('Connect Wallet')}</div>
       </div>

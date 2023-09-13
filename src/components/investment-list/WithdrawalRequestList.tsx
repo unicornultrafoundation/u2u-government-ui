@@ -130,7 +130,7 @@ export const WithdrawalRequestList = ({
                       <a href={exploreTransaction(row.undelegateHash)} target="_blank" rel="noopener noreferrer">{row.wrId}
                       </a>
                     </div>
-                    {dateToUTCString(row.unbondTime)}
+                    <div className="whitespace-nowrap">{dateToUTCString(row.unbondTime)}</div> 
                   </Td>
                   <Td index={index} className="text-base font-medium">
                     <RenderNumberFormat amount={bigFormatEther(row.unbondingAmount)} />
@@ -147,7 +147,7 @@ export const WithdrawalRequestList = ({
                         <div className="text-green">
                           <a href={exploreTransaction(row.withdrawalHash)} target="_blank" rel="noopener noreferrer">{truncate({ str: row.withdrawalHash })}</a>
                         </div>
-                        {dateToUTCString(row.withdrawalTime)}
+                        <div className="whitespace-nowrap">{dateToUTCString(row.withdrawalTime)}</div> 
                       </>
                     )
                     }
