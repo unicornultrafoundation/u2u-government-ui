@@ -12,7 +12,7 @@ export const Router = () => {
       <Route path="portfolio" element={<Portfolio />} />
       <Route path="validator/register" element={<ValidatorRegistration />} />
       <Route path="validator/:validatorId" element={<ValidatorDetails />} />
-      <Route path="validator" element={<Validator />} />
+      <Route path="validators" element={<Validator />} />
     </Routes>
   )
 }

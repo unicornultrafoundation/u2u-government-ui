@@ -28,16 +28,16 @@ export const navs: NavProps[] = [
     link: "/"
   }, {
     id: "portfolio",
-    name: "My U2U Staking",
+    name: "My Staking",
     icon: peopleIcon,
     activeIcon: peopleActiveIcon,
     link: "portfolio"
   }, {
     id: "validator",
-    name: "Validator",
+    name: "Validators",
     icon: bookIcon,
     activeIcon: bookActiveIcon,
-    link: "validator"
+    link: "validators"
   }
 ]
 
