@@ -18,7 +18,7 @@ export interface AprResult {
 }
 
 export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
-  const {apr} = useValidatorApr(Number(validator ? validator.valId : 0))
+  const { apr } = useValidatorApr(Number(validator ? validator.valId : 0))
   const [aprResult, serAprResult] = useState<AprResult>({} as AprResult)
 
   useEffect(() => {
@@ -42,23 +42,23 @@ export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
     <div className="mb-6">
       <div className="flex justify-between">
         <div className="text-sm text-black">APR(%)</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._apr} className="mr-2" fractionDigits={2} /></div>
+        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._apr} fractionDigits={2} /></div>
       </div>
       <div className="flex justify-between">
         <div className="text-sm text-black">30 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._30days} className="mr-2" fractionDigits={2} /> U2U</div>
+        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._30days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
       <div className="flex justify-between">
         <div className="text-sm text-black">90 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._90days} className="mr-2" fractionDigits={2} /> U2U</div>
+        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._90days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
       <div className="flex justify-between">
         <div className="text-sm text-black">180 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._180days} className="mr-2" fractionDigits={2} />U2U</div>
+        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._180days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
       <div className="flex justify-between">
         <div className="text-sm text-black">365 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._365days} className="mr-2" fractionDigits={2} /> U2U</div>
+        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._365days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
     </div>
   )
