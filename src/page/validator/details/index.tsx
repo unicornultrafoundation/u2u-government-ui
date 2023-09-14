@@ -37,7 +37,7 @@ export const ValidatorDetails = () => {
           <div>
             <div className="flex flex-wrap justify-between text-left">
               <div>
-                <div className="text-[26px] text-black-2">{t('Validator detail')}</div>
+                <div className="text-[26px] text-black-2">{t('Validator Detail')}</div>
                 <div className="text-[32px] text-black font-bold">{name}</div>
               </div>
               <div>
