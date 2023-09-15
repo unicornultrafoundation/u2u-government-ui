@@ -17,20 +17,20 @@ export const WALLET_CONNECT_KEY = process.env.REACT_APP_WALLET_CONNECT_KEY as st
 export const TableLimit = 10;
 
 const durationOptionsMainet: SelectOption[] = [
-  { label: "14 days", value: 8467200 },
-  { label: "30 days", value: 18144000 },
-  { label: "60 days", value: 36288000 },
-  { label: "90 days", value: 54432000 },
-  { label: "180 days", value: 108864000 },
+  { label: "14 days", value: 1209600 },
+  { label: "30 days", value: 2592000 },
+  { label: "60 days", value: 5184000 },
+  { label: "90 days", value: 7776000 },
+  { label: "180 days", value: 15552000 },
   { label: "365 days", value: 31536000 }
 ]
 
 const durationOptionsTestnet: SelectOption[] = [
-  { label: "14 days", value: 8467200 },
-  { label: "30 days", value: 18144000 },
-  { label: "60 days", value: 36288000 },
-  { label: "90 days", value: 54432000 },
-  { label: "180 days", value: 108864000 },
+  { label: "14 days", value: 1209600 },
+  { label: "30 days", value: 2592000 },
+  { label: "60 days", value: 5184000 },
+  { label: "90 days", value: 7776000 },
+  { label: "180 days", value: 15552000 },
   { label: "365 days", value: 31536000 }
 ]
 
