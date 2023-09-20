@@ -36,6 +36,23 @@ const VALIDATIONS_GQL = `
         stakedAmount
 `
 
+// const EPOCH_GQL = `
+//     epoch
+//     block
+//     endTime
+//     totalBaseReward
+//     totalRewards
+//     totalStake
+//     epochRewards
+//     epochBurntFees
+//     validators {
+//       epochId
+//       validatorId
+//       epochRewards
+//       totalRewards
+//     }
+// `
+
 
 
 export const Schema = () => {
@@ -136,13 +153,22 @@ export const Schema = () => {
       }
     `,
     STAKING_APR: gql`
-      query stakingApr($validatorId: Int!) {
+      query stakingApr($validatorId: Int!, $stakingAmount: String!) {
         apr0: calculateApr(
           validatorId: $validatorId
-          amount: "1000000000000000000000"
+          amount: $stakingAmount
           duration: 0
         )
-    }
-  `
+      }
+    `,
+    // LAST_EPOCH: gql`
+    //   query LastEpoch() {
+    //     epoches (
+    //     orderBy: block
+    //     orderDirection: desc
+    //     first: 1
+    // ) {${EPOCH_GQL}}
+    //   }
+    // `
   }
 }

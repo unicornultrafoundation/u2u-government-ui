@@ -18,7 +18,7 @@ export interface AprResult {
 }
 
 export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
-  const { apr } = useValidatorApr(Number(validator ? validator.valId : 0))
+  const { apr } = useValidatorApr(Number(validator ? validator.valId : 0), amount)
   const [aprResult, serAprResult] = useState<AprResult>({} as AprResult)
 
   useEffect(() => {

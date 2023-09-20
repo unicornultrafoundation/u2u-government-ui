@@ -55,10 +55,11 @@ const queryDelegationsPagination = (valId: number, skip: number) => apolloClient
   fetchPolicy: "no-cache"
 })
 
-const queryValidatorApr = (valId: number) => apolloStakingClient.query({
+const queryValidatorApr = (valId: number, stakingAmount: string) => apolloStakingClient.query({
   query: Schema().STAKING_APR,
   variables: {
-    validatorId: valId
+    validatorId: valId,
+    stakingAmount: stakingAmount
   },
   fetchPolicy: "no-cache"
 })

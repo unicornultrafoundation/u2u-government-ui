@@ -15,3 +15,11 @@ export const apolloStakingClient = new ApolloClient({
   link: httpStakingLink,
 })
 
+const httpU2UNetworkLink = new HttpLink({ uri: appConfig.u2uNetworkSubgraph })
+
+export const apolloU2UNetworkClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: httpU2UNetworkLink,
+})
+
+
