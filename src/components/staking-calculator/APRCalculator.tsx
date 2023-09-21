@@ -37,11 +37,10 @@ export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
     })()
   }, [apr, amount])
 
-
   return (
     <div className="mb-6">
       <div className="flex justify-between">
-        <div className="text-sm text-black">APR(%)</div>
+        <div className="text-sm text-black">Current estimated APR(%)</div>
         <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._apr} fractionDigits={2} /></div>
       </div>
       <div className="flex justify-between">

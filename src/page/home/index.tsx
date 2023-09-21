@@ -56,12 +56,12 @@ export const Home = () => {
       <Box variant="gradient">
         <div className="md:py-[32px] py-10 md:text-center text-left">
           <div className="md:hidden w-[50px] h-[2px] bg-green mb-6"></div>
-          <div className="text-[26px] text-black-2">Validators form the backbone of U2U’s network.</div>
-          <div className="text-base text-gray">By processing transactions and participating in consensus, each validator helps make U2U the most censorship resistant and highest-performance blockchain network in the world.</div>
-          <div className="text-2xl text-black-2 mt-10">Delegators</div>
-          <div className="text-base text-gray">Delegators are rewarded for helping to validate the network. They do this by delegating their stake to validator nodes. </div>
-          <div className="text-2xl text-black-2 mt-10">Epoch Reward</div>
-          <div className="text-base text-gray">Reward from the Reserve to incentivize Validators to join us in securing the network. This reward will be distributed at end of Epoch, which last 24h each</div>
+          <div className="text-[26px] text-black-2">Validators: The Backbone of U2U's Network</div>
+          <div className="text-base text-gray">Validators are the cornerstone of U2U's network. They play a pivotal role in U2U distributed network by processing transactions and realtime participating in consensus mechanisms. This active involvement contributes significantly to making U2U the most censorship-resistant and one of the highest-performing blockchain networks in the world.</div>
+          <div className="text-2xl text-black-2 mt-10">Delegators: Powering Network Validation</div>
+          <div className="text-base text-gray">Delegators play a vital role in the validation process and are duly rewarded for their contribution to securing the network. Their role involves staking U2U Token by delegating them to validator nodes, thus fortifying the network's reliability and integrity.</div>
+          <div className="text-2xl text-black-2 mt-10">Epoch Rewards: Fostering Network Security</div>
+          <div className="text-base text-gray">Epoch rewards represent a critical component of our network. These rewards are drawn from our reserve and serve as a strong incentive for validators to join us in safeguarding the network. The rewards are distributed at the end of each epoch, and each epoch spans a duration of  7 minutes.</div>
           <div className="mt-10 flex justify-center">
             <Button scale={buttonScale.lg} className="w-[500px]" onClick={() => navigate("/validator/register")}>Become a Validator</Button>
           </div>

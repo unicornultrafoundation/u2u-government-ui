@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { Box, RenderNumberFormat, ValidatorList } from "../../components"
-import { useFetchAllValidator, useFetchStakingStats, useValidatorApr } from "../../hooks"
+import { useFetchAllValidator, useFetchStakingStats } from "../../hooks"
 import { useMemo } from "react"
 import { bigFormatEther, shortenDisplayNumber } from "../../utils"
 // import ArrowIcon from "../../images/icons/arrow-left.png"
@@ -10,7 +10,6 @@ export const Validator = () => {
   const { t } = useTranslation()
   const { stakingStats } = useFetchStakingStats()
   const { validators } = useFetchAllValidator()
-  const {apr} = useValidatorApr(Number(1))
 
 
   const {
@@ -18,7 +17,6 @@ export const Validator = () => {
     totalStaked,
     totalDelegator
   } = useMemo(() => stakingStats, [stakingStats])
-
 
   return (
     <div>
@@ -45,7 +43,7 @@ export const Validator = () => {
             <div className="w-6/12 md:w-fit">
               <div className="text-gray text-base mb-2">{t('Avg.APR')}</div>
               <div className="text-2xl md:text-green font-medium md:font-bold">
-              <RenderNumberFormat amount={apr * 100} className="mr-2" fractionDigits={2} />
+              <RenderNumberFormat amount={validators && validators[0] ? validators[0].apr : 0} className="mr-2" fractionDigits={2} />
               </div>
             </div>
           </Box>

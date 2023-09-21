@@ -15,7 +15,9 @@ export const useFetchValidator = (valId: number) => {
       const {data: stakingStats} = await QueryService.queryStakingStats()
       const totalNetworkStaked = stakingStats && stakingStats.stakings ? BigNumber.from(stakingStats.stakings[0].totalStaked || 0) : BigNumber.from(0)
       if (data && data.validators.length > 0) {
-        setValidator(DataProcessor.validator(data.validators[0], totalNetworkStaked))
+        const { data: dataApr } = await QueryService.queryValidatorsApr([valId])
+        let apr = dataApr[`apr${valId}`]
+        setValidator(DataProcessor.validator(data.validators[0], totalNetworkStaked, Number(apr)))
       }
     })()
   }, [fastRefresh, valId])

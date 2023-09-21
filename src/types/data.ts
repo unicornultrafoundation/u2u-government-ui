@@ -26,6 +26,7 @@ export interface Validator {
   delegations?: Delegation[]
   votingPower?: number
   totalDelegator: number
+  apr: number
 }
 
 export interface Validation {
@@ -75,4 +76,11 @@ export interface LockedStake {
   lockedAmount: BigNumber
   penalty: BigNumber
   isLockedUp: boolean
+}
+
+export interface LockupInfo {
+  lockedStake: BigNumber
+  duration: number
+  fromEpoch: number
+  endTime: number
 }

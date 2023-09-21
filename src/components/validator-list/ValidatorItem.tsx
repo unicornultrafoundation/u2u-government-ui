@@ -20,7 +20,8 @@ export const ValidatorItem = ({
     valId,
     totalStakedAmount,
     delegations,
-    votingPower
+    votingPower,
+    apr
   } = useMemo(() => validator, [validator])
 
   const navigate = useNavigate()
@@ -36,6 +37,12 @@ export const ValidatorItem = ({
           <div className="text-sm font-medium text-gray">{t('Staked Amount (U2U)')}</div>
           <div className="text-sm font-bold text-black">
             <RenderNumberFormat amount={bigFormatEther(totalStakedAmount)} className="mr-2" fractionDigits={2} />
+          </div>
+        </div>
+        <div className="md:mt-4 mt-2">
+          <div className="text-sm font-medium text-gray">{t('APR (%)')}</div>
+          <div className="text-sm font-bold text-black">
+            <RenderNumberFormat amount={Number(apr)} className="mr-2" fractionDigits={2} />
           </div>
         </div>
         <div className="md:mt-4 mt-2">

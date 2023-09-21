@@ -1,15 +1,16 @@
 import { useCallback, useMemo, useState } from "react"
 import { Modal } from "../../modal"
 import { useTranslation } from "react-i18next"
-import { Input, Select, SelectOption } from "../../form"
+import { Input } from "../../form"
 import { Button, buttonScale, buttonType } from "../../button"
 import { RelockStakeParams, Validation } from "../../../types"
 import { RenderNumberFormat } from "../../text"
-import { useRelockStake } from "../../../hooks"
+import { useLockupInfo, useRelockStake } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../toast"
 import { BigNumber } from "ethers"
 import { bigFormatEther } from "../../../utils"
-import { appConfig } from "../../../contants"
+import { MIN_LOCKUP_DURATION } from "../../../contants"
+import { Slider } from "@material-tailwind/react"
 
 interface RelockStakeModalProps {
   validation: Validation
@@ -30,13 +31,26 @@ export const RelockStakeModal = ({
   const [amount, setAmount] = useState('')
   const [amountErr, setAmountErr] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [selected, setSelected] = useState<SelectOption>(appConfig.lockStakeDuration[0])
+  const [duration, setDuration] = useState(0)
+  const [durationErr, setDurationErr] = useState("")
+
   const { relockStake } = useRelockStake()
   const {
     validator
   } = useMemo(() => validation, [validation])
 
-  const { valId } = useMemo(() => validator, [validator])
+  const { valId, auth } = useMemo(() => validator, [validator])
+  const { lockStakeInfo } = useLockupInfo(auth, Number(valId))
+
+  let maxDuration = useMemo(() => {
+    if (!lockStakeInfo || !lockStakeInfo.endTime) return 0
+    const { endTime } = lockStakeInfo
+    let now = Math.ceil((new Date()).getTime() / 1000)
+    if (endTime < now) return 0
+    let duration = Math.ceil((endTime - now) / 86400) - 1
+    if (duration < MIN_LOCKUP_DURATION) return 0
+    return duration
+  }, [lockStakeInfo])
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
@@ -51,12 +65,22 @@ export const RelockStakeModal = ({
     return true;
   }, [actualStakedAmount, t])
 
+
+  const validateDuration = useCallback((value: any) => {
+    if (Number(value) === 0) {
+      setDurationErr(t('Lockup duration wrong'));
+      return false;
+    }
+    setDurationErr("")
+    return true
+  }, [t])
+
   const onReLockStake = useCallback(async () => {
-    if (!validateAmount(amount) || !valId || !selected) return;
+    if (!validateDuration(duration) || !validateAmount(amount) || !valId) return;
     setIsLoading(true)
     const params: RelockStakeParams = {
       toValidatorID: Number(valId),
-      lockupDuration: selected.value,
+      lockupDuration: duration * 86400,
       amount: Number(amount)
     }
     try {
@@ -76,24 +100,29 @@ export const RelockStakeModal = ({
     setIsLoading(false)
     setAmount('')
     // eslint-disable-next-line
-  }, [amount, valId, selected])
+  }, [amount, valId, duration])
 
   return (
     <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
       <div className="text-2xl text-black-2 mb-2">{t('Re-Lock Stake')}</div>
-      <div className="text-base text-gray">Available lock amount:</div>
-      <div className="text-base text-green">
-        <RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-2" fractionDigits={2} />
-        U2U
+      <div className="text-base text-gray">Available lock amount:
+        <span className="text-base text-green"><RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-1 ml-2" fractionDigits={2} />U2U</span>
       </div>
-
-      <div className="text-base text-gray mb-3 mt-6">Duration</div>
-      <Select
-        options={appConfig.lockStakeDuration}
-        placeholder="Select validator"
-        setSelected={setSelected}
-        onChange={(option) => setSelected(option)}
-        selected={selected} />
+      <div className="text-base text-gray">Max lockup duration: <span className="text-green">{maxDuration} {maxDuration <= 1 ? "day" : "days"}</span></div>
+      <div className="text-base text-gray mb-3 mt-6">Lockup duration: <span className="text-green">{duration} {duration <= 1 ? "day" : "days"}</span></div>
+      <div>
+        <Slider
+          defaultValue={0}
+          min={maxDuration > 0 ? MIN_LOCKUP_DURATION : 0}
+          max={maxDuration}
+          barClassName="bg-transparent"
+          value={duration}
+          onChange={(e) => {
+            setDuration(Math.ceil(Number(e.target.value)))
+            validateDuration(Math.ceil(Number(e.target.value)))
+          }}
+        />
+      </div>{durationErr && <div className="text-sm text-error italic mt-2">{durationErr}</div>}
       <div className="mt-4">
         <Input
           className="w-full"

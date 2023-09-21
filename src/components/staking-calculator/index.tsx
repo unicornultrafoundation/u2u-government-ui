@@ -33,14 +33,14 @@ export const StakingCalculator = ({
   const { account } = useWeb3React()
   const { degegate } = useDelegate()
   const adjustedFeeU2U = 0.1 // 0.1 U2U
-
-
+  
   useEffect(() => {
     if (validators.length > 0) {
       let _options = validators.map((v: Validator, index: number) => {
         return {
           value: v,
-          label: `Validator ${v.valId ? v.valId : ''} (${v.votingPower  ? ((v.votingPower / 10000).toFixed(2)) : ''}%)`
+          label: `Validator ${v.valId ? v.valId : ''}`,
+          subLabel: `(${v.apr  ? `APR:${(v.apr).toFixed(2)}%` : ''} - ${v.votingPower  ? `Power:${(v.votingPower / 10000).toFixed(2)}%` : ''})`
         } as SelectOption
       })
       setSelection(_options)

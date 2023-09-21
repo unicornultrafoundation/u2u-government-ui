@@ -53,8 +53,6 @@ const VALIDATIONS_GQL = `
 //     }
 // `
 
-
-
 export const Schema = () => {
   return {
     STAKING_STATS: gql`
@@ -161,6 +159,20 @@ export const Schema = () => {
         )
       }
     `,
+    VALIDATORS_APR(vals: any[]) {
+      let queryString = `query stakingApr {`;
+      queryString += vals.map(
+        (val) => `
+          apr${val}: calculateApr(
+            validatorId: ${val}
+            amount: "1000000000000000000000"
+            duration: 0
+          )
+            `
+      );
+      queryString += "}";
+      return gql(queryString);
+    },
     // LAST_EPOCH: gql`
     //   query LastEpoch() {
     //     epoches (

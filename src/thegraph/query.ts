@@ -64,6 +64,11 @@ const queryValidatorApr = (valId: number, stakingAmount: string) => apolloStakin
   fetchPolicy: "no-cache"
 })
 
+const queryValidatorsApr = (vals: number[]) => apolloStakingClient.query({
+  query: Schema().VALIDATORS_APR(vals),
+  fetchPolicy: "no-cache"
+})
+
 
 
 
@@ -75,5 +80,6 @@ export const QueryService = {
   queryWithdrawalRequest,
   queryLockedStake,
   queryDelegationsPagination,
-  queryValidatorApr
+  queryValidatorApr,
+  queryValidatorsApr
 }

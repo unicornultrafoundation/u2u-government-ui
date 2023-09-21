@@ -1,7 +1,7 @@
 import { ReactNode, forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import { classNames } from "../../utils";
 
-export type SelectOption = { value: any, label: string, disabled?: boolean }
+export type SelectOption = { value: any, label: string, disabled?: boolean, subLabel?: string }
 
 
 export interface SelectProps {
@@ -91,12 +91,14 @@ export const Select = forwardRef<any, SelectProps>((
                 <li
                   key={`select-option-${index}`}
                   role="option"
-                  className="p-4 rounded-lg cursor-pointer select-none hover:bg-white focus:bg-white outline outline-0 transition-all"
+                  className="px-4 py-2 rounded-lg cursor-pointer select-none hover:bg-white focus:bg-white outline outline-0 transition-all"
                   tabIndex={1}
                   aria-selected={false}
                   data-selected={false}
                   onClick={() => handleSelect(option)}
-                >{option.label}
+                >
+                  <div>{option.label}</div>
+                  <div className="text-xs">{option.subLabel}</div>
                 </li>
               ))
             }
