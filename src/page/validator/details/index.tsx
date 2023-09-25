@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom"
 import { useBalance, useFetchValidator } from "../../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "../../../utils";
-import { Box, DelegationList, RenderNumberFormat, StakingCalculator } from "../../../components";
+import { Box, RenderNumberFormat, StakingCalculator } from "../../../components";
 import { VALIDATOR_COMMISSION } from "../../../contants";
 import { isMobile } from "mobile-device-detect";
 import { Tooltip } from "react-tooltip";
 import InfoIcon from "../../../images/icons/info.svg"
+import { ListOfValidator } from "./list";
 
 export const ValidatorDetails = () => {
 
@@ -149,10 +150,11 @@ export const ValidatorDetails = () => {
         <StakingCalculator balance={balance} validators={[validator]} />
       </div>
       <div className="mt-16 text-left">
-        <div className="text-[26px] text-black-2 mb-6 w-full">{t('Delegators')}</div>
-        {
-          delegations && delegations.length > 0 ? <DelegationList validationId={Number(valId)} totalDelegator={totalDelegator} /> : <></>
-        }
+        <ListOfValidator
+          delegations={delegations}
+          valId={Number(valId)}
+          totalDelegator={totalDelegator}
+        />
       </div>
       <Tooltip anchorSelect="#validator-commission" place="top">
         Commission for Validator from Delegators

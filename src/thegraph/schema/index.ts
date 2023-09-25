@@ -53,6 +53,25 @@ const VALIDATIONS_GQL = `
 //     }
 // `
 
+const EPOCH_OF_VAL_GQL = `
+          id
+          receivedStake
+          accumulatedRewardPerToken
+          epoch {
+            id
+            block
+            endTime
+            totalTxReward
+            epochFee
+            epochRewards
+            totalRewards
+          }
+          validatorId
+          epochRewards
+          totalRewards
+`
+
+
 export const Schema = () => {
   return {
     STAKING_STATS: gql`
@@ -173,6 +192,25 @@ export const Schema = () => {
       queryString += "}";
       return gql(queryString);
     },
+    EPOCH_OF_VALIDATOR: gql`
+      query EpochOfValidator ($validatorId: Int!, $validatorIdHexString: String!, $skip: Int!, $limit: Int!) {
+        validators(
+        orderBy: epoch__block
+        orderDirection: desc
+        first: $limit
+        skip: $skip
+        where: {
+          validatorId: $validatorId
+        }
+        ) {${EPOCH_OF_VAL_GQL}}
+        validatorCounters (where:{
+          id: $validatorIdHexString
+        }) {
+            total
+            id
+          }
+      }
+    `
     // LAST_EPOCH: gql`
     //   query LastEpoch() {
     //     epoches (
@@ -182,5 +220,6 @@ export const Schema = () => {
     // ) {${EPOCH_GQL}}
     //   }
     // `
+
   }
 }

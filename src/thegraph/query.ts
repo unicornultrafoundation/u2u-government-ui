@@ -1,5 +1,5 @@
 import { TableLimit } from "../contants";
-import { apolloClient, apolloStakingClient } from "./client";
+import { apolloClient, apolloStakingClient, apolloU2UNetworkClient } from "./client";
 import { Schema } from "./schema";
 
 const queryStakingStats = () => apolloClient.query({
@@ -49,7 +49,7 @@ const queryDelegationsPagination = (valId: number, skip: number) => apolloClient
   query: Schema().DELEGATIONS_PAGINATION,
   variables: {
     validatorId: valId,
-    skip: skip,
+    skip: skip*TableLimit,
     limit: TableLimit
   },
   fetchPolicy: "no-cache"
@@ -69,8 +69,16 @@ const queryValidatorsApr = (vals: number[]) => apolloStakingClient.query({
   fetchPolicy: "no-cache"
 })
 
-
-
+const queryEpochOfValidator = (valId: number, valIdHex: string, skip: number) => apolloU2UNetworkClient.query({
+  query: Schema().EPOCH_OF_VALIDATOR,
+  variables: {
+    validatorId: valId,
+    validatorIdHexString: valIdHex,
+    skip: skip*TableLimit,
+    limit: TableLimit
+  },
+  fetchPolicy: "no-cache"
+})
 
 export const QueryService = {
   queryValidators,
@@ -81,5 +89,6 @@ export const QueryService = {
   queryLockedStake,
   queryDelegationsPagination,
   queryValidatorApr,
-  queryValidatorsApr
+  queryValidatorsApr,
+  queryEpochOfValidator
 }

@@ -84,3 +84,10 @@ export interface LockupInfo {
   fromEpoch: number
   endTime: number
 }
+
+export interface ValidatorEpochInfo {
+  epochId: number
+  validatorId: number
+  epochRewards: BigNumber
+  endTime: number
+}
