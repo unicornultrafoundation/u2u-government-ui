@@ -49,7 +49,7 @@ const queryDelegationsPagination = (valId: number, skip: number) => apolloClient
   query: Schema().DELEGATIONS_PAGINATION,
   variables: {
     validatorId: valId,
-    skip: skip,
+    skip: skip*TableLimit,
     limit: TableLimit
   },
   fetchPolicy: "no-cache"
@@ -69,17 +69,16 @@ const queryValidatorsApr = (vals: number[]) => apolloStakingClient.query({
   fetchPolicy: "no-cache"
 })
 
-
-const queryEpochOfValidator = (valId: number) => apolloU2UNetworkClient.query({
-  query: Schema().EPOCH_OF_VALDIATOR,
+const queryEpochOfValidator = (valId: number, valIdHex: string, skip: number) => apolloU2UNetworkClient.query({
+  query: Schema().EPOCH_OF_VALIDATOR,
   variables: {
-    validatorId: valId
+    validatorId: valId,
+    validatorIdHexString: valIdHex,
+    skip: skip*TableLimit,
+    limit: TableLimit
   },
   fetchPolicy: "no-cache"
 })
-
-
-
 
 export const QueryService = {
   queryValidators,

@@ -57,7 +57,15 @@ const EPOCH_OF_VAL_GQL = `
           id
           receivedStake
           accumulatedRewardPerToken
-          epochId
+          epoch {
+            id
+            block
+            endTime
+            totalTxReward
+            epochFee
+            epochRewards
+            totalRewards
+          }
           validatorId
           epochRewards
           totalRewards
@@ -184,16 +192,23 @@ export const Schema = () => {
       queryString += "}";
       return gql(queryString);
     },
-    EPOCH_OF_VALDIATOR: gql`
-      query EpochOfValidator ($validatorId: Int!) {
+    EPOCH_OF_VALIDATOR: gql`
+      query EpochOfValidator ($validatorId: Int!, $validatorIdHexString: String!, $skip: Int!, $limit: Int!) {
         validators(
-        orderBy: epochId
+        orderBy: epoch__block
         orderDirection: desc
-        first: 10
+        first: $limit
+        skip: $skip
         where: {
           validatorId: $validatorId
         }
         ) {${EPOCH_OF_VAL_GQL}}
+        validatorCounters (where:{
+          id: $validatorIdHexString
+        }) {
+            total
+            id
+          }
       }
     `
     // LAST_EPOCH: gql`

@@ -1,8 +1,11 @@
 import { Tbody, Td, Th, Thead } from "../table"
 import { useFetchEpochOfValidator } from "../../hooks";
-import { EpochInfo } from "../../types";
+import { ValidatorEpochInfo } from "../../types";
 import { RenderNumberFormat } from "../text";
-import { bigFormatEther } from "../../utils";
+import { bigFormatEther, dateToUTCString } from "../../utils";
+import { ChangePageParams, Pagination } from "../pagination";
+import { TableLimit } from "../../contants";
+import { useState } from "react";
 
 interface Header {
   name: string;
@@ -16,6 +19,9 @@ const headers: Header[] = [
   {
     name: "Rewards",
     subName: "(U2U)"
+  },
+  {
+    name: "End Time"
   }
 ]
 
@@ -28,12 +34,13 @@ export const ValidatorEpochs = ({
   validationId
 }: ValidatorEpochsProps) => {
 
-  // const [skip, setSkip] = useState(0)
-  const { epoches } = useFetchEpochOfValidator(validationId, 0)
-  // const onChangePage = async (params: ChangePageParams) => {
-  //   let _skip = params.page ? params.page - 1 : 0
-  //   setSkip(_skip)
-  // }
+  const [skip, setSkip] = useState(0)
+  const { epoches, totalCount } = useFetchEpochOfValidator(validationId, skip)
+
+  const onChangePage = async (params: ChangePageParams) => {
+    let _skip = params.page ? params.page - 1 : 0
+    setSkip(_skip)
+  }
 
   return (
     <div className="w-full overflow-x-auto">
@@ -58,7 +65,7 @@ export const ValidatorEpochs = ({
         </Thead>
         <Tbody>
           {
-            epoches && epoches.length > 0 ? epoches.map((row: EpochInfo, index: number) => {
+            epoches && epoches.length > 0 ? epoches.map((row: ValidatorEpochInfo, index: number) => {
               return (
                 <tr key={index}>
                   <Td index={index} className="text-green text-base font-medium">
@@ -67,17 +74,20 @@ export const ValidatorEpochs = ({
                   <Td index={index} className="text-right text-base font-medium">
                     <RenderNumberFormat amount={bigFormatEther(row.epochRewards)} fractionDigits={2} />
                   </Td>
+                  <Td index={index} className="text-right text-base font-medium">
+                    {dateToUTCString(row.endTime)}
+                  </Td>
                 </tr>
               )
             }) : <></>
           }
         </Tbody>
       </table>
-      {/* <Pagination
-      limit={TableLimit}
-      total={totalDelegator}
-      onChangePage={onChangePage}
-    /> */}
+      <Pagination
+        limit={TableLimit}
+        total={totalCount}
+        onChangePage={onChangePage}
+      />
     </div>
   )
 }
