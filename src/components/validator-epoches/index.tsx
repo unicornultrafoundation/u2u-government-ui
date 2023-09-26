@@ -74,7 +74,7 @@ export const ValidatorEpochs = ({
                   <Td index={index} className="text-right text-base font-medium">
                     <RenderNumberFormat amount={bigFormatEther(row.epochRewards)} fractionDigits={2} />
                   </Td>
-                  <Td index={index} className="text-right text-base font-medium">
+                  <Td index={index} className="text-right text-base font-medium whitespace-nowrap">
                     {dateToUTCString(row.endTime)}
                   </Td>
                 </tr>
