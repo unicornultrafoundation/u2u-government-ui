@@ -36,23 +36,6 @@ const VALIDATIONS_GQL = `
         stakedAmount
 `
 
-// const EPOCH_GQL = `
-//     epoch
-//     block
-//     endTime
-//     totalBaseReward
-//     totalRewards
-//     totalStake
-//     epochRewards
-//     epochBurntFees
-//     validators {
-//       epochId
-//       validatorId
-//       epochRewards
-//       totalRewards
-//     }
-// `
-
 const EPOCH_OF_VAL_GQL = `
           id
           receivedStake
@@ -210,16 +193,21 @@ export const Schema = () => {
             id
           }
       }
+    `,
+    LAST_EPOCH: gql`
+      query LastEpoch {
+        epoches (
+        orderBy: epoch
+        orderDirection: desc
+        first: 1
+        ) {
+          epoch
+          endTime
+          epochRewards
+          totalRewards
+        }
+      }
     `
-    // LAST_EPOCH: gql`
-    //   query LastEpoch() {
-    //     epoches (
-    //     orderBy: block
-    //     orderDirection: desc
-    //     first: 1
-    // ) {${EPOCH_GQL}}
-    //   }
-    // `
 
   }
 }

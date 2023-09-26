@@ -79,7 +79,7 @@ export const UndelegateModal = ({
       <div className="text-2xl text-black-2 mb-2">{t('Undelegate')}</div>
       <div className="text-base text-gray">Your staked:</div>
       <div className="text-base text-green">
-        <RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-2" fractionDigits={2} />
+        <RenderNumberFormat amount={actualStakedAmount && (bigFormatEther(actualStakedAmount))} className="mr-2" fractionDigits={5} />
         U2U
       </div>
       <div className="mt-6">

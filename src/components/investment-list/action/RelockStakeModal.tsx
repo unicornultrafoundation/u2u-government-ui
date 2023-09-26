@@ -106,7 +106,7 @@ export const RelockStakeModal = ({
     <Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
       <div className="text-2xl text-black-2 mb-2">{t('Re-Lock Stake')}</div>
       <div className="text-base text-gray">Available lock amount:
-        <span className="text-base text-green"><RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-1 ml-2" fractionDigits={2} />U2U</span>
+        <span className="text-base text-green"><RenderNumberFormat amount={actualStakedAmount && bigFormatEther(actualStakedAmount)} className="mr-1 ml-2" fractionDigits={5} />U2U</span>
       </div>
       <div className="text-base text-gray">Max lockup duration: <span className="text-green">{maxDuration} {maxDuration <= 1 ? "day" : "days"}</span></div>
       <div className="text-base text-gray mb-3 mt-6">Lockup duration: <span className="text-green">{duration} {duration <= 1 ? "day" : "days"}</span></div>

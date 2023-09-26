@@ -39,14 +39,18 @@ export const InvestmentItem = ({
   } = useMemo(() => validator, [validator])
 
   const { lockedStake } = useFetchLockedStake(delegator, Number(valId))
-  const { lockedAmount, endTime, isLockedUp } = useMemo(() => lockedStake, [lockedStake])
+  const { lockedAmount, endTime, isLockedUp, penalty } = useMemo(() => lockedStake, [lockedStake])
 
   const actualStakedAmount = useMemo(() => {
     if (stakedAmount && !stakedAmount.isZero()) {
-      return stakedAmount.sub(BigNumber.from(lockedAmount || 0))
+      let _amount = stakedAmount.sub(BigNumber.from(lockedAmount || 0))
+      if (penalty) {
+        _amount = _amount.sub(penalty)
+      }
+      return _amount
     }
     return BigNumber.from(0)
-  }, [stakedAmount, lockedAmount])
+  }, [stakedAmount, lockedAmount, penalty])
   // Local state
   const [isOpenUndelegateModal, setIsOpenUndelegateModal] = useState(false)
   const [isOpenLockStakeModal, setIsOpenLockStakeModal] = useState(false)

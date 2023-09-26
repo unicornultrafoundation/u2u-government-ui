@@ -80,6 +80,11 @@ const queryEpochOfValidator = (valId: number, valIdHex: string, skip: number) =>
   fetchPolicy: "no-cache"
 })
 
+const queryLastEpoch = () => apolloU2UNetworkClient.query({
+  query: Schema().LAST_EPOCH,
+  fetchPolicy: "no-cache"
+})
+
 export const QueryService = {
   queryValidators,
   queryStakingStats,
@@ -90,5 +95,6 @@ export const QueryService = {
   queryDelegationsPagination,
   queryValidatorApr,
   queryValidatorsApr,
-  queryEpochOfValidator
+  queryEpochOfValidator,
+  queryLastEpoch
 }
