@@ -91,3 +91,10 @@ export interface ValidatorEpochInfo {
   epochRewards: BigNumber
   endTime: number
 }
+
+export interface EpochInfo {
+  epochId: number
+  endTime: number
+  epochRewards: BigNumber
+  totalRewards: BigNumber
+}

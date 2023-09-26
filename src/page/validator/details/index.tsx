@@ -22,7 +22,6 @@ export const ValidatorDetails = () => {
     valId,
     auth,
     totalStakedAmount,
-    delegations,
     active,
     votingPower,
     totalDelegator,
@@ -130,7 +129,7 @@ export const ValidatorDetails = () => {
             </div>
             <div className="flex items-center justify-between px-4 py-4 bg-light-2">
               <div className="text-base text-gray">{t('Total Delegator')}</div>
-              <div className="text-base font-medium">{delegations ? delegations?.length : 0}</div>
+              <div className="text-base font-medium">{totalDelegator}</div>
             </div>
             <div className="flex items-center justify-between px-4 py-4">
               <div className="text-base text-gray">{t('Status')}</div>
@@ -151,7 +150,6 @@ export const ValidatorDetails = () => {
       </div>
       <div className="mt-16 text-left">
         <ListOfValidator
-          delegations={delegations}
           valId={Number(valId)}
           totalDelegator={totalDelegator}
         />

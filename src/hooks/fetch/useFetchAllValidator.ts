@@ -10,7 +10,6 @@ export const useFetchAllValidator = () => {
   const { fastRefresh } = useRefresh()
   useEffect(() => {
     (async () => {
-
       const { data } = await QueryService.queryValidators()
       const { data: stakingStats } = await QueryService.queryStakingStats()
       const totalNetworkStaked = stakingStats && stakingStats.stakings ? BigNumber.from(stakingStats.stakings[0].totalStaked || 0) : BigNumber.from(0)

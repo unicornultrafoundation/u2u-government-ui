@@ -19,8 +19,8 @@ export const ValidatorItem = ({
   const {
     valId,
     totalStakedAmount,
-    delegations,
     votingPower,
+    totalDelegator,
     apr
   } = useMemo(() => validator, [validator])
 
@@ -53,7 +53,7 @@ export const ValidatorItem = ({
         </div>
         <div className="md:mt-4 mt-2">
           <div className="text-sm font-medium text-gray">{t('Delegators')}</div>
-          <div className="text-sm font-bold text-black">{delegations?.length}</div>
+          <div className="text-sm font-bold text-black">{totalDelegator}</div>
         </div>
         <div className="md:mt-4 mt-2">
           <Button

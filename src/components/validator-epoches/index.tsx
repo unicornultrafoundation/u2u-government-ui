@@ -14,7 +14,7 @@ interface Header {
 
 const headers: Header[] = [
   {
-    name: "Epoch ID"
+    name: "Epoch"
   },
   {
     name: "Rewards",

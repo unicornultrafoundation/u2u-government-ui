@@ -1,5 +1,4 @@
 import { DelegationList, TabOption, TabsCard, ValidatorEpochs } from "../../../../components"
-import { Delegation } from "../../../../types"
 
 const tabs: TabOption[] = [
   {
@@ -7,28 +6,24 @@ const tabs: TabOption[] = [
     label: "Delegators"
   },
   {
-    key: "epoches",
-    label: "Epoches"
+    key: "rewards",
+    label: "Rewards"
   }
 ]
 interface ListOfValidatorProps {
-  delegations: Delegation[] | undefined
   valId: number
   totalDelegator: number
 }
 export const ListOfValidator = ({
-  delegations,
   valId,
   totalDelegator
 }: ListOfValidatorProps) => {
-  
+
   return (
     <div>
       <TabsCard tabs={tabs}>
         <div>
-          {
-            delegations && delegations.length > 0 ? <DelegationList validationId={Number(valId)} totalDelegator={totalDelegator} /> : <></>
-          }
+           <DelegationList validationId={valId} totalDelegator={totalDelegator} />
         </div>
         <div><ValidatorEpochs validationId={valId} /></div>
       </TabsCard>

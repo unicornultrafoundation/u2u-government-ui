@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Box, Button, RenderNumberFormat, StakingCalculator, ValidatorList, buttonScale } from "../../components";
-import { useBalance, useEpochRewards, useFetchAllValidator, useFetchStakingStats, useTotalSupply } from "../../hooks";
+import { useBalance, useFetchAllValidator, useFetchLastEpoch, useFetchStakingStats, useTotalSupply } from "../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, shortenDisplayNumber } from "../../utils";
 // import ArrowIcon from "../../images/icons/arrow-left.png"
@@ -10,11 +10,13 @@ export const Home = () => {
   const { t } = useTranslation();
   const { stakingStats } = useFetchStakingStats()
   const { validators } = useFetchAllValidator()
+  const { lastEpoch } = useFetchLastEpoch()
   const { balance } = useBalance()
   const { supply } = useTotalSupply()
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
   const navigate = useNavigate()
-  const { rewardsPerEpoch } = useEpochRewards()
+  const { epochRewards } = useMemo(() => lastEpoch ,[lastEpoch])
+
 
   return (
     <div>
@@ -36,7 +38,7 @@ export const Home = () => {
         <div className="w-6/12 md:w-fit md:mx-4">
           <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Epoch Reward (U2U)')}</div>
           <div className="md:text-2xl text-sm text-black font-bold">
-          <RenderNumberFormat amount={rewardsPerEpoch} className="mr-2" fractionDigits={2} />
+          <RenderNumberFormat amount={epochRewards ? bigFormatEther(epochRewards) : 0} className="mr-2" fractionDigits={2} />
           </div>
         </div>
       </Box>
@@ -72,10 +74,6 @@ export const Home = () => {
       </div>
       <div className="flex justify-between items-center mb-6 mt-10">
         <div className="text-[26px]">{`${t('Validator List')} (${stakingStats.totalValidator})`}</div>
-        {/* <div className="text-base inline text-green font-medium cursor-pointer flex items-center gap-2">
-          See more
-          <img src={ArrowIcon} alt="u2u" />
-        </div> */}
       </div>
       <div>
         <ValidatorList validators={validators} />

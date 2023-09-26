@@ -9,7 +9,7 @@ export const lockedStake  = (data: any): LockedStake => {
     duration: Number(data.duration) * 1000,
     endTime: Number(data.endTime) * 1000,
     lockedAmount: BigNumber.from(data.lockedAmount),
-    penalty: BigNumber.from(data.penalty),
+    penalty: data.penalty ? BigNumber.from(data.penalty) : BigNumber.from(0),
     isLockedUp: !!data.delegator.id 
   }
 }
