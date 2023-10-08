@@ -12,6 +12,7 @@ import MenuIcon from "../../images/icons/menu-icon.svg"
 import { NavProps, navs } from "../left-bar"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
+import { useAppStore } from "../../store"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -23,7 +24,12 @@ export const Header = () => {
   const [isShowLogout, setIsShowLogout] = useState(false)
   const { logout } = useAuth()
 
+
   const mobileMenuRef = useRef(null);
+
+  const [changeLng] = useAppStore(state => [
+    state.changeLng
+  ])
 
 
   const handleClick = (index: number) => {
@@ -52,6 +58,10 @@ export const Header = () => {
   const connect = useCallback(async () => {
     setIsOpen(true)
   }, [])
+
+  const changeLanguageHandler = (lng: string) => {
+    changeLng(lng);
+  }
 
   if (isMobile) {
     return (
@@ -119,6 +129,8 @@ export const Header = () => {
 
   return (
     <div className="flex items-center justify-end w-full py-4 gap-4 px-5">
+      <Button onClick={() => changeLanguageHandler("vi")}>VI</Button>
+      <Button onClick={() => changeLanguageHandler("en")}>EN</Button>
       <Button className="w-[200px]" onClick={() => navigate("/validator/register")}>{t('Validator Register')}</Button>
       {
         isActive ? (

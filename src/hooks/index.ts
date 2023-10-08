@@ -18,6 +18,7 @@ export * from "./useIsLockedUp"
 export * from "./useValidatorApr"
 export * from "./useEpochRewards"
 export * from "./useLockupInfo"
+export * from "./useChangeLanguage"
 
 ////===== Fetch
 export * from "./fetch/useFetchAllValidator"
