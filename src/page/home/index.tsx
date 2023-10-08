@@ -1,22 +1,29 @@
 import { useTranslation } from "react-i18next";
 import { Box, Button, RenderNumberFormat, StakingCalculator, ValidatorList, buttonScale } from "../../components";
-import { useBalance, useFetchAllValidator, useFetchLastEpoch, useFetchStakingStats, useTotalSupply } from "../../hooks";
+import { useBalance } from "../../hooks";
 import { useMemo } from "react";
 import { bigFormatEther, shortenDisplayNumber } from "../../utils";
-// import ArrowIcon from "../../images/icons/arrow-left.png"
 import { useNavigate } from "react-router-dom";
+import { useEpochStore, useStakingStore, useValidatorStore } from "../../store";
 
 export const Home = () => {
   const { t } = useTranslation();
-  const { stakingStats } = useFetchStakingStats()
-  const { validators } = useFetchAllValidator()
-  const { lastEpoch } = useFetchLastEpoch()
   const { balance } = useBalance()
-  const { supply } = useTotalSupply()
-  const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
   const navigate = useNavigate()
-  const { epochRewards } = useMemo(() => lastEpoch ,[lastEpoch])
 
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+  const [stakingStats, totalSupply] = useStakingStore(state => [
+    state.stakingStats,
+    state.totalSupply
+  ])
+  const [lastEpoch] = useEpochStore(state => [
+    state.lastEpoch
+  ])
+
+  const { epochRewards } = useMemo(() => lastEpoch ,[lastEpoch])
+  const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
 
   return (
     <div>
@@ -32,7 +39,7 @@ export const Home = () => {
         <div className="w-6/12 md:w-fit md:mx-4">
           <div className="md:text-base text-sm md:font-medium text-gray mb-2">{t('Circulating Supply (U2U)')}</div>
           <div className="md:text-2xl text-sm text-black font-bold">
-            {shortenDisplayNumber(supply)}
+            {shortenDisplayNumber(totalSupply)}
           </div>
         </div>
         <div className="w-6/12 md:w-fit md:mx-4">
@@ -70,13 +77,13 @@ export const Home = () => {
         </div>
       </Box>
       <div className="flex justify-center mt-10">
-        <StakingCalculator validators={validators} balance={balance} />
+        <StakingCalculator validators={allValidators} balance={balance} />
       </div>
       <div className="flex justify-between items-center mb-6 mt-10">
         <div className="text-[26px]">{`${t('Validator List')} (${stakingStats.totalValidator})`}</div>
       </div>
       <div>
-        <ValidatorList validators={validators} />
+        <ValidatorList validators={allValidators} />
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ import { BigNumber } from "ethers"
 
 export const useFetchDelegator = (delAddress: string) => {
   const [delegator, setDelegator] = useState<Delegator>({} as Delegator)
-  const { fastRefresh } = useRefresh()
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     if(!delAddress) return
     (async() => {
@@ -18,7 +18,7 @@ export const useFetchDelegator = (delAddress: string) => {
         setDelegator(DataProcessor.delegator(data?.delegators[0], totalNetworkStaked));
       }
     })()
-  }, [fastRefresh, delAddress])
+  }, [mediumRefresh, delAddress])
   return {
     delegator
   }

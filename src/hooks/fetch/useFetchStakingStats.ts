@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react"
-import { StakingStats } from "../../types"
+import { useEffect } from "react"
 import { QueryService } from "../../thegraph"
-import { DataProcessor, defaultStakingStats } from "./dataProccesser"
+import { DataProcessor } from "./dataProccesser"
 import { useRefresh } from "../useRefresh"
+import { useStakingStore } from "../../store"
 
 export const useFetchStakingStats = () => {
-    const [stakingStats, setStakingStats] = useState<StakingStats>(defaultStakingStats)
-    const { fastRefresh } = useRefresh()
-    useEffect(() => {
-      (async() => {
-        const {data} = await QueryService.queryStakingStats()
-        if (data && data?.stakings) {
-          setStakingStats(DataProcessor.stakingStats(data?.stakings[0]));
-        }
-      })()
-    }, [fastRefresh])
-    return {
-      stakingStats
-    }
+  const [updateStakingStats] = useStakingStore(state => [
+    state.updateStakingStats
+  ])
+  const { mediumRefresh } = useRefresh()
+  useEffect(() => {
+    (async () => {
+      const { data } = await QueryService.queryStakingStats()
+      if (data && data?.stakings) {
+        updateStakingStats(DataProcessor.stakingStats(data?.stakings[0]));
+      }
+    })()
+    // eslint-disable-next-line
+  }, [mediumRefresh])
 }

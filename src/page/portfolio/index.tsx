@@ -1,18 +1,23 @@
 import { useWeb3React } from "@web3-react/core"
 import { Box, Button, MyInvestmentList, StakingCalculator, boxType, buttonScale, buttonType } from "../../components"
-import { useBalance, useFetchAllValidator, useFetchDelegator } from "../../hooks"
+import { useBalance, useFetchDelegator } from "../../hooks"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import ArrowLeftIcon from "../../images/icons/arrow-left-black.png"
 import { useNavigate } from "react-router-dom"
+import { useValidatorStore } from "../../store"
 
 export const Portfolio = () => {
 
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { validators } = useFetchAllValidator()
   const { balance } = useBalance()
   const navigator = useNavigate()
+
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+
 
   const { delegator } = useFetchDelegator(account || "")
 
@@ -50,7 +55,7 @@ export const Portfolio = () => {
       </div>
 
       <div className="flex justify-center my-20">
-          <StakingCalculator validators={validators} balance={balance} />
+          <StakingCalculator validators={allValidators} balance={balance} />
       </div>
     </div>
   )

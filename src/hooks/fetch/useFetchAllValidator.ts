@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { QueryService } from "../../thegraph"
 import { useRefresh } from "../useRefresh"
 import { DataProcessor } from "./dataProccesser"
-import { Validator } from "../../types"
 import { BigNumber } from "ethers"
+import { useValidatorStore } from "../../store"
 
 export const useFetchAllValidator = () => {
-  const [validators, setValidators] = useState<Validator[]>([])
-  const { fastRefresh } = useRefresh()
+  const [updateAllValidator] = useValidatorStore(state => [
+    state.updateAllValidator
+  ])
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     (async () => {
       const { data } = await QueryService.queryValidators()
@@ -16,14 +18,12 @@ export const useFetchAllValidator = () => {
       if (data && data.validators.length > 0) {
         let valIds: number[] = data.validators.map((v: any) => Number(v.validatorId))
         const { data: dataApr } = await QueryService.queryValidatorsApr(valIds)
-        setValidators(data.validators.map((v: any) => {
+        updateAllValidator(data.validators.map((v: any) => {
           let apr = dataApr[`apr${v.validatorId}`]
           return DataProcessor.validator(v, totalNetworkStaked, Number(apr))
         }))
       }
     })()
-  }, [fastRefresh])
-  return {
-    validators
-  }
+    // eslint-disable-next-line
+  }, [mediumRefresh])
 }

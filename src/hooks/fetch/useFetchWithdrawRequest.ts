@@ -6,7 +6,7 @@ import { DataProcessor } from "./dataProccesser"
 
 export const useFetchWithdrawRequest = (delegatorAddr: string, validatorId: number, skip: number) => {
   const [wr, setWr] = useState<WithdrawalRequest[]>([])
-  const { slowRefresh } = useRefresh()
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     if (!delegatorAddr || !validatorId) return
     (async () => {
@@ -15,7 +15,7 @@ export const useFetchWithdrawRequest = (delegatorAddr: string, validatorId: numb
         setWr(data.withdrawalRequests.map((i: any) => DataProcessor.withdrawalRequest(i)))
       }
     })()
-  }, [slowRefresh, delegatorAddr, validatorId, skip])
+  }, [mediumRefresh, delegatorAddr, validatorId, skip])
   return {
     wr
   }

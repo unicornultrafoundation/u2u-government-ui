@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react"
-import { EpochInfo } from "../../types"
+import { useEffect } from "react"
 import { useRefresh } from "../useRefresh"
 import { QueryService } from "../../thegraph"
 import { DataProcessor } from "./dataProccesser"
+import { useEpochStore } from "../../store"
 
 export const useFetchLastEpoch = () => {
-  const [lastEpoch, setLastEpoch] = useState<EpochInfo>({} as EpochInfo)
-  const { slowRefresh } = useRefresh()
+  const [updateLastEpoch] = useEpochStore(state => [
+    state.updateLastEpoch
+  ])
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     (async () => {
       const { data } = await QueryService.queryLastEpoch()
       if (data && data.epoches.length > 0) {
-        setLastEpoch(DataProcessor.epoch(data.epoches[0]))
+        updateLastEpoch(DataProcessor.epoch(data.epoches[0]))
       }
     })()
-  }, [slowRefresh])
-  return {
-    lastEpoch
-  }
+  // eslint-disable-next-line
+  }, [mediumRefresh])
 }

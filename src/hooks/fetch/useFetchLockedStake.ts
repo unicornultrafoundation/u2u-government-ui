@@ -6,7 +6,7 @@ import { LockedStake } from "../../types"
 
 export const useFetchLockedStake = (delAddress: string, valId: number) => {
   const [lockedStake, setLockedStake] = useState<LockedStake>({} as LockedStake)
-  const { fastRefresh } = useRefresh()
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     if(!delAddress) return
     (async() => {
@@ -16,7 +16,7 @@ export const useFetchLockedStake = (delAddress: string, valId: number) => {
         setLockedStake(DataProcessor.lockedStake(data?.lockedUps[0]));
       }
     })()
-  }, [fastRefresh, delAddress, valId])
+  }, [mediumRefresh, delAddress, valId])
   return {
     lockedStake
   }
