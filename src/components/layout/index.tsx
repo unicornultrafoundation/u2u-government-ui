@@ -29,7 +29,7 @@ export const Layout = ({ children }: Props) => {
   return (
     <div className="flex">
       {!isMobile && <LeftBar />}
-      <div className={`${!isMobile && 'ml-[300px]'} w-full`}>
+      <div className={`w-full`}>
         <div className="w-full">
           <Header />
         </div>

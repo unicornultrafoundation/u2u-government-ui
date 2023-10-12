@@ -6,16 +6,18 @@ import { WalletLoginModal } from "../modal/WalletLoginModal";
 export const buttonType = {
   primary: "primary",
   secondary: "secondary",
-  light: "light",
-  transparent: "transparent"
+  tertiary: "tertiary",
+  ghostPrimary: "ghostPrimary",
+  ghostSecondary: "ghostSecondary"
 }
 
 export type ButtonVariant = typeof buttonType[keyof typeof buttonType];
 
 export const buttonScale = {
-  sm: "sm",
+  lg: "lg",
   md: "md",
-  lg: "lg"
+  sm: "sm",
+  icon: "icon"
 }
 
 export type ButtonScale = typeof buttonScale[keyof typeof buttonScale];
@@ -46,13 +48,24 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const backgroundClass = () => {
       switch (variant) {
         case buttonType.primary:
-          return "bg-green"
+          return "bg-primary"
         case buttonType.secondary:
+        case buttonType.tertiary:
+        case buttonType.ghostPrimary:
+        case buttonType.ghostSecondary:
           return "bg-white"
-        case buttonType.light:
-          return "bg-light"
-        case buttonType.transparent:
-          return "bg-transparent"
+        default:
+          return `bg-white`
+      }
+    }
+
+
+    const borderClass = () => {
+      switch (variant) {
+        case buttonType.secondary:
+          return "border-[1.5px] border-primary"
+        case buttonType.tertiary:
+          return "border-[1.5px] border-border-outline"
         default:
           return ``
       }
@@ -60,12 +73,12 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 
     const fontClass = () => {
       switch (scale) {
-        case buttonScale.sm:
-          return 'text-xs font-medium'
-        case buttonScale.md:
-          return 'text-sm font-medium'
         case buttonScale.lg:
-          return 'text-lg font-semibold'
+          return 'text-base'
+        case buttonScale.md:
+          return 'text-sm'
+        case buttonScale.sm:
+          return 'text-sm'
       }
     }
 
@@ -74,10 +87,13 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
         case buttonType.primary:
           return "text-white";
         case buttonType.secondary:
-        case buttonType.transparent:
-          return "text-green"
-        case buttonType.light:
-          return "text-green"
+          return "text-primary";
+        case buttonType.tertiary:
+          return "text-border-outline"
+        case buttonType.ghostPrimary:
+          return "text-primary";
+        case buttonType.ghostSecondary:
+          return "text-border-outline"
         default:
           return ``
       }
@@ -86,34 +102,18 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const heightClass = () => {
       switch (scale) {
         case buttonScale.sm:
-          return 'py-1 px-2'
+          return 'py-2 px-5'
         case buttonScale.md:
-          return 'py-2 px-4'
+          return 'py-[10px] px-5'
         case buttonScale.lg:
           return 'py-3 px-5'
       }
     }
 
     const radiusClass = () => {
-      switch (scale) {
-        case buttonScale.lg:
-          return 'rounded-[48px]'
-        case buttonScale.md:
-          return 'rounded-[32px]'
-        case buttonScale.sm:
-          return 'rounded-lg'
-      }
+      return 'rounded-[8px]'
     }
 
-    const borderClass = () => {
-      switch (variant) {
-        case buttonType.secondary:
-        case buttonType.transparent:
-          return "border border-green"
-        default:
-          return ""
-      }
-    }
 
     return classNames(
       "flex items-center justify-center",
@@ -124,18 +124,18 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
       radiusClass(),
       borderClass(),
       className
-      )
-  },[scale, variant, className])
+    )
+  }, [scale, variant, className])
 
   return (
     <button className={buttonClasses} disabled={disabled || loading} {...rest}>
-        {loading && <i className="fa fa-spinner fa-spin mr-2"></i>}
-        {children}
+      {loading && <i className="fa fa-spinner fa-spin mr-2"></i>}
+      {children}
     </button>
   )
 }
 
-export const ConnectWalletButton = ({className, scale = buttonScale.lg}: {
+export const ConnectWalletButton = ({ className, scale = buttonScale.lg }: {
   className?: string
   scale?: ButtonScale
 }) => {

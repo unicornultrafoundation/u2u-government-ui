@@ -41,7 +41,7 @@ export const Portfolio = () => {
             </div>
             <div className="mt-6 md:mt-0">
               <Button
-                variant={buttonType.transparent}
+                variant={buttonType.primary}
                 scale={buttonScale.lg}
                 className="border-black flex items-center gap-3 px-6"
                 onClick={() => navigator("/validator")}

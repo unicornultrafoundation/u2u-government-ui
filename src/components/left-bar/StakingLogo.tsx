@@ -5,10 +5,10 @@ import DesktopLogo from "../../images/u2u-logo.png"
 export const StakingLogo = () => {
   const navigate = useNavigate()
   return (
-    <div className="flex items-center justify-center gap-1 cursor-pointer" onClick={() => navigate("")}>
+    <div className="py-4 px-[22px] flex items-center justify-center gap-1 cursor-pointer" onClick={() => navigate("")}>
       <img src={DesktopLogo} alt="_u2u" />
-      <div className="text-green text-[27px] font-semibold">U2U</div>
-      <div className="text-black text-[27px]">Staking</div>
+      <div className="text-green text-[25.3px] font-bold">U2U</div>
+      <div className="text-black text-[25.3px]">Staking</div>
     </div>
   )
 }

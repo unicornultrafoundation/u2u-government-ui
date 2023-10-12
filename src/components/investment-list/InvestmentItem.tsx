@@ -138,7 +138,7 @@ export const InvestmentItem = ({
             <div>
               <Button
                 onClick={() => setIsOpenUndelegateModal(true)}
-                variant={buttonType.transparent}
+                variant={buttonType.primary}
                 className="mb-2 w-[120px]">{t('Undelegate')}
               </Button>
               {
@@ -158,7 +158,7 @@ export const InvestmentItem = ({
             <RenderNumberFormat amount={pendingRewards} className="mr-2" />
           </div>
           <div className="grid grid-cols-2 mt-10 gap-4">
-            <Button loading={isClaimRewardsLoading} variant={buttonType.transparent} onClick={() => onClaimedRewards()}>{t('Claim')}</Button>
+            <Button loading={isClaimRewardsLoading} variant={buttonType.primary} onClick={() => onClaimedRewards()}>{t('Claim')}</Button>
             <Button loading={isRestakeLoading} onClick={() => onRestakedRewards()}>{t('Re-Stake')}</Button>
           </div>
         </Box>
@@ -177,7 +177,7 @@ export const InvestmentItem = ({
               </div>
               <div className="grid grid-cols-2 mt-10 gap-4">
                 <Button
-                  variant={buttonType.transparent} onClick={() => setIsOpenRelockStakeModal(true)}>{t('Re-Lock')}</Button>
+                  variant={buttonType.primary} onClick={() => setIsOpenRelockStakeModal(true)}>{t('Re-Lock')}</Button>
                 <Button onClick={() => setIsOpenUnlockStakeModal(true)}>{t('Un-Lock')}</Button>
               </div>
             </Box>
