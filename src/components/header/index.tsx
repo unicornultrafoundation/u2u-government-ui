@@ -11,6 +11,7 @@ import { NavProps, navs } from "../left-bar"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
 import { Images, OptionIcon, UserIcon, WalletIcon } from "../../images"
+import { appConfig } from "../../contants"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -129,15 +130,13 @@ export const Header = () => {
       {
         isActive ? (
           <div className="flex justify-end">
-            <div className="flex items-center p-3 bg-[#EBFCFB] rounded-lg gap-5 text-left relative">
-              <img src={Images.MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
+            <div className="flex items-center py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
+              <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
               <div>
-                <div className="text-base font-medium">
-                  <RenderNumberFormat amount={balance} /><span className="ml-2">U2U</span>
+                <div className="text-base text-text font-semibold">
+                  {truncate({ str: account || "", headCount: 5 })}
                 </div>
-                <div className="text-xs text-green">
-                  <a href={exploreAddress(account || "")} target="_blank" rel="noopener noreferrer">{truncate({ str: account || "" })}</a>
-                </div>
+                <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
               </div>
               <div className="cursor-pointer" onClick={() => setIsShowLogout(!isShowLogout)}>
                 <i className="fa fa-caret-down"></i>
@@ -164,15 +163,15 @@ export const Header = () => {
               <WalletIcon className="mr-2" />
               {t('Connect Wallet')}
             </Button>
-            <Button
-              className="font-semibold w-[48px] h-[48px]"
-              scale={buttonScale.icon}
-              variant={buttonType.tertiary}>
-              <OptionIcon className="fill-border-outline" />
-            </Button>
           </div>
         )
       }
+      <Button
+        className="font-semibold w-[48px] h-[48px]"
+        scale={buttonScale.icon}
+        variant={buttonType.tertiary}>
+        <OptionIcon className="fill-border-outline" />
+      </Button>
       <WalletLoginModal isOpenModal={isOpen} setIsOpenModal={setIsOpen} />
     </div>
   )

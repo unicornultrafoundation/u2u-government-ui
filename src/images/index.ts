@@ -1,5 +1,6 @@
 import MenuIcon from "./icons/menu-icon.svg"
 import MetamaskIcon from "./metamask-wallet.png"
+import AvatarImage from "./avatar.png"
 export interface IconProps {
   className?: string
 }
@@ -9,5 +10,6 @@ export * from "./icons/OptionIcon"
 
 export const Images = {
   MenuIcon,
-  MetamaskIcon
+  MetamaskIcon,
+  AvatarImage
 }
