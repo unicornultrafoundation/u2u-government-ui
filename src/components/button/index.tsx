@@ -27,7 +27,6 @@ export interface ButtonProps {
   variant?: ButtonVariant,
   scale?: ButtonScale,
   disabled?: boolean,
-  wide?: boolean,
   className?: string,
   loading?: boolean
 }
@@ -37,7 +36,6 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
   children,
   variant = buttonType.primary,
   scale = buttonScale.md,
-  wide,
   disabled,
   className,
   loading,
@@ -48,8 +46,9 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const backgroundClass = () => {
       switch (variant) {
         case buttonType.primary:
-          return "bg-primary"
+          return "bg-primary hover:bg-primary-dark"
         case buttonType.secondary:
+          return "bg-white hover:bg-primary-light"
         case buttonType.tertiary:
         case buttonType.ghostPrimary:
         case buttonType.ghostSecondary:
@@ -62,8 +61,10 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 
     const borderClass = () => {
       switch (variant) {
+        case buttonType.primary:
+          return "border-[1.5px] border-primary border:bg-primary-dark"
         case buttonType.secondary:
-          return "border-[1.5px] border-primary"
+          return "border-[1.5px] border-primary hover:border-primary-dark"
         case buttonType.tertiary:
           return "border-[1.5px] border-border-outline"
         default:
@@ -85,15 +86,15 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const colorClass = () => {
       switch (variant) {
         case buttonType.primary:
-          return "text-white";
+          return "text-neutral hover:text-neutral-surface-active hover:fill-neutral-surface-active hover:stroke-neutral-surface-active fill-neutral stroke-neutral";
         case buttonType.secondary:
-          return "text-primary";
+          return "text-primary hover:text-primary-dark hover:fill-primary-dark hover:stroke-primary-dark fill-primary stroke-primary";
         case buttonType.tertiary:
-          return "text-border-outline"
+          return "text-border-outline fill-border-outline stroke-border-outline"
         case buttonType.ghostPrimary:
-          return "text-primary";
+          return "text-primary hover:text-primary-dark hover:fill-primary-dark hover:stroke-primary-dark fill-primary stroke-primary";
         case buttonType.ghostSecondary:
-          return "text-border-outline"
+          return "text-border-outline hover:text-neutral-surface-active hover:fill-neutral-surface-active hover:stroke-neutral-surface-active fill-neutral stroke-neutral"
         default:
           return ``
       }
@@ -107,10 +108,13 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
           return 'py-[10px] px-5'
         case buttonScale.lg:
           return 'py-3 px-5'
+        case buttonScale.icon:
+          return 'p-0'
       }
     }
 
     const radiusClass = () => {
+      if (scale === buttonScale.icon) return 'rounded-full'
       return 'rounded-[8px]'
     }
 

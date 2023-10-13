@@ -82,14 +82,14 @@ export const LeftBar = () => {
                 key={index}
                 onClick={() => { handleClick(index) }}>
                 <img src={activeNav(item.id) ? item.activeIcon : item.icon} className="w-[24px] h-[24px]" alt="_u2u" />
-                <div className={`${activeNav(item.id) ? "text-background-surface" : "text-text-disabled"}`} >{item.name}</div>
+                <div className={`${activeNav(item.id) ? "text-neutral-surface" : "text-text-disabled"}`} >{item.name}</div>
               </div>
             )
           })
         }
       </div>
       <div className="w-full rounded-[18px] bg-gradient-1 px-4 pt-8 pb-6">
-        <div className="font-bold text-base text-background">{t('Explore U2U wallet to get more secret gift!')}</div>
+        <div className="font-bold text-base text-neutral">{t('Explore U2U wallet to get more secret gift!')}</div>
         <div className="flex justify-center my-4">
           <img src={layer2Image} alt="u2u" />
         </div>

@@ -25,10 +25,11 @@ module.exports = withMT({
           dark: "#3007C5",
           darker: "#180363"
         },
-        background: {
+        neutral: {
           DEFAULT: "#FFFFFF",
+          bg: "#F3F3F3",
           surface: {
-            DEFAULT: "#f6f6f6",
+            DEFAULT: "#F8F8F8",
             hover: "#e3e3e3",
             active: "#b4b4b4",
             disabled: "#D8D8D8"
@@ -39,8 +40,7 @@ module.exports = withMT({
           secondary: "#838383",
           placeholder: "#c6c6c6",
           title: "#191B1E",
-          disabled: "#8D8D8D",
-
+          disabled: "#8D8D8D"
         },
         border: {
           divider: "#d8d8d8",
@@ -48,7 +48,7 @@ module.exports = withMT({
           shadow: "#c6c6c6"
         },
         darkmode: {
-          background: {
+          neutral: {
             DEFAULT: "#181818",
             surface: {
               DEFAULT: "#1F2225",
@@ -61,7 +61,7 @@ module.exports = withMT({
             secondary: "#b4b4b4",
             placeholder: "#363636",
             title: "#FFFFFF",
-            disabled: "#8D8D8D",
+            disabled: "#8D8D8D"
           },
           border: {
             divider: "#272727",
@@ -102,7 +102,7 @@ module.exports = withMT({
         white: "#FFFFFF",
         green: "#1EAA7F",
 
-        // Remove later
+        // ======== Remove later ==============
         cyan: "#DFF9F7",
         pale: "#E4F8F2",
         silver: "#ECECEC",

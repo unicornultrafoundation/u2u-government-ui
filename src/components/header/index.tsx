@@ -1,18 +1,16 @@
 import { useTranslation } from "react-i18next"
-import { Button, buttonType } from "../button"
+import { useWeb3React } from "@web3-react/core"
+import { Button, buttonScale, buttonType } from "../button"
 import { useAuth, useBalance } from "../../hooks"
 import { exploreAddress, truncate } from "../../utils"
-import { useWeb3React } from "@web3-react/core"
-import MetamaskIcon from "../../images/metamask-wallet.png"
 import { RenderNumberFormat } from "../text"
 import { useNavigate } from "react-router-dom"
 import { isMobile } from 'mobile-device-detect';
 import { StakingLogo } from "../left-bar/StakingLogo"
-import MenuIcon from "../../images/icons/menu-icon.svg"
 import { NavProps, navs } from "../left-bar"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
-import { useAppStore } from "../../store"
+import { Images, OptionIcon, UserIcon, WalletIcon } from "../../images"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -26,11 +24,6 @@ export const Header = () => {
 
 
   const mobileMenuRef = useRef(null);
-
-  const [changeLng] = useAppStore(state => [
-    state.changeLng
-  ])
-
 
   const handleClick = (index: number) => {
     navigate(navs[index].link)
@@ -59,10 +52,6 @@ export const Header = () => {
     setIsOpen(true)
   }, [])
 
-  const changeLanguageHandler = (lng: string) => {
-    changeLng(lng);
-  }
-
   if (isMobile) {
     return (
       <div className="w-full relative">
@@ -79,7 +68,7 @@ export const Header = () => {
             <div onClick={() => setIsShowMobileMenu(false)}>
               <StakingLogo />
             </div>
-            <img src={MenuIcon} alt="u2u" onClick={handleOpenMenu} />
+            <img src={Images.MenuIcon} alt="u2u" onClick={handleOpenMenu} />
           </div>
           {isShowMobileMenu &&
             <div className={`bg-white absolute w-screen left-0 ${isActive ? "top-[100px]" : "top-[150px]"}`}>
@@ -109,7 +98,7 @@ export const Header = () => {
           isActive && (
             <div className="flex justify-items py-4 w-full px-5">
               <div className="flex items-center p-3 bg-[#EBFCFB] rounded-lg gap-5 text-left w-full">
-                <img src={MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
+                <img src={Images.MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
                 <div>
                   <div className="text-base font-medium">
                     <RenderNumberFormat amount={balance} className="mr-2" /> U2U
@@ -129,14 +118,19 @@ export const Header = () => {
 
   return (
     <div className="flex items-center justify-end w-full py-4 gap-4 px-5">
-      <Button onClick={() => changeLanguageHandler("vi")}>VI</Button>
-      <Button onClick={() => changeLanguageHandler("en")}>EN</Button>
-      <Button className="w-[200px]" onClick={() => navigate("/validator/register")}>{t('Validator Register')}</Button>
+      <Button
+        variant={buttonType.secondary}
+        className="font-semibold"
+        scale={buttonScale.lg}
+        onClick={() => navigate("/validator/register")}>
+        <UserIcon className="mr-2" />
+        {t('Validator Register')}
+      </Button>
       {
         isActive ? (
           <div className="flex justify-end">
             <div className="flex items-center p-3 bg-[#EBFCFB] rounded-lg gap-5 text-left relative">
-              <img src={MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
+              <img src={Images.MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
               <div>
                 <div className="text-base font-medium">
                   <RenderNumberFormat amount={balance} /><span className="ml-2">U2U</span>
@@ -162,7 +156,20 @@ export const Header = () => {
           </div>
         ) : (
           <div className="flex items-center justify-end gap-4">
-            <Button variant={buttonType.secondary} onClick={() => connect()}>{t('Connect Wallet')}</Button>
+            <Button
+              className="font-semibold"
+              scale={buttonScale.lg}
+              variant={buttonType.primary}
+              onClick={() => connect()}>
+              <WalletIcon className="mr-2" />
+              {t('Connect Wallet')}
+            </Button>
+            <Button
+              className="font-semibold w-[48px] h-[48px]"
+              scale={buttonScale.icon}
+              variant={buttonType.tertiary}>
+              <OptionIcon className="fill-border-outline" />
+            </Button>
           </div>
         )
       }
