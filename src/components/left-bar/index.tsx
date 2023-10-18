@@ -18,7 +18,6 @@ import telegramIcon from "../../images/icons/telegram.svg"
 import youtubeIcon from "../../images/icons/youtube.svg"
 import u2uIcon from "../../images/icons/u2u.svg"
 
-
 export interface NavProps {
   id: string
   name: string
@@ -71,7 +70,7 @@ export const LeftBar = () => {
   }, [pathname])
 
   return (
-    <div className="px-8 py-2 w-[300px] bg-white border-r-2 border-border-outline">
+    <div className="px-8 py-2 w-[300px] bg-white border-r-2 border-border-outline min-h-screen">
       <StakingLogo />
       <div className="mt-[24px] pt-2 pb-8 w-full">
         {

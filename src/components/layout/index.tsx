@@ -33,9 +33,7 @@ export const Layout = ({ children }: Props) => {
         <div className="w-full">
           <Header />
         </div>
-        <div className="md:px-5">
-          <div className="md:p-8 p-4 pb-10">{children}</div>
-        </div>
+        <div>{children}</div>
         {isMobile && <Footer />}
       </div>
     </div>
