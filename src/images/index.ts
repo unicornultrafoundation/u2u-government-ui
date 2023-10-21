@@ -8,6 +8,10 @@ import Staking3PNG from "./staking-3.png"
 import Ellipse1PNG from "./ellipse1.png"
 import Ellipse2PNG from "./ellipse2.png"
 import Staking4PNG from "./staking-4.png"
+import Staking5PNG from "./staking-5.png"
+import Staking6PNG from "./staking-6.png"
+import U2ULogoPNG from "./u2u-logo2.png"
+import CoinsPNG from "./coins.png"
 
 export * from "./icons/UserIcon"
 export * from "./icons/WalletIcon"
@@ -31,5 +35,9 @@ export const Images = {
   WalletConnectLogo,
   Ellipse1PNG,
   Ellipse2PNG,
-  Staking4PNG
+  Staking4PNG,
+  Staking5PNG,
+  Staking6PNG,
+  U2ULogoPNG,
+  CoinsPNG
 }

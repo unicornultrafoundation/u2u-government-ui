@@ -43,7 +43,7 @@ export const Validator = () => {
             </div>
           </div>
           <div className="flex justify-end">
-            <img src={Images.Staking4PNG} alt="u2u" className="w-[80px] height-[105px]" />
+            <img src={Images.Staking5PNG} alt="u2u" className="w-[80px] height-[105px]" />
           </div>
         </div>
         <div className="col-span-2 border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2">
@@ -54,8 +54,17 @@ export const Validator = () => {
             </div>
           </div>
           <div className="flex justify-end">
-            <img src={Images.Staking4PNG} alt="u2u" className="w-[80px] height-[105px]" />
+            <img src={Images.Staking6PNG} alt="u2u" className="w-[80px] height-[105px]" />
           </div>
+        </div>
+        <div className="col-span-3 border border-border-ountline rounded-2xl p-4 pb-0 bg-neutral-surface shadow-2">
+          <div className="text-left">
+            <div className="text-sm text-text">{t('Validators Rewards')}</div>
+            <div className="text-primary font-semibold text-lg">
+              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} className="mr-2" fractionDigits={2} />
+            </div>
+          </div>
+          <LineChart />
         </div>
         <div className="col-span-3 border border-border-ountline rounded-2xl p-4 pb-0 bg-neutral-surface shadow-2">
           <div className="text-left">
@@ -64,17 +73,8 @@ export const Validator = () => {
           </div>
           <LineChart />
         </div>
-        <div className="col-span-3 border border-border-ountline rounded-2xl p-4 pb-0 bg-neutral-surface shadow-2">
-          <div className="text-left">
-            <div className="text-sm text-text">{t('Avg.APR')}</div>
-            <div className="text-primary font-semibold text-lg">
-              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} className="mr-2" fractionDigits={2} />
-            </div>
-          </div>
-          <LineChart />
-        </div>
       </div>
-      <div className="mt-10">
+      <div className="my-10">
         <ValidatorList validators={allValidators} />
       </div>
     </div>

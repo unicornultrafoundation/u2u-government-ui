@@ -12,7 +12,8 @@ module.exports = withMT({
       backgroundImage: {
         'gradient-1': "linear-gradient(5.3deg, #33CC99 12.83%, #14523D 110.36%)",
         'gradient-primary': "linear-gradient(270.04deg, rgba(51, 204, 153, 0) -63.21%, #33CC99 53.05%, rgba(51, 204, 153, 0) 162.26%)",
-        'gradient-2': "linear-gradient(269.98deg, #33CC99 0.02%, #D8CEFD 156.99%)"
+        'gradient-2': "linear-gradient(269.98deg, #33CC99 0.02%, #D8CEFD 156.99%)",
+        'gradient-3': "linear-gradient(269.86deg, rgba(51, 204, 153, 0.4) -17.72%, rgba(51, 204, 153, 0) 92.12%)"
       },
       boxShadow: {
         white: "0px 4px 14px 0px rgba(0, 0, 0, 0.1)",

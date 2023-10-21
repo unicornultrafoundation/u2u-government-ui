@@ -33,14 +33,14 @@ export const StakingCalculator = ({
   const { account } = useWeb3React()
   const { degegate } = useDelegate()
   const adjustedFeeU2U = 0.1 // 0.1 U2U
-  
+
   useEffect(() => {
     if (validators.length > 0) {
       let _options = validators.map((v: Validator, index: number) => {
         return {
           value: v,
           label: `Validator ${v.valId ? v.valId : ''}`,
-          subLabel: `(${v.apr  ? `APR:${(v.apr).toFixed(2)}%` : ''} - ${v.votingPower  ? `Power:${(v.votingPower / 10000).toFixed(2)}%` : ''})`
+          subLabel: `(${v.apr ? `APR:${(v.apr).toFixed(2)}%` : ''} - ${v.votingPower ? `Power:${(v.votingPower / 10000).toFixed(2)}%` : ''})`
         } as SelectOption
       })
       setSelection(_options)
@@ -124,57 +124,57 @@ export const StakingCalculator = ({
   }, [amount, selected])
 
   return (
-    <div className="w-[550px]">
-      <Box variant="gradient" className="pb-10">
-        <div className="md:hidden w-[50px] h-[2px] bg-green mb-4 mt-6"></div>
-        <div className="md:px-4 md:py-4 text-left">
-          <div className="text-2xl text-black-2 font-medium mb-2">Staking Calculator</div>
-          <div className="text-base text-gray">Your Balance:</div>
-          <div className="text-base text-green">
-            <RenderNumberFormat amount={u2uBalance} className="mr-2" />
-            <span className="ml-2">U2U</span>
+    <div className="max-w-[550px] text-left w-full py-8 px-10 bg-neutral-surface shadow-1 border border-border-outline rounded-[24px]">
+      <div className="text-2xl font-bold text-text">{t("Staking Calculator")}</div>
+      <div className="flex justify-between mt-6 mb-2">
+        <div className="text-base text-text">{t("Staking amount")}</div>
+        <div className="flex gap-1">
+          <div className="text-base text-text-secondary mr-1">{t("U2U available")}</div>
+          <div className="text-base font-semibold text-primary">
+            <RenderNumberFormat amount={u2uBalance} />
           </div>
-          <div className="mt-6">
-            <Input
-              className="w-full"
-              value={amount}
-              type="number"
-              label="Staking amount"
-              placeholder={"Ex: 10000"}
-              error={!!amountErr}
-              errorMessage={amountErr}
-              onInput={() => {
-                setSuggestOp(SuggestionOptions.NONE)
-              }}
-              onChange={(e) => {
-                const value = e.target.value
-                validateAmount(value)
-                setAmount(value)
-              }}
-            />
-          </div>
-          <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
-          <div className="text-base text-gray mb-3 mt-4">Validator</div>
-          <Select
-            options={selection}
-            placeholder="Select validator"
-            onChange={(option: any) =>{
-              setSelected(option)
-            }}
-            selected={selected} />
-          <div className="w-full h-[1px] bg-lightGray px-4 my-6"></div>
-          <APRCalculator amount={Number(amount)} validator={selected && selected.value} />
-          <div className="flex justify-center">
-            {
-              account ? (
-                <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>Delegate</Button>
-              ) : (
-                <ConnectWalletButton />
-              )
-            }
-          </div>
+          <div className="text-base text-text">U2U</div>
         </div>
-      </Box>
+      </div>
+      <div>
+        <Input
+          className="w-full"
+          value={amount}
+          type="number"
+          placeholder={"Ex: 10000"}
+          error={!!amountErr}
+          errorMessage={amountErr}
+          onInput={() => {
+            setSuggestOp(SuggestionOptions.NONE)
+          }}
+          onChange={(e) => {
+            const value = e.target.value
+            validateAmount(value)
+            setAmount(value)
+          }}
+        />
+      </div>
+      <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
+      <div className="text-base text-text mb-2 mt-4">{t("Validator")}</div>
+      <Select
+        options={selection}
+        placeholder="Select validator"
+        onChange={(option: any) => {
+          setSelected(option)
+        }}
+        selected={selected} />
+        <div className="mt-6">
+        <APRCalculator amount={Number(amount)} validator={selected && selected.value} />
+        </div>
+      <div className="flex justify-center">
+        {
+          account ? (
+            <Button loading={isLoading} className="w-full rounded-[100px]" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
+          ) : (
+            <ConnectWalletButton />
+          )
+        }
+      </div>
     </div>
   )
 }

@@ -152,7 +152,7 @@ export const ConnectWalletButton = ({ className, scale = buttonScale.lg }: {
   if (account) return <></>
   return (
     <>
-      <Button className={classNames("w-full", className)} scale={scale} onClick={connect}>Connect Wallet</Button>
+      <Button className={classNames("w-full rounded-[100px]", className)} scale={scale} onClick={connect}>Connect Wallet</Button>
       <WalletLoginModal isOpenModal={isShow} setIsOpenModal={setIsShow} />
     </>
   )

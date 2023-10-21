@@ -169,7 +169,7 @@ export const Header = () => {
               <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
               {
                 isShowAccountDetail &&
-                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px]">
+                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50">
                   <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
                   <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
                     <div className="flex items-center gap-2">
