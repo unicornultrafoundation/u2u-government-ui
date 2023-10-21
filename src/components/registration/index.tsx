@@ -81,48 +81,44 @@ export const ValidatorRegistrationComponent = () => {
 
 
   return (
-    <div className="w-[600px]">
-      <Box variant="gradient">
-        <div className="p-6 text-left">
-          <div className="text-[26px] text-black-2 text-center mb-3">Validator Registration</div>
-          <div className="text-base text-gray">Register with us to be one of the initial Validators. In the early stage of the project, Validators must be considered carefully, but that also comes with higher rewards</div>
-          <div className="mt-14">
-            <Input
-              className="w-full"
-              value={pubKey}
-              type="text"
-              label="Public Key"
-              placeholder="0xxxx"
-              onChange={(e) => {
-                const value = e.target.value
-                setPubKey(value)
-              }}
-            />
-          </div>
-          <div className="mt-8">
-            <Input
-              className="w-full"
-              value={amount}
-              type="number"
-              label="Your Delegation Amount (U2U)"
-              placeholder="Ex.25.000"
-              onChange={(e) => {
-                const value = e.target.value
-                setAmount(value)
-              }}
-            />
-          </div>
-          <div className="flex justify-center mt-10">
-            {
-              account ? (
-                <Button className="w-full" scale={buttonScale.lg} onClick={onRegister}>{t('Register')}</Button>
-              ) : (
-                <ConnectWalletButton />
-              )
-            }
-          </div>
-        </div>
-      </Box>
+    <div className="w-[560px] bg-neutral-surface border-border-outline shadow-1 px-10 py-8 rounded-[24px]" >
+      <div className="text-[24px] font-bold text-text mb-4">{t("Validator Registration")}</div>
+      <div className="text-base text-text-secondary text-left mb-6">{t("Register with us to be one of the initial Validators. In the early stage of the project, Validators must be considered carefully, but that also comes with higher rewards")}</div>
+      <div className="">
+        <Input
+          className="w-full"
+          value={pubKey}
+          type="text"
+          label="Public Key"
+          placeholder="0xxxx"
+          onChange={(e) => {
+            const value = e.target.value
+            setPubKey(value)
+          }}
+        />
+      </div>
+      <div className="mt-8">
+        <Input
+          className="w-full"
+          value={amount}
+          type="number"
+          label="Your Delegation Amount (U2U)"
+          placeholder="Ex.25.000"
+          onChange={(e) => {
+            const value = e.target.value
+            setAmount(value)
+          }}
+        />
+      </div>
+      <div className="flex justify-center mt-10">
+        {
+          account ? (
+            <Button className="w-full" scale={buttonScale.lg} onClick={onRegister}>{t('Register')}</Button>
+          ) : (
+            <ConnectWalletButton />
+          )
+        }
+      </div>
     </div>
   )
 }

@@ -5,11 +5,11 @@ import { bigFormatEther, shortenDisplayNumber } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import { useEpochStore, useStakingStore } from "../../store";
 import { Images } from "../../images";
+import { EstimateRewards } from "./EstimateRewards";
 
 export const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate()
-
   const [stakingStats, totalSupply] = useStakingStore(state => [
     state.stakingStats,
     state.totalSupply
@@ -17,9 +17,10 @@ export const Home = () => {
   const [lastEpoch] = useEpochStore(state => [
     state.lastEpoch
   ])
-
   const { epochRewards } = useMemo(() => lastEpoch, [lastEpoch])
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
+
+  
 
   return (
     <div className="pt-6">
@@ -60,12 +61,14 @@ export const Home = () => {
         </div>
       </div>
       <div className="flex px-8 py-[145px]">
-        <div className="w-6/12"></div>
-        <div className="w-6/12 text-left">
+        <div className="w-6/12">
+          <EstimateRewards />
+        </div>
+        <div className="w-6/12 text-left px-16">
           <div className="text-text-title text-5xl font-semibold">{t('Earn rewards while staking U2U network')}</div>
           <div className="font-semibold text-[18px] text-text-secondary mt-4">{t('Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.')}</div>
           <div className="mt-8">
-            <Button onClick={() => navigate("/portfolio")}>{t('Stake your U2U')}</Button>
+            <Button onClick={() => navigate("/portfolio")} className="rounded-[44px]">{t('Stake your U2U')}</Button>
           </div>
         </div>
       </div>

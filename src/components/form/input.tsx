@@ -28,15 +28,15 @@ export const Input: React.FC<InputProps> = (props) => {
 	} = props
 	
 	const inputClasses = useCallback(() => {
-		const base = "bg-white rounded-lg focus:border focus:outline-none focus:ring-0 text-base py-3 px-6"
-		const border = error ? "focus:border-error border border-error" : "focus:border-green border-0"
+		const base = "bg-white rounded-lg focus:border focus:outline-none focus:ring-0 text-base py-3 px-4"
+		const border = error ? "focus:border-error border border-error" : "focus:border-green border border-border-outline"
 		return classNames(base, border, className)
 	}, [className, error])
 
 	return (
 		<div>
 			<div className="w-full relative">
-				{label && <div className="text-base text-gray mb-3">{label}</div>}
+				{label && <div className="text-base text-text mb-2 text-left">{label}</div>}
 				<input
 					className={inputClasses()}
 					type={type}
