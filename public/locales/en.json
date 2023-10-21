@@ -18,5 +18,12 @@
   "Delegators play a vital role in the validation process and are duly rewarded for their contribution to securing the network. Their role involves staking U2U Token by delegating them to validator nodes, thus fortifying the network's reliability and integrity.": "Delegators play a vital role in the validation process and are duly rewarded for their contribution to securing the network. Their role involves staking U2U Token by delegating them to validator nodes, thus fortifying the network's reliability and integrity.",
   "Epoch Rewards": "Epoch Rewards",
   "Fostering Network Security": "Fostering Network Security",
-  "Epoch rewards represent a critical component of our network. These rewards are drawn from our reserve and serve as a strong incentive for validators to join us in safeguarding the network. The rewards are distributed at the end of each epoch, and each epoch spans a duration of 7 minutes.": "Epoch rewards represent a critical component of our network. These rewards are drawn from our reserve and serve as a strong incentive for validators to join us in safeguarding the network. The rewards are distributed at the end of each epoch, and each epoch spans a duration of 7 minutes."
+  "Epoch rewards represent a critical component of our network. These rewards are drawn from our reserve and serve as a strong incentive for validators to join us in safeguarding the network. The rewards are distributed at the end of each epoch, and each epoch spans a duration of 7 minutes.": "Epoch rewards represent a critical component of our network. These rewards are drawn from our reserve and serve as a strong incentive for validators to join us in safeguarding the network. The rewards are distributed at the end of each epoch, and each epoch spans a duration of 7 minutes.",
+  "Connect a wallet to continue": "Connect a wallet to continue",
+  "Choose how you want to connect. If you don't have a wallet, you can select a provider and create one.": "Choose how you want to connect. If you don't have a wallet, you can select a provider and create one.",
+  "Connected": "Connected",
+  "Copied Successfully": "Copied Successfully",
+  "Balance": "Balance",
+  "Explorer": "Explorer",
+  "Logout": "Logout"
 }

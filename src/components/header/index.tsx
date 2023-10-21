@@ -10,8 +10,10 @@ import { StakingLogo } from "../left-bar/StakingLogo"
 import { NavProps, navs } from "../left-bar"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
-import { Images, OptionIcon, UserIcon, WalletIcon } from "../../images"
+import { ArrowDownIcon, CopyIcon, GlobeIcon, Images, LogoutIcon, OptionIcon, UserIcon, WalletIcon } from "../../images"
 import { appConfig } from "../../contants"
+import { useCopyToClipboard } from 'usehooks-ts'
+import { toastSuccess } from "../toast"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -20,11 +22,13 @@ export const Header = () => {
   const navigate = useNavigate()
   const [isShowMobileMenu, setIsShowMobileMenu] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [isShowLogout, setIsShowLogout] = useState(false)
+  const [isShowAccountDetail, setIsShowAccountDetail] = useState(false)
   const { logout } = useAuth()
 
+  const [, copy] = useCopyToClipboard()
 
   const mobileMenuRef = useRef(null);
+  const accountDetailsRef = useRef(null)
 
   const handleClick = (index: number) => {
     navigate(navs[index].link)
@@ -45,6 +49,20 @@ export const Header = () => {
     };
   }, [mobileMenuRef]);
 
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (accountDetailsRef.current && !(accountDetailsRef.current as any).contains(event.target)) {
+        setIsShowAccountDetail(false)
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [accountDetailsRef]);
+
   const handleOpenMenu = useCallback(() => {
     setIsShowMobileMenu(!isShowMobileMenu)
   }, [isShowMobileMenu])
@@ -52,6 +70,14 @@ export const Header = () => {
   const connect = useCallback(async () => {
     setIsOpen(true)
   }, [])
+
+  const onCopyAdd = useCallback(async (str: string) => {
+    const c = await copy(str)
+    if (c) {
+      toastSuccess(t("Copied Successfully"), t('Success'))
+    }
+    // eslint-disable-next-line
+  }, [t])
 
   if (isMobile) {
     return (
@@ -130,27 +156,55 @@ export const Header = () => {
       {
         isActive ? (
           <div className="flex justify-end">
-            <div className="flex items-center py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
-              <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
-              <div>
-                <div className="text-base text-text font-semibold">
-                  {truncate({ str: account || "", headCount: 5 })}
+            <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
+              <div className="flex items-center gap-2">
+                <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                <div>
+                  <div className="text-base text-text font-semibold">
+                    {truncate({ str: account || "", headCount: 5 })}
+                  </div>
+                  <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
                 </div>
-                <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
               </div>
-              <div className="cursor-pointer" onClick={() => setIsShowLogout(!isShowLogout)}>
-                <i className="fa fa-caret-down"></i>
-              </div>
+              <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
               {
-                isShowLogout && <div
-                  className="bg-green absolute top-[80px] p-3 text-sm right-0 w-[100px] rounded text-black text-center cursor-pointer"
-                  onClick={() => {
-                    logout()
-                    setIsShowLogout(false)
-                  }}>Logout
+                isShowAccountDetail &&
+                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-shadow-1 rounded-[16px]">
+                  <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
+                  <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
+                    <div className="flex items-center gap-2">
+                      <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                      <div>
+                        <div className="text-base text-text font-semibold">
+                          {truncate({ str: account || "", headCount: 5 })}
+                        </div>
+                        <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                      </div>
+                    </div>
+                    <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(account || "")} />
+                  </div>
+                  <div className="py-3 px-6 border-b border-border-outline">
+                    <div className="text-sm text-text-secondary">{t("Balance")}</div>
+                    <div className="text-base font-semibold text-text">
+                      <RenderNumberFormat amount={balance} className="mr-2" /><span>U2U</span>
+                    </div>
+                  </div>
+                  <div className="py-3 px-6 border-b border-border-outline flex gap-4">
+                    <GlobeIcon />
+                    <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
+                    <div className="text-base font-semibold text-text">{t("Explorer")}</div>
+                    </a>
+                  </div>
+                  <div className="py-3 px-6 flex gap-4">
+                    <LogoutIcon />
+                    <div className="text-base font-semibold text-text cursor-pointer"
+                    onClick={() => {
+                      logout()
+                      setIsShowAccountDetail(false)
+                    }}>{t("Logout")}</div>
+                  </div>
                 </div>
               }
-
             </div>
           </div>
         ) : (

@@ -15,7 +15,8 @@ module.exports = withMT({
       },
       colors: {
         shadow: {
-          white: "0px 4px 14px 0px rgba(0, 0, 0, 0.1)"
+          white: "0px 4px 14px 0px rgba(0, 0, 0, 0.1)",
+          "1": "0px 8px 28px 0px rgba(0, 0, 0, 0.1)",
         },
         primary: {
           DEFAULT: "#33CC99",

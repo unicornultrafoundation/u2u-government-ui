@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, ReactNode, useCallback } from 'react'
 import { classNames } from '../../utils';
+import { CloseIcon } from '../../images';
 
 export const modalScale = {
   sm: "sm",
@@ -30,7 +31,7 @@ export const Modal = ({
 }: ModalProps) => {
 
   const panelClass = useCallback(() => {
-    const modalBase = "transform overflow-hidden rounded-xl text-left align-middle shadow-xl transition-all"
+    const modalBase = "transform overflow-hidden rounded-xl text-left align-middle shadow-shadow-1 transition-all"
     const modalWidth = () => {
       switch (scale) {
         case modalScale.sm:
@@ -46,14 +47,18 @@ export const Modal = ({
       }
     }
     const padding = () => {
-      return "p-10"
+      return "px-[32px] py-[22px]"
     }
     const bg = () => {
-      return "bg-gradient-to-br from-cyan to-[#EBFCFB]"
+      return "bg-neutral-surface"
     }
-    return classNames(modalBase, modalWidth(), padding(), bg(), className)
+    const border = () => {
+      return "border border-border-outline"
+    }
+    return classNames(modalBase, modalWidth(), padding(), bg(), border(), className)
   }, [scale, className])
 
+ 
 
   return (
     <>
@@ -70,7 +75,6 @@ export const Modal = ({
           >
             <div className="fixed inset-0 bg-black bg-opacity-30" aria-hidden="true" />
           </Transition.Child>
-
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
@@ -83,6 +87,9 @@ export const Modal = ({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className={panelClass()}>
+                  <div className='flex justify-end'>
+                    <CloseIcon onClick={() => setIsOpen(false)} className='cursor-pointer' />
+                  </div>
                   {children}
                 </Dialog.Panel>
               </Transition.Child>
