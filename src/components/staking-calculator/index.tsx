@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
 import { useDelegate } from "../../hooks"
-import { Box } from "../box"
 import { Button, ConnectWalletButton, buttonScale } from "../button"
 import { Input, Select, SelectOption } from "../form"
 import { RenderNumberFormat } from "../text"
@@ -124,7 +123,7 @@ export const StakingCalculator = ({
   }, [amount, selected])
 
   return (
-    <div className="max-w-[550px] text-left w-full py-8 px-10 bg-neutral-surface shadow-1 border border-border-outline rounded-[24px]">
+    <div className="text-left w-full py-8 px-10 bg-neutral-surface shadow-1 border border-border-outline rounded-[24px]">
       <div className="text-2xl font-bold text-text">{t("Staking Calculator")}</div>
       <div className="flex justify-between mt-6 mb-2">
         <div className="text-base text-text">{t("Staking amount")}</div>
@@ -169,7 +168,7 @@ export const StakingCalculator = ({
       <div className="flex justify-center">
         {
           account ? (
-            <Button loading={isLoading} className="w-full rounded-[100px]" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
+            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
           ) : (
             <ConnectWalletButton />
           )

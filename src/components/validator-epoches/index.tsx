@@ -1,4 +1,3 @@
-import { Tbody, Td, Th, Thead } from "../table"
 import { useFetchEpochOfValidator } from "../../hooks";
 import { ValidatorEpochInfo } from "../../types";
 import { RenderNumberFormat } from "../text";
@@ -6,24 +5,7 @@ import { bigFormatEther, dateToUTCString } from "../../utils";
 import { ChangePageParams, Pagination } from "../pagination";
 import { TableLimit } from "../../contants";
 import { useState } from "react";
-
-interface Header {
-  name: string;
-  subName?: string
-}
-
-const headers: Header[] = [
-  {
-    name: "Epoch"
-  },
-  {
-    name: "Rewards",
-    subName: "(U2U)"
-  },
-  {
-    name: "End Time"
-  }
-]
+import { useTranslation } from "react-i18next";
 
 interface ValidatorEpochsProps {
   validationId: number
@@ -33,6 +15,8 @@ interface ValidatorEpochsProps {
 export const ValidatorEpochs = ({
   validationId
 }: ValidatorEpochsProps) => {
+
+  const {t} = useTranslation()
 
   const [skip, setSkip] = useState(0)
   const { epoches, totalCount } = useFetchEpochOfValidator(validationId, skip)
@@ -45,43 +29,32 @@ export const ValidatorEpochs = ({
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full">
-        <Thead>
-          <tr>
-            {
-              headers.map((header: Header, index: number) => {
-                return (
-                  <Th index={index} length={headers.length} key={index}>
-                    <div className={`${index === 1 ? "text-right" : ""}`}>
-                      <div className={`text-lg font-normal`}>{header.name}</div>
-                      {
-                        header.subName ? <div className="text-xs text-gray font-light">{header.subName}</div> : <></>
-                      }
-                    </div>
-                  </Th>
-                )
-              })
-            }
+      <thead>
+          <tr className="border-y border-border-outline text-text-secondary font-medium">
+            <th className="py-6 text-left px-6 font-medium">{t("Epoch")}</th>
+            <th className="py-6 text-right font-medium">{t("Rewards (U2U)")}</th>
+            <th className="py-6 text-right font-medium px-6">{t("End Time")}</th>
           </tr>
-        </Thead>
-        <Tbody>
+        </thead>
+        <tbody>
           {
             epoches && epoches.length > 0 ? epoches.map((row: ValidatorEpochInfo, index: number) => {
               return (
-                <tr key={index}>
-                  <Td index={index} className="text-green text-base font-medium">
-                    {row.epochId}
-                  </Td>
-                  <Td index={index} className="text-right text-base font-medium">
+                <tr key={index} className="border-y border-border-outline font-semibold hover:bg-neutral-surface-hover cursor-pointer">
+                  <td className="text-base font-semibold text-primary py-4 text-left px-6">
+                  {row.epochId}                  
+                  </td>
+                  <td className="text-base font-semibold text-text py-4 text-right">
                     <RenderNumberFormat amount={bigFormatEther(row.epochRewards)} fractionDigits={2} />
-                  </Td>
-                  <Td index={index} className="text-right text-base font-medium whitespace-nowrap">
+                  </td>
+                  <td className="text-base font-semibold text-text py-4 text-right px-6">
                     {dateToUTCString(row.endTime)}
-                  </Td>
+                  </td>
                 </tr>
               )
             }) : <></>
           }
-        </Tbody>
+        </tbody>
       </table>
       <Pagination
         limit={TableLimit}

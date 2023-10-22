@@ -53,7 +53,6 @@ export const Portfolio = () => {
           </div>
         </Box>
       </div>
-
       <div className="flex justify-center my-20">
           <StakingCalculator validators={allValidators} balance={balance} />
       </div>

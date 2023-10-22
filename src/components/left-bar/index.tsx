@@ -70,14 +70,14 @@ export const LeftBar = () => {
   }, [pathname])
 
   return (
-    <div className="px-8 py-2 w-[300px] bg-neutral-surface border-r-2 border-border-outline min-h-screen">
+    <div className="px-8 py-2 w-[300px] bg-neutral-surface border-r-2 border-border-outline min-h-screen z-50">
       <StakingLogo />
       <div className="mt-[24px] pt-2 pb-8 w-full">
         {
           navs.map((item: NavProps, index: number) => {
             return (
               <div
-                className={`${activeNav(item.id) ? "bg-primary" : ""} flex items-center gap-4 cursor-pointer p-6 rounded-2xl font-semibold text-base`}
+                className={`${activeNav(item.id) ? "bg-primary" : ""} w-full flex items-center gap-4 cursor-pointer p-6 rounded-2xl font-semibold text-base`}
                 key={index}
                 onClick={() => { handleClick(index) }}>
                 <img src={activeNav(item.id) ? item.activeIcon : item.icon} className="w-[24px] h-[24px]" alt="_u2u" />
@@ -119,7 +119,6 @@ export const LeftBar = () => {
           <a href="https://www.youtube.com/@UnicornUltra" target="_blank" rel="noopener noreferrer">
             <div className="flex items-center w-[28px] h-[28px] justify-center">
               <img src={youtubeIcon} alt="u2u" />
-
             </div>
           </a>
           <a href="https://twitter.com/uniultra_xyz" target="_blank" rel="noopener noreferrer">

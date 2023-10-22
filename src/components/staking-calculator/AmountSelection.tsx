@@ -20,7 +20,6 @@ export const AmountSelection = ({
   handleOnclickSuggest,
   suggestOp
 }: AmountSelectionProps) => {
-
   return (
     <div className="grid grid-cols-4 gap-1 mt-2 text-center">
       <div>
