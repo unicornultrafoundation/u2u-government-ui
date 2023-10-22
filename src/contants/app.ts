@@ -10,6 +10,6 @@ export const SLOW_REFRESH_INTERVAL = 20000
 export const epochTime = BigNumber.from(420);
 export const DecimalBigNumber = BigNumber.from("1000000000000000000")
 export const WALLET_CONNECT_KEY = process.env.REACT_APP_WALLET_CONNECT_KEY as string
-export const TableLimit = 10;
+export const TableLimit = 8;
 
 export const MIN_LOCKUP_DURATION = 14

@@ -170,7 +170,7 @@ export const Schema = () => {
             amount: "1000000000000000000000"
             duration: 0
           )
-            `
+        `
       );
       queryString += "}";
       return gql(queryString);
@@ -207,7 +207,29 @@ export const Schema = () => {
           totalRewards
         }
       }
+    `,
+    STAKING_TXS: gql`
+      query StakingTxs($from: String!, $skip: Int!, $limit: Int!) {
+        transations (where:{
+          from: $from
+        }, 
+        first: $limit
+        skip: $skip
+        orderBy:block 
+        orderDirection: desc) {
+          block
+          txHash
+          from
+          type
+          validatorId
+          createdAt
+        }
+        transactionCounts (where:{
+          id: $from
+        }) {
+          count
+        }
+      }
     `
-
   }
 }

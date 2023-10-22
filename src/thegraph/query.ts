@@ -85,6 +85,16 @@ const queryLastEpoch = () => apolloU2UNetworkClient.query({
   fetchPolicy: "no-cache"
 })
 
+const queryStakingTxs = (from: string, skip: number) => apolloClient.query({
+  query: Schema().STAKING_TXS,
+  variables: {
+    from: from,
+    skip: skip*TableLimit,
+    limit: TableLimit
+  },
+  fetchPolicy: "no-cache"
+})
+
 export const QueryService = {
   queryValidators,
   queryStakingStats,
@@ -96,5 +106,6 @@ export const QueryService = {
   queryValidatorApr,
   queryValidatorsApr,
   queryEpochOfValidator,
-  queryLastEpoch
+  queryLastEpoch,
+  queryStakingTxs
 }

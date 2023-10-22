@@ -21,6 +21,7 @@ export * from "./icons/ArrowDownIcon"
 export * from "./icons/CopyIcon"
 export * from "./icons/GlobeIcon"
 export * from "./icons/LogoutIcon"
+export * from "./icons/LinkIcon"
 export interface IconProps {
   className?: string
   onClick?: () => void

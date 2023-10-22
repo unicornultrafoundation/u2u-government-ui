@@ -98,3 +98,12 @@ export interface EpochInfo {
   epochRewards: BigNumber
   totalRewards: BigNumber
 }
+
+export interface StakingTransaction {
+  txHash: string
+  validator: number
+  from: string
+  type: number
+  createdAt: number
+  age: number
+}
