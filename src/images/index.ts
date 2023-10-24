@@ -12,6 +12,18 @@ import Staking5PNG from "./staking-5.png"
 import Staking6PNG from "./staking-6.png"
 import U2ULogoPNG from "./u2u-logo2.png"
 import CoinsPNG from "./coins.png"
+import twitterIcon from "./icons/twitter.svg"
+import facebookIcon from "./icons/facebook.svg"
+import telegramIcon from "./icons/telegram.svg"
+import youtubeIcon from "./icons/youtube.svg"
+import u2uIcon from "./icons/u2u.svg"
+import userIcon from "./icons/user.svg"
+import userActiveIcon from "./icons/user-active.svg"
+import profileIcon from "./icons/profile.svg"
+import profileActiveIcon from "./icons/profile-active.svg"
+import homeIcon from "./icons/home.svg"
+import homeActiveIcon from "./icons/home-active.svg"
+import layer2Image from "./layer_2.png"
 
 export * from "./icons/UserIcon"
 export * from "./icons/WalletIcon"
@@ -22,8 +34,11 @@ export * from "./icons/CopyIcon"
 export * from "./icons/GlobeIcon"
 export * from "./icons/LogoutIcon"
 export * from "./icons/LinkIcon"
+export * from "./icons/MenuIcon"
+
 export interface IconProps {
   className?: string
+  style?: any
   onClick?: () => void
 }
 export const Images = {
@@ -40,5 +55,17 @@ export const Images = {
   Staking5PNG,
   Staking6PNG,
   U2ULogoPNG,
-  CoinsPNG
+  CoinsPNG,
+  twitterIcon,
+  facebookIcon,
+  telegramIcon,
+  youtubeIcon,
+  u2uIcon,
+  userIcon,
+  userActiveIcon,
+  profileIcon,
+  profileActiveIcon,
+  homeIcon,
+  layer2Image,
+  homeActiveIcon
 }

@@ -1,48 +1,17 @@
-import { StakingLogo } from "./StakingLogo"
+import { useLocation, useNavigate } from "react-router-dom"
+import { CloseIcon, Images } from "../../images"
+import { NavProps, navs } from "../left-bar"
+import { StakingLogo } from "../left-bar/StakingLogo"
 import { useCallback } from "react"
-import { useNavigate } from "react-router"
-import { useLocation } from "react-router-dom"
-import AppStore from "../../images/appstore.png"
-import GgPlay from "../../images/ggplay.png"
-import { useTranslation } from "react-i18next"
-import { Images } from "../../images"
 
-export interface NavProps {
-  id: string
-  name: string
-  icon: any
-  activeIcon: any
-  link: string
+interface MenuMobileProps {
+  isShow: boolean
+  setIsShow: (show: boolean) => void
 }
 
-export const navs: NavProps[] = [
-  {
-    id: "home",
-    name: "Home",
-    icon: Images.homeIcon,
-    activeIcon: Images.homeActiveIcon,
-    link: "/"
-  }, {
-    id: "portfolio",
-    name: "My Staking",
-    icon: Images.profileIcon,
-    activeIcon: Images.profileActiveIcon,
-    link: "portfolio"
-  }, {
-    id: "validator",
-    name: "Validators",
-    icon: Images.userIcon,
-    activeIcon: Images.userActiveIcon,
-    link: "validators"
-  }
-]
+export const MenuMobile = ({isShow, setIsShow}: MenuMobileProps) => {
 
-export const LeftBar = () => {
-  const { t } = useTranslation()
   const navigate = useNavigate()
-  const handleClick = (index: number) => {
-    navigate(navs[index].link)
-  }
   let { pathname } = useLocation();
   const activeNav = useCallback((id: string): boolean => {
     switch (true) {
@@ -58,10 +27,23 @@ export const LeftBar = () => {
     }
   }, [pathname])
 
+  const handleClick = (index: number) => {
+    navigate(navs[index].link)
+    setIsShow(false)
+  }
+
+  if (!isShow) return <></>
   return (
-    <div className="px-8 py-2 w-[300px] bg-neutral-surface border-r-2 border-border-outline min-h-screen z-50">
-      <StakingLogo />
-      <div className="mt-[24px] pt-2 pb-8 w-full">
+    <div className="fixed top-0 left-0 w-screen h-screen border border-border-outline bg-neutral-surface p-4">
+      <div className="flex justify-between items-center"> 
+        <StakingLogo />
+        <button
+          className="w-[44px] h-[44px] rounded-full border-[1.5px] border-border-outline flex justify-center items-center cursor-pointer"
+          onClick={() => setIsShow(false)}>
+          <CloseIcon />
+        </button>
+      </div>
+      <div className="mt-[24px] w-full px-4">
         {
           navs.map((item: NavProps, index: number) => {
             return (
@@ -76,23 +58,7 @@ export const LeftBar = () => {
           })
         }
       </div>
-      <div className="w-full rounded-[18px] bg-gradient-1 px-4 pt-8 pb-6">
-        <div className="font-bold text-base text-neutral">{t('Explore U2U wallet to get more secret gift!')}</div>
-        <div className="flex justify-center my-4">
-          <img src={Images.layer2Image} alt="u2u" />
-        </div>
-        <div className="flex justify-center mt-8">
-          <a href="https://play.google.com/store/apps/details?id=org.u2u.wallet" target="_blank" rel="noopener noreferrer">
-            <img src={GgPlay} alt="u2u" width={180} />
-          </a>
-        </div>
-        <div className="flex justify-center mt-2">
-          <a href="https://apps.apple.com/vn/app/u2u-wallet/id6446194312" target="_blank" rel="noopener noreferrer">
-            <img src={AppStore} alt="u2u" width={180} />
-          </a>
-        </div>
-      </div>
-      <div className="w-full px-4 pt-8 pb-6">
+      <div className="w-full px-8 py-8 absolute bottom-0 left-0 ">
         <div className="text-sm text-text">© 2023 Unicorn Ultra (U2U). All rights reserved</div>
         <div className="flex item-center justify-between mt-4">
           <a href="https://uniultra.xyz" target="_blank" rel="noopener noreferrer">

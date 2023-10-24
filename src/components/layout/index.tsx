@@ -5,7 +5,6 @@ import { useAuth } from "../../hooks";
 import { connectorLocalStorageKey } from "../../contants";
 import { ConnectorNames } from "../../utils";
 import { isMobile } from 'mobile-device-detect';
-import { Footer } from "../footer";
 
 interface Props {
   children: ReactNode
@@ -34,7 +33,7 @@ export const Layout = ({ children }: Props) => {
           <Header />
         </div>
         <div>{children}</div>
-        {isMobile && <Footer />}
+        {/* {isMobile && <Footer />} */}
       </div>
     </div>
   )

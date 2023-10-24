@@ -14,6 +14,7 @@ export const TxHistory = () => {
   const { t } = useTranslation()
   const [skip, setSkip] = useState(0)
   const { txs, total } = useFetchStakingTxs(account || "", skip)
+  
   const onChangePage = async (params: ChangePageParams) => {
     let _skip = params.page ? params.page - 1 : 0
     setSkip(_skip)

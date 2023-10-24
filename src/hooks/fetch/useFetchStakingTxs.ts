@@ -7,19 +7,19 @@ import { DataProcessor } from "./dataProccesser"
 export const useFetchStakingTxs = (from: string, skip: number = 0) => {
   const [txs, setTxs] = useState<StakingTransaction[]>([])
   const [total, setTotal] = useState(0)
-  const { mediumRefresh } = useRefresh()
+  const { fastRefresh } = useRefresh()
   useEffect(() => {
     if (!from) return
     (async () => {
       try {
-        const { data } = await QueryService.queryStakingTxs(from.toLowerCase(), skip)        
+        const { data } = await QueryService.queryStakingTxs(from.toLowerCase(), skip)  
         if (data && data.transations.length > 0) {
           setTxs(data.transations.map((i: any) => DataProcessor.transaction(i)))
           setTotal(Number(data.transactionCounts[0].count))
         }
       } catch (error) {}
     })()
-  }, [mediumRefresh, from, skip])
+  }, [fastRefresh, from, skip])
   return {
     txs,
     total

@@ -19,9 +19,7 @@ export const Home = () => {
   ])
   const { epochRewards } = useMemo(() => lastEpoch, [lastEpoch])
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
-
   
-
   return (
     <div className="pt-6">
       <div className="bg-gradient-primary px-[74px]">

@@ -2,18 +2,17 @@ import { useTranslation } from "react-i18next"
 import { useWeb3React } from "@web3-react/core"
 import { Button, buttonScale, buttonType } from "../button"
 import { useAuth, useBalance } from "../../hooks"
-import { exploreAddress, truncate } from "../../utils"
+import { truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
 import { useNavigate } from "react-router-dom"
 import { isMobile } from 'mobile-device-detect';
-import { StakingLogo } from "../left-bar/StakingLogo"
-import { NavProps, navs } from "../left-bar"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
-import { ArrowDownIcon, CopyIcon, GlobeIcon, Images, LogoutIcon, OptionIcon, UserIcon, WalletIcon } from "../../images"
+import { ArrowDownIcon, CopyIcon, GlobeIcon, Images, LogoutIcon, MenuIcon, OptionIcon, UserIcon, WalletIcon } from "../../images"
 import { appConfig } from "../../contants"
 import { useCopyToClipboard } from 'usehooks-ts'
 import { toastSuccess } from "../toast"
+import { MenuMobile } from "./MenuMobile"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -27,28 +26,7 @@ export const Header = () => {
 
   const [, copy] = useCopyToClipboard()
 
-  const mobileMenuRef = useRef(null);
   const accountDetailsRef = useRef(null)
-
-  const handleClick = (index: number) => {
-    navigate(navs[index].link)
-    setIsShowMobileMenu(false)
-  }
-
-  useEffect(() => {
-    function handleClickOutside(event: any) {
-      if (mobileMenuRef.current && !(mobileMenuRef.current as any).contains(event.target)) {
-        setIsShowMobileMenu(false)
-      }
-    }
-    // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [mobileMenuRef]);
-
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (accountDetailsRef.current && !(accountDetailsRef.current as any).contains(event.target)) {
@@ -62,10 +40,6 @@ export const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [accountDetailsRef]);
-
-  const handleOpenMenu = useCallback(() => {
-    setIsShowMobileMenu(!isShowMobileMenu)
-  }, [isShowMobileMenu])
 
   const connect = useCallback(async () => {
     setIsOpen(true)
@@ -81,64 +55,38 @@ export const Header = () => {
 
   if (isMobile) {
     return (
-      <div className="w-full relative">
-        {
-          !isActive && (
-            <div className="flex justify-center gap-4 py-2">
-              <Button onClick={() => navigate("/validator/register")}>{t('Validator Register')}</Button>
-              <Button variant={buttonType.secondary} onClick={() => connect()}>{t('Connect Wallet')}</Button>
-            </div>
-          )
-        }
-        <div ref={mobileMenuRef}>
-          <div className="flex justify-between items-center border-y py-4 px-5">
-            <div onClick={() => setIsShowMobileMenu(false)}>
-              <StakingLogo />
-            </div>
-            <img src={Images.MenuIcon} alt="u2u" onClick={handleOpenMenu} />
-          </div>
-          {isShowMobileMenu &&
-            <div className={`bg-white absolute w-screen left-0 ${isActive ? "top-[100px]" : "top-[150px]"}`}>
-              {
-                navs.map((item: NavProps, index: number) => {
-                  return (
-                    <div
-                      className="flex items-center gap-2 my-3 p-3 font-semibold cursor-pointer"
-                      key={index}
-                      onClick={() => { handleClick(index) }}>
-                      <img src={item.icon} alt="_u2u" />
-                      <div className={`${"text-black-1"} text-base`} >{item.name}</div>
-                    </div>
-                  )
-                })
-              }
-              {isActive && <div className="text-green gap-2 my-3 p-3 px-6 text-center font-semibold cursor-pointer"
-                onClick={() => {
-                  logout()
-                  setIsShowMobileMenu(false)
-                }}>Logout</div>}
-            </div>
-          }
+      <div className="flex px-4 py-[10px] justify-between">
+        <button
+          className="w-[44px] h-[44px] rounded-full border-[1.5px] border-border-outline flex justify-center items-center cursor-pointer"
+          onClick={() => setIsShowMobileMenu(true)}>
+          <MenuIcon />
+        </button>
+        <div className="flex gap-2">
+          <Button
+            variant={buttonType.secondary}
+            className="font-semibold"
+            scale={buttonScale.md}
+            onClick={() => navigate("/validator/register")}>
+            <UserIcon className="mr-1" style={{
+              width: "20px",
+              height: "20px"
+            }} />
+            {t('Register')}
+          </Button>
+          <Button
+            className="font-semibold"
+            scale={buttonScale.md}
+            variant={buttonType.primary}
+            onClick={() => connect()}>
+            <WalletIcon className="mr-1" style={{
+              width: "20px",
+              height: "20px"
+            }} />
+            {t('Connect')}
+          </Button>
         </div>
-
-        {
-          isActive && (
-            <div className="flex justify-items py-4 w-full px-5">
-              <div className="flex items-center p-3 bg-[#EBFCFB] rounded-lg gap-5 text-left w-full">
-                <img src={Images.MetamaskIcon} alt="u2u" className="w-[35px] h-[35px]" />
-                <div>
-                  <div className="text-base font-medium">
-                    <RenderNumberFormat amount={balance} className="mr-2" /> U2U
-                  </div>
-                  <div className="text-xs text-green">
-                    <a href={exploreAddress(account || "")} target="_blank" rel="noopener noreferrer">{truncate({ str: account || "" })}</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        }
         <WalletLoginModal isOpenModal={isOpen} setIsOpenModal={setIsOpen} />
+        <MenuMobile isShow={isShowMobileMenu} setIsShow={setIsShowMobileMenu} />
       </div>
     )
   }
@@ -169,7 +117,8 @@ export const Header = () => {
               <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
               {
                 isShowAccountDetail &&
-                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50">
+                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50
+                ">
                   <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
                   <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
                     <div className="flex items-center gap-2">
@@ -192,16 +141,16 @@ export const Header = () => {
                   <div className="py-3 px-6 border-b border-border-outline flex gap-4">
                     <GlobeIcon />
                     <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
-                    <div className="text-base font-semibold text-text">{t("Explorer")}</div>
+                      <div className="text-base font-semibold text-text">{t("Explorer")}</div>
                     </a>
                   </div>
                   <div className="py-3 px-6 flex gap-4">
                     <LogoutIcon />
                     <div className="text-base font-semibold text-text cursor-pointer"
-                    onClick={() => {
-                      logout()
-                      setIsShowAccountDetail(false)
-                    }}>{t("Logout")}</div>
+                      onClick={() => {
+                        logout()
+                        setIsShowAccountDetail(false)
+                      }}>{t("Logout")}</div>
                   </div>
                 </div>
               }

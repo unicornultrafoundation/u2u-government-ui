@@ -1,8 +1,9 @@
+import { classNames } from "../../utils"
 import { IconProps } from "../index"
 
-export const UserIcon = ({ className }: IconProps) => {
+export const UserIcon = ({ className, style }: IconProps) => {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 24 24" style={style} className={classNames(className, "w-[24px] h-[24px]")} fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M17.5948 10.9319C19.1972 10.9319 20.497 9.63295 20.497 8.03061C20.497 6.42828 19.1972 5.12936 17.5948 5.12936" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       <path d="M18.9291 14.0847C19.4076 14.1177 19.8833 14.1856 20.3517 14.291C21.0026 14.4184 21.7854 14.6852 22.0641 15.2691C22.2419 15.6431 22.2419 16.0785 22.0641 16.4534C21.7863 17.0373 21.0026 17.3032 20.3517 17.437" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       <path d="M6.28998 10.9319C4.68765 10.9319 3.38782 9.63295 3.38782 8.03061C3.38782 6.42828 4.68765 5.12936 6.28998 5.12936" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
