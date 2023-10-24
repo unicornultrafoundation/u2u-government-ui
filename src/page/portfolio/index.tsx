@@ -1,28 +1,14 @@
 import { useWeb3React } from "@web3-react/core"
-import { Box, Button, MyInvestmentList, StakingCalculator, boxType, buttonScale, buttonType } from "../../components"
-import { useBalance, useFetchDelegator } from "../../hooks"
+import { useFetchDelegator } from "../../hooks"
 import { useMemo } from "react"
-import { useTranslation } from "react-i18next"
-import ArrowLeftIcon from "../../images/icons/arrow-left-black.png"
-import { useNavigate } from "react-router-dom"
-import { useValidatorStore } from "../../store"
 import { TxHistory } from "./History"
+import { WithdrawalList } from "./widthrawn"
 
 export const Portfolio = () => {
 
-  const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { balance } = useBalance()
-  const navigator = useNavigate()
-
-  const [allValidators] = useValidatorStore(state => [
-    state.allValidators
-  ])
-
-
   const { delegator } = useFetchDelegator(account || "")
-
-  const { validations, address: delegatorAddr } = useMemo(() => delegator, [delegator])
+  const { address: delegatorAddr } = useMemo(() => delegator, [delegator])
 
   return (
     <div className="px-8 py-6">
@@ -31,7 +17,12 @@ export const Portfolio = () => {
 
             </div>
             <div className="col-span-6 py-8 px-10 border border-border-outline shadow-1 rounded-[24px]">
-              <TxHistory />
+              <WithdrawalList delegator={delegatorAddr} />
+            </div>  
+        </div>
+        <div className="w-full grid grid-cols-12 gap-6 mt-12">
+            <div className="col-span-12 py-8 px-10 border border-border-outline shadow-1 rounded-[24px]">
+            <TxHistory />
             </div>  
         </div>
     </div>

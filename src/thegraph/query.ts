@@ -27,11 +27,10 @@ const queryDelegatorDetail = (address: string) => apolloClient.query({
   fetchPolicy: "no-cache"
 })
 
-const queryWithdrawalRequest = (delegator: string, validatorId: number) => apolloClient.query({
+const queryWithdrawalRequest = (delegator: string) => apolloClient.query({
   query: Schema().WITHDRAWALREQUEST,
   variables: {
-    delegatorAddress: delegator,
-    validatorId: validatorId
+    delegatorAddress: delegator
   },
   fetchPolicy: "no-cache"
 })

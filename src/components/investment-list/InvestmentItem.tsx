@@ -8,7 +8,6 @@ import { RenderNumberFormat } from "../text"
 import { Button, buttonType } from "../button"
 import { UndelegateModal } from "./action/UndelegateModal"
 import { useClaimRewards, useFetchLockedStake, usePendingReward, useRestakeRewards } from "../../hooks"
-import { WithdrawalRequestList } from "./WithdrawalRequestList"
 import { toastDanger, toastSuccess } from "../toast"
 import { useNavigate } from "react-router-dom"
 import { LockStakeModal } from "./action/LockStakeModal"
@@ -185,7 +184,7 @@ export const InvestmentItem = ({
         }
 
       </div>
-      <WithdrawalRequestList delegator={delegator} valId={Number(valId)} />
+      {/* <WithdrawalRequestList delegator={delegator} valId={Number(valId)} /> */}
       <UndelegateModal
         validation={validation}
         isOpenModal={isOpenUndelegateModal}

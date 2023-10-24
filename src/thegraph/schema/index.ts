@@ -97,10 +97,9 @@ export const Schema = () => {
       }
     `,
     WITHDRAWALREQUEST: gql`
-      query WithdrawalRequest($delegatorAddress: String!, $validatorId: Int!) {
+      query WithdrawalRequest($delegatorAddress: String!) {
         withdrawalRequests (where:{
           delegatorAddress: $delegatorAddress
-          validatorId: $validatorId
         }
         orderBy: time
         orderDirection: desc
@@ -110,7 +109,6 @@ export const Schema = () => {
           delegatorAddress
           validatorId
           delegatorAddress
-          validatorId
           wrID
           time
           unbondingAmount
