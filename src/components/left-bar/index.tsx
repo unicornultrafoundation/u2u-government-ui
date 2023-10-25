@@ -59,7 +59,7 @@ export const LeftBar = () => {
   }, [pathname])
 
   return (
-    <div className="px-8 py-2 w-[300px] bg-neutral-surface border-r-2 border-border-outline min-h-screen z-50">
+    <div className="px-8 py-2 w-[300px] bg-neutral-surface border-r-2 border-border-outline min-h-screen z-20">
       <StakingLogo />
       <div className="mt-[24px] pt-2 pb-8 w-full">
         {

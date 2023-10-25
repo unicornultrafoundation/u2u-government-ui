@@ -128,12 +128,12 @@ export const ValidatorDetails = () => {
           </div>
         </div>
         <div className="w-full grid grid-cols-12 gap-8 mt-8">
-          <div className="col-span-4">
+          <div className="col-span-6 2xl:col-span-5">
             <div className="w-full flex justify-end">
               <StakingCalculator balance={balance} validators={[validator]} />
             </div>
           </div>
-          <div className="col-span-8">
+          <div className="col-span-6 2xl:col-span-7">
             <ListOfValidator
               valId={Number(valId)}
               totalDelegator={totalDelegator}
