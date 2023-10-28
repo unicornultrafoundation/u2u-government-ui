@@ -115,7 +115,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 
     const radiusClass = () => {
       if (scale === buttonScale.icon) return 'rounded-full'
-      return 'rounded-[8px]'
+      return 'rounded-[24px]'
     }
 
 

@@ -4,6 +4,7 @@ import { classNames } from "../../../utils"
 import { StakeForm } from "./StakeForm"
 import { LockForm } from "./LockForm"
 import { UnStakeForm } from "./UnStakeForm"
+import { Rewards } from "./Rewards"
 
 const tabs: TabOption[] = [
   {
@@ -26,7 +27,7 @@ const tabs: TabOption[] = [
 
 export const StakingContainer = () => {
 
-  const [activeTab, setActiveTab] = useState(tabs[1].key)
+  const [activeTab, setActiveTab] = useState(tabs[3].key)
   const activeTabIndex = useMemo(() => {
     return tabs.findIndex(tab => tab.key === activeTab)
   }, [activeTab])
@@ -43,6 +44,8 @@ export const StakingContainer = () => {
         return <LockForm />
       case "unstake": 
         return <UnStakeForm />
+      case "rewards": 
+        return <Rewards />
       default:
         return <></>
     }
@@ -62,7 +65,7 @@ export const StakingContainer = () => {
           }
           
       </div>
-      <div className="w-full">
+      <div className="w-full w-full overflow-x-auto">
             {renderTab}
           </div>
     </div>
