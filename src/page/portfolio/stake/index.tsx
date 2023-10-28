@@ -27,7 +27,7 @@ const tabs: TabOption[] = [
 
 export const StakingContainer = () => {
 
-  const [activeTab, setActiveTab] = useState(tabs[3].key)
+  const [activeTab, setActiveTab] = useState(tabs[0].key)
   const activeTabIndex = useMemo(() => {
     return tabs.findIndex(tab => tab.key === activeTab)
   }, [activeTab])
