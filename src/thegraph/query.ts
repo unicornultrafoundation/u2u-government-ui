@@ -71,8 +71,8 @@ const queryValidatorApr = (valId: number, stakingAmount: string) => apolloStakin
   fetchPolicy: "no-cache"
 })
 
-const queryValidatorsApr = (vals: number[]) => apolloStakingClient.query({
-  query: Schema().VALIDATORS_APR(vals),
+const queryValidatorsApr = (vals: number[], amount = "1000000000000000000000", duration = 0) => apolloStakingClient.query({
+  query: Schema().VALIDATORS_APR(vals, amount, duration),
   fetchPolicy: "no-cache"
 })
 

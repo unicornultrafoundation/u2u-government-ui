@@ -186,14 +186,14 @@ export const Schema = () => {
         )
       }
     `,
-    VALIDATORS_APR(vals: any[]) {
+    VALIDATORS_APR(vals: any[], amount: string, duration: number) {
       let queryString = `query stakingApr {`;
       queryString += vals.map(
         (val) => `
           apr${val}: calculateApr(
             validatorId: ${val}
-            amount: "1000000000000000000000"
-            duration: 0
+            amount: "${amount}"
+            duration: ${duration}
           )
         `
       );

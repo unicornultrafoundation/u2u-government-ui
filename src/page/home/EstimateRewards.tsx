@@ -1,8 +1,11 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { RenderNumberFormat } from "../../components"
 import { SliderComponent } from "../../components"
 import { useTranslation } from "react-i18next"
 import { Images } from "../../images"
+import { useValidatorStore } from "../../store"
+import { QueryService } from "../../thegraph"
+import { ethers } from "ethers"
 
 export const EstimateRewards = () => {
   const { t } = useTranslation()
@@ -10,6 +13,12 @@ export const EstimateRewards = () => {
   const [lockSlideValue, setLockSlideValue] = useState(0)
   const maxStake = 1000000
   const maxLockDays = 365
+
+  const [allValidators] = useValidatorStore((state) => [
+    state.allValidators
+  ])
+
+  const [apr, setApr] = useState(0)
 
   const stakeAmount = useMemo(() => {
     return Math.round(stakeSlideValue * maxStake / 100)
@@ -19,6 +28,29 @@ export const EstimateRewards = () => {
   const lockDays = useMemo(() => {
     return Math.round(lockSlideValue * maxLockDays / 100)
   }, [lockSlideValue])
+
+
+  useEffect(() => {
+    (async() => {
+      if (allValidators && allValidators.length > 0) {
+        try {
+          const valIds: number[] = allValidators.map((v: any) => Number(v.valId))
+          const amountDec = ethers.utils.parseEther(stakeAmount.toString()).toString();
+          const duration = lockDays * 24 * 60 * 60
+          let total = 0;
+          if (valIds && amountDec) {
+            const { data: dataApr } = await QueryService.queryValidatorsApr(valIds, amountDec, duration)
+            for (let i = 0; i < valIds.length; ++i) {
+              total += Number(dataApr[`apr${valIds[i]}`])
+            }
+            setApr(total / valIds.length)
+          } else {
+            setApr(0)
+          }
+        } catch (error) { }
+      }
+    })()
+  }, [allValidators, stakeAmount, lockDays])
 
   return (
     <div className="w-full flex justify-end pr-16">
@@ -72,11 +104,14 @@ export const EstimateRewards = () => {
           <div className="flex justify-between">
             <div>
               <div className="text-lg font-semibold text-text">{t("Estimated rewards")}</div>
-              <div className="text-lg font-semibold text-primary">0 U2U</div>
+              <div className="text-lg font-semibold text-primary">
+              <RenderNumberFormat amount={apr} className="mr-2" fractionDigits={2} />
+                <span>U2U</span></div>
             </div>
             <div>
               <div className="text-lg font-semibold text-text">{t("APR")}</div>
-              <div className="text-lg font-semibold text-primary">0 %</div>
+              <div className="text-lg font-semibold text-primary">
+              <RenderNumberFormat amount={apr} fractionDigits={2} /> <span className="ml-1">%</span></div>
             </div>
           </div>
         </div>
