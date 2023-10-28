@@ -75,14 +75,14 @@ export const UnlockStakeModal = ({
 
   return (
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
-      <div className="text-[24px] font-bold text-text">{t("Unlock Stake")}</div>
+      <div className="text-[24px] font-bold text-text whitespace-nowrap">{t("Unlock Stake")}</div>
       <div className="w-full mt-6">
-        <div className="flex gap-4 items-center whitespace-nowrap">
+        <div className="flex gap-4 items-center">
           <img src={Images.U2ULogoPNG} alt="u2u" />
           <div>{`Validator ${Number(lockStake.validatorId)}`}</div>
         </div>
       </div>
-      <div className="w-full flex justify-between mt-6 mb-2">
+      <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
         <div className="text-base text-text">{t("Unlock amount")}</div>
         <div className="flex gap-1">
           <div className="text-base text-text-secondary mr-1">{t("U2U available")}</div>
@@ -107,23 +107,23 @@ export const UnlockStakeModal = ({
           }}
         />
       </div>
-      <div className="w-full flex justify-between mt-4 mb-2">
+      <div className="w-full flex justify-between mt-4 mb-2 flex-wrap">
         <div className="text-base text-text">{t("Penalty")}</div>
         <div className="flex gap-1">
           <div className="text-base font-semibold text-text">0</div>
           <div className="text-base text-text">U2U</div>
         </div>
       </div>
-      <div className="w-full flex justify-between mt-4 mb-2">
-        <div className="text-base text-text">{t("End time")}</div>
+      <div className="w-full flex justify-between mt-4 mb-2 flex-wrap">
+        <div className="text-base text-text whitespace-nowrap">{t("End time")}</div>
         <div className="flex gap-1">
-          <div className="text-base font-semibold text-text">
+          <div className="text-base font-semibold text-text whitespace-nowrap">
             {dateToUTCString(endTime)}
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-between mt-4 mb-2">
-        <div className="text-base text-text">{t("Duration")}</div>
+      <div className="w-full flex justify-between mt-4 mb-2 flex-wrap">
+        <div className="text-base text-text whitespace-nowrap">{t("Duration")}</div>
         <div className="flex gap-1">
           <div className="text-base font-semibold text-text">
             {duration / 86400000}

@@ -31,7 +31,7 @@ export const Modal = ({
 }: ModalProps) => {
 
   const panelClass = useCallback(() => {
-    const modalBase = "transform overflow-hidden rounded-xl text-left align-middle shadow-1 transition-all"
+    const modalBase = "transform overflow-x-auto rounded-xl text-left align-middle shadow-1 transition-all"
     const modalWidth = () => {
       switch (scale) {
         case modalScale.sm:

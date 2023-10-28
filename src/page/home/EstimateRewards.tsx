@@ -6,6 +6,8 @@ import { Images } from "../../images"
 import { useValidatorStore } from "../../store"
 import { QueryService } from "../../thegraph"
 import { ethers } from "ethers"
+import { isMobile } from 'mobile-device-detect';
+import { classNames } from "../../utils"
 
 export const EstimateRewards = () => {
   const { t } = useTranslation()
@@ -31,7 +33,7 @@ export const EstimateRewards = () => {
 
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       if (allValidators && allValidators.length > 0) {
         try {
           const valIds: number[] = allValidators.map((v: any) => Number(v.valId))
@@ -53,15 +55,18 @@ export const EstimateRewards = () => {
   }, [allValidators, stakeAmount, lockDays])
 
   return (
-    <div className="w-full flex justify-end pr-16">
-      <div className="relative w-[450px]">
+    <div className={classNames("w-full flex", isMobile ? "justify-center" : "justify-end pr-16")}>
+      <div className={classNames("relative", isMobile ? "w-full" : "w-[450px]")}>
         <div className="absolute z-0 top-[-291px] left-[-385px]">
           <img src={Images.Ellipse1PNG} alt="u2u" />
         </div>
         <div className="absolute z-0 top-[250px] left-[200px]">
           <img src={Images.Ellipse2PNG} alt="u2u" />
         </div>
-        <div className="z-20 w-[250px] text-center py-[10px] text-base font-semibold text-neutral rounded-[64px] bg-primary absolute top-[-22px] left-[100px] whitespace-nowrap">{t("Estimate your rewards")}</div>
+        <div className={classNames(
+          "z-20 w-[250px] text-center py-[10px] text-base font-semibold text-neutral rounded-[64px] bg-primary absolute top-[-22px] whitespace-nowrap",
+          isMobile ? "left-[calc(50vw_-_140px)]" : "left-[100px]"
+        )}>{t("Estimate your rewards")}</div>
         <div className="z-10 relative border border-border-outline shadow-1 px-10 pt-[54px] pb-8 rounded-[24px] bg-neutral-surface text-left">
           <div className="mb-4">
             <div className="flex gap-2 mb-4">
@@ -105,13 +110,13 @@ export const EstimateRewards = () => {
             <div>
               <div className="text-lg font-semibold text-text">{t("Estimated rewards")}</div>
               <div className="text-lg font-semibold text-primary">
-              <RenderNumberFormat amount={apr} className="mr-2" fractionDigits={2} />
-                <span>U2U</span></div>
+                <RenderNumberFormat amount={apr} fractionDigits={2} />
+                <span className="ml-1">U2U</span></div>
             </div>
             <div>
               <div className="text-lg font-semibold text-text">{t("APR")}</div>
               <div className="text-lg font-semibold text-primary">
-              <RenderNumberFormat amount={apr} fractionDigits={2} /> <span className="ml-1">%</span></div>
+                <RenderNumberFormat amount={apr} fractionDigits={2} /> <span className="ml-1">%</span></div>
             </div>
           </div>
         </div>

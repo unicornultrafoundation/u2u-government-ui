@@ -25,13 +25,13 @@ export const ValidatorStakeModal = ({
 
   return (
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
-      <div className="text-[24px] font-bold text-text text-center">{t("Choose a Validator")}</div>
-      <div className="w-full mt-6">
+      <div className="text-[24px] font-bold text-text text-center whitespace-nowrap">{t("Choose a Validator")}</div>
+      <div className="w-full mt-6 min-w-[500px]">
         {
           validators.map((row: Validator, index: number) => {
             return (
               <div className={classNames(
-                "flex px-4 py-2 items-center justify-between border border-border-outline rounded-[8px] mb-2 cursor-pointer hover:bg-neutral-surface-hover",
+                "w-full flex px-4 py-2 items-center justify-between border border-border-outline rounded-[8px] mb-2 cursor-pointer hover:bg-neutral-surface-hover",
                 selected.valId === row.valId ? "bg-neutral-surface-hover" : "")}
                 key={index}
                 onClick={() => {
@@ -49,20 +49,20 @@ export const ValidatorStakeModal = ({
                 </div>
                 <div className="flex gap-8">
                   <div>
-                    <div className="text-[14px] text-text-secondary">{t("APR (%)")}</div>
-                    <div className="text-base text-text">
+                    <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("APR (%)")}</div>
+                    <div className="text-base text-text whitespace-nowrap">
                       <RenderNumberFormat amount={row.apr} fractionDigits={2} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-[14px] text-text-secondary">{t("VP (%)")}</div>
-                    <div className="text-base text-text">
+                    <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("VP (%)")}</div>
+                    <div className="text-base text-text whitespace-nowrap">
                       <RenderNumberFormat amount={Number(row.votingPower) / 10000} fractionDigits={2} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-[14px] text-text-secondary">{t("Staked (U2U)")}</div>
-                    <div className="text-base text-text">
+                    <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Staked (U2U)")}</div>
+                    <div className="text-base text-text whitespace-nowrap">
                       <RenderNumberFormat amount={bigFormatEther(row.totalStakedAmount || 0) || 0} fractionDigits={0} />
                     </div>
                   </div>

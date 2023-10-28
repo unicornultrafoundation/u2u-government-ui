@@ -102,17 +102,17 @@ export const UnStakeForm = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-between mt-6 mb-2">
-        <div className="text-base text-text">{t("Validator Staked")}</div>
+      <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
+        <div className="text-base text-text whitespace-nowrap">{t("Validator Staked")}</div>
       </div>
       <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
         <img src={Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
         <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
       </div>
-      <div className="w-full flex justify-between mt-6 mb-2">
-        <div className="text-base text-text">{t("Undelegate amount")}</div>
+      <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
+        <div className="text-base text-text whitespace-nowrap">{t("Undelegate amount")}</div>
         <div className="flex gap-1">
-          <div className="text-base text-text-secondary mr-1">{t("U2U available")}</div>
+          <div className="text-base text-text-secondary mr-1 whitespace-nowrap">{t("U2U available")}</div>
           <div className="text-base font-semibold text-primary">
             <RenderNumberFormat amount={bigFormatEther(selectedValidator.actualStakedAmount || 0) || 0} fractionDigits={4} />
           </div>

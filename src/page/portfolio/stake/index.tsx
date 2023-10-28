@@ -5,6 +5,7 @@ import { StakeForm } from "./StakeForm"
 import { LockForm } from "./LockForm"
 import { UnStakeForm } from "./UnStakeForm"
 import { Rewards } from "./Rewards"
+import { isMobile } from 'mobile-device-detect';
 
 const tabs: TabOption[] = [
   {
@@ -53,17 +54,16 @@ export const StakingContainer = () => {
 
   return (
     <div>
-      <div className="w-full grid grid-cols-12 pb-6">
+      <div className="w-full grid grid-cols-12 pb-6 overflow-x-auto">
           {
             tabs.map((item: TabOption, index: number) => {
               return (
-                <div key={index} className={classNames("col-span-3", index < 3 && "border-r border-border-outline")} onClick={() => handleChangeTab(item)}>
+                <div key={index} className={classNames(isMobile ? "col-span-6 mb-2" : "col-span-3", index < 3 && "border-r border-border-outline")} onClick={() => handleChangeTab(item)}>
                   <div className={classNames("text-[20px] font-bold cursor-pointer", index === activeTabIndex ? "text-text" : "text-text-disabled")}>{item.label}</div>
                 </div>
               )
             })
           }
-          
       </div>
       <div className="w-full w-full overflow-x-auto">
             {renderTab}

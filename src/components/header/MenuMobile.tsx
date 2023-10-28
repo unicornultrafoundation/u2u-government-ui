@@ -34,7 +34,7 @@ export const MenuMobile = ({isShow, setIsShow}: MenuMobileProps) => {
 
   if (!isShow) return <></>
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen border border-border-outline bg-neutral-surface p-4">
+    <div className="fixed top-0 left-0 w-screen h-screen border border-border-outline bg-neutral-surface p-4 z-50">
       <div className="flex justify-between items-center"> 
         <StakingLogo />
         <button

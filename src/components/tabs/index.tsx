@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react"
 import { classNames } from "../../utils"
+import { isMobile } from 'mobile-device-detect';
 
 export interface TabOption {
   key: string
@@ -41,7 +42,7 @@ export const TabsCard = ({
             return (
               <div
                 key={index}
-                className={classNames("text-[24px] font-bold cursor-pointer", tab.key === activeTab ? "text-primary" : "text-text-disabled")}
+                className={classNames("cursor-pointer", isMobile ? "text-lg font-semibold" : "text-[24px] font-bold" , tab.key === activeTab ? "text-primary" : "text-text-disabled")}
                 onClick={() => handleChangeTab(tab)}
               >
                 <div className="">

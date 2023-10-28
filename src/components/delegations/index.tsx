@@ -30,9 +30,9 @@ export const DelegationList = ({ validationId, totalDelegator }: DelegationListP
       <table className="w-full">
         <thead>
           <tr className="border-y border-border-outline text-text-secondary font-medium">
-            <th className="py-6 text-left px-6 font-medium">{t("Address")}</th>
-            <th className="py-6 text-right font-medium">{t("Staked (U2U)")}</th>
-            <th className="py-6 text-right font-medium px-6">{t("Claimed Rewards (U2U)")}</th>
+            <th className="py-6 text-left px-6 font-medium whitespace-nowrap">{t("Address")}</th>
+            <th className="py-6 text-right font-medium whitespace-nowrap">{t("Staked (U2U)")}</th>
+            <th className="py-6 text-right font-medium px-6 whitespace-nowrap">{t("Claimed Rewards (U2U)")}</th>
           </tr>
         </thead>
         <tbody>

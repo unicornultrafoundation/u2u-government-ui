@@ -48,10 +48,10 @@ export const TxHistory = () => {
         <table className="w-full">
           <thead>
             <tr className="border-y border-border-outline text-text-secondary font-medium">
-              <th className="py-6 text-left px-6 font-medium">{t("Type")}</th>
-              <th className="py-6 text-left font-medium">{t("Validator")}</th>
-              <th className="py-6 text-right font-medium px-6">{t("Transaction")}</th>
-              <th className="py-6 text-right font-medium px-6">{t("Age")}</th>
+              <th className="py-6 text-left px-6 font-medium whitespace-nowrap">{t("Type")}</th>
+              <th className="py-6 text-left font-medium whitespace-nowrap">{t("Validator")}</th>
+              <th className="py-6 text-right font-medium px-6 whitespace-nowrap">{t("Transaction")}</th>
+              <th className="py-6 text-right font-medium px-6 whitespace-nowrap">{t("Age")}</th>
             </tr>
           </thead>
           <tbody>
@@ -68,7 +68,7 @@ export const TxHistory = () => {
                         <div>{`Validator ${row.validator}`}</div>
                       </div>
                     </td>
-                    <td className="text-base font-semibold text-primary py-3 text-right px-6">
+                    <td className="text-base font-semibold text-primary py-3 text-right px-6 min-w-[220px]">
                       <a href={exploreTransaction(row.txHash)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center justify-end">
                         <span>{truncate({ str: row.txHash, headCount: 5, tailCount: 3 })}</span>  
                         <LinkIcon className="stroke-primary" />

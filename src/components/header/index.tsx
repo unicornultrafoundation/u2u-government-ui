@@ -55,9 +55,9 @@ export const Header = () => {
 
   if (isMobile) {
     return (
-      <div className="flex px-4 py-[10px] justify-between">
+      <div className="flex px-4 py-[10px] justify-between flex-wrap">
         <button
-          className="w-[44px] h-[44px] rounded-full border-[1.5px] border-border-outline flex justify-center items-center cursor-pointer"
+          className="w-[44px] h-[44px] mb-2 rounded-full border-[1.5px] border-border-outline flex justify-center items-center cursor-pointer"
           onClick={() => setIsShowMobileMenu(true)}>
           <MenuIcon />
         </button>
@@ -73,17 +73,74 @@ export const Header = () => {
             }} />
             {t('Register')}
           </Button>
-          <Button
-            className="font-semibold"
-            scale={buttonScale.md}
-            variant={buttonType.primary}
-            onClick={() => connect()}>
-            <WalletIcon className="mr-1" style={{
-              width: "20px",
-              height: "20px"
-            }} />
-            {t('Connect')}
-          </Button>
+          {
+            isActive ? (
+              <div className="flex justify-end">
+                <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline">
+                  <div className="flex items-center gap-2">
+                    <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                    <div>
+                      <div className="text-base text-text font-semibold">
+                        {truncate({ str: account || "", headCount: 5 })}
+                      </div>
+                      <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                    </div>
+                  </div>
+                  <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
+                  {
+                    isShowAccountDetail &&
+                    <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50">
+                      <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
+                      <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
+                        <div className="flex items-center gap-2">
+                          <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                          <div>
+                            <div className="text-base text-text font-semibold">
+                              {truncate({ str: account || "", headCount: 5 })}
+                            </div>
+                            <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                          </div>
+                        </div>
+                        <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(account || "")} />
+                      </div>
+                      <div className="py-3 px-6 border-b border-border-outline">
+                        <div className="text-sm text-text-secondary">{t("Balance")}</div>
+                        <div className="text-base font-semibold text-text">
+                          <RenderNumberFormat amount={balance} className="mr-2" /><span>U2U</span>
+                        </div>
+                      </div>
+                      <div className="py-3 px-6 border-b border-border-outline flex gap-4">
+                        <GlobeIcon />
+                        <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
+                          <div className="text-base font-semibold text-text">{t("Explorer")}</div>
+                        </a>
+                      </div>
+                      <div className="py-3 px-6 flex gap-4">
+                        <LogoutIcon />
+                        <div className="text-base font-semibold text-text cursor-pointer"
+                          onClick={() => {
+                            logout()
+                            setIsShowAccountDetail(false)
+                          }}>{t("Logout")}</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            ) : (
+              <Button
+                className="font-semibold"
+                scale={buttonScale.md}
+                variant={buttonType.primary}
+                onClick={() => connect()}>
+                <WalletIcon className="mr-1" style={{
+                  width: "20px",
+                  height: "20px"
+                }} />
+                {t('Connect')}
+              </Button>
+            )
+          }
         </div>
         <WalletLoginModal isOpenModal={isOpen} setIsOpenModal={setIsOpen} />
         <MenuMobile isShow={isShowMobileMenu} setIsShow={setIsShowMobileMenu} />

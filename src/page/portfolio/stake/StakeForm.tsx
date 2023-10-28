@@ -98,10 +98,10 @@ export const StakeForm = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-between mt-6 mb-2">
-        <div className="text-base text-text">{t("Staking amount")}</div>
-        <div className="flex gap-1">
-          <div className="text-base text-text-secondary mr-1">{t("U2U available")}</div>
+      <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
+        <div className="text-base text-text whitespace-nowrap">{t("Staking amount")}</div>
+        <div className="flex gap-1 flex-wrap">
+          <div className="text-base text-text-secondary mr-1 whitespace-nowrap">{t("U2U available")}</div>
           <div className="text-base font-semibold text-primary">
             <RenderNumberFormat amount={balance} />
           </div>

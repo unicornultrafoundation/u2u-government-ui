@@ -26,8 +26,8 @@ export const StakedValidatorModal = ({
 
   return (
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
-      <div className="text-[24px] font-bold text-text text-center">{t("Choose a Staked Validator")}</div>
-      <div className="w-full mt-6">
+      <div className="text-[24px] font-bold text-text text-center whitespace-nowrap">{t("Choose a Staked Validator")}</div>
+      <div className="w-full mt-6 min-w-[400px]">
         {
           validations && validations.length > 0 && validations.map((row: Validation, index: number) => {
             return (
@@ -42,7 +42,7 @@ export const StakedValidatorModal = ({
                 <div className="flex gap-4 items-center whitespace-nowrap">
                   <img src={Images.U2ULogoPNG} className="w-[40px] h-[40px]" alt="u2u" />
                   <div>
-                    <div className="text-base font-semibold text-text">{row.validator.name}</div>
+                    <div className="text-base font-semibold text-text whitespace-nowrap">{row.validator.name}</div>
                     <a href={exploreAddress(row.validator.auth)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center justify-end text-primary">
                       <span>{truncate({ str: row.validator.auth, headCount: 5, tailCount: 3 })}</span>
                     </a>
@@ -50,7 +50,7 @@ export const StakedValidatorModal = ({
                 </div>
                 <div className="flex gap-8">
                   <div>
-                    <div className="text-[14px] text-text-secondary">{t("Your Staked (U2U)")}</div>
+                    <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Your Staked (U2U)")}</div>
                     <div className="text-base text-text text-right">
                       <RenderNumberFormat amount={bigFormatEther(row.actualStakedAmount || 0) || 0} fractionDigits={4} />
                     </div>
