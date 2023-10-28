@@ -49,7 +49,7 @@ export const Input: React.FC<InputProps> = (props) => {
 					{append}
 				</div>
 			</div>
-			{error && <div className="text-sm text-error italic mt-1">{errorMessage}</div>}
+			{error && <div className="text-sm text-error italic mt-1 text-left">{errorMessage}</div>}
 		</div>
 	)
 }

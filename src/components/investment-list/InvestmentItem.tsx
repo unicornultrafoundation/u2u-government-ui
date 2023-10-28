@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { ClaimRewardsParams, RestakeRewardsParams, Validation } from "../../types"
+import { ClaimRewardsParams, LockedStake, RestakeRewardsParams, Validation } from "../../types"
 import { Box } from "../box"
 import { useCallback, useMemo, useState } from "react"
 import { bigFormatEther, dateToUTCString, exploreAddress, truncate } from "../../utils"
@@ -37,8 +37,9 @@ export const InvestmentItem = ({
     valId
   } = useMemo(() => validator, [validator])
 
-  const { lockedStake } = useFetchLockedStake(delegator, Number(valId))
-  const { lockedAmount, endTime, isLockedUp, penalty } = useMemo(() => lockedStake, [lockedStake])
+  // const { lockedStake } = useFetchLockedStake(delegator, Number(valId))
+  
+  const { lockedAmount, endTime, isLockedUp, penalty } = {} as LockedStake
 
   const actualStakedAmount = useMemo(() => {
     if (stakedAmount && !stakedAmount.isZero()) {
@@ -205,12 +206,12 @@ export const InvestmentItem = ({
         setIsOpenModal={setIsOpenRelockStakeModal}
         actualStakedAmount={actualStakedAmount}
       />
-      <UnlockStakeModal
+      {/* <UnlockStakeModal
         delegator={delegator}
         validation={validation}
         isOpenModal={isOpenUnlockStakeModal}
         setIsOpenModal={setIsOpenUnlockStakeModal}
-        lockedStake={lockedStake} />
+        lockedStake={lockedStake} /> */}
     </div>
   )
 }

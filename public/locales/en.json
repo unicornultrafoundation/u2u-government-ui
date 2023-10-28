@@ -59,5 +59,9 @@
   "Unbonded amount (U2U)": "Unbonded amount (U2U)",
   "Release in": "Release in",
   "Withdrawal amount (U2U)": "Withdrawal amount (U2U)",
-  "Choose a Validator": "Choose a Validator"
+  "Choose a Validator": "Choose a Validator",
+  "Validator Staked": "Validator Staked",
+  "Choose a Staked Validator": "Choose a Staked Validator",
+  "Your Staked (U2U)": "Your Staked (U2U)",
+  "Undelegate amount": "Undelegate amount"
 }

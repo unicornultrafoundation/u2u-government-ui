@@ -33,6 +33,7 @@ export interface Validation {
   id: string
   validator: Validator
   stakedAmount: BigNumber
+  actualStakedAmount: BigNumber
 }
 
 export interface Delegation {

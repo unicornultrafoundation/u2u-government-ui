@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useFetchWithdrawRequest } from "../../../hooks";
 import { WithdrawalRequest } from "../../../types";
 import { classNames} from "../../../utils";
 import {  TabOption } from "../../../components";
 import { WithdrawPending } from "./Pending";
 import { WithdrawCompleted } from "./Completed";
+import { useDelegatorStore } from "../../../store";
 
 const tabs: TabOption[] = [
   {
@@ -18,23 +18,19 @@ const tabs: TabOption[] = [
   }
 ]
 
-interface WithdrawalListProps {
-  delegator: string
-}
-
-export const WithdrawalList = ({
-  delegator,
-}: WithdrawalListProps) => {
+export const WithdrawalList = () => {
   const { t } = useTranslation()
-  const { wr: withdrawalRequests } = useFetchWithdrawRequest(delegator)
   const [activeTab, setActiveTab] = useState(tabs[0].key)
   const activeTabIndex = useMemo(() => {
     return tabs.findIndex(tab => tab.key === activeTab)
   }, [activeTab])
-
   const handleChangeTab = (tab: TabOption) => {
     setActiveTab(tab.key)
   }
+
+  const [withdrawalRequests] = useDelegatorStore(state => [
+    state.withdrawalRequests
+  ])
 
   const wrPending = useMemo(() => {
     if (withdrawalRequests && withdrawalRequests.length > 0) {

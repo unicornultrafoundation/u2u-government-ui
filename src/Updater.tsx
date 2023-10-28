@@ -1,8 +1,11 @@
 import {
   useChangeLanguage,
   useFetchAllValidator,
+  useFetchDelegator,
   useFetchLastEpoch,
+  useFetchLockedStake,
   useFetchStakingStats,
+  useFetchWithdrawRequest,
   useTotalSupply
 } from "./hooks"
 
@@ -12,5 +15,8 @@ export const Updater = () => {
   useFetchLastEpoch()
   useTotalSupply()
   useChangeLanguage()
+  useFetchDelegator()
+  useFetchWithdrawRequest()
+  useFetchLockedStake()
   return <></>
 }

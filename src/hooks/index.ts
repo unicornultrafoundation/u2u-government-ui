@@ -19,6 +19,7 @@ export * from "./useValidatorApr"
 export * from "./useEpochRewards"
 export * from "./useLockupInfo"
 export * from "./useChangeLanguage"
+export * from "./useDelegator"
 
 ////===== Fetch
 export * from "./fetch/useFetchAllValidator"

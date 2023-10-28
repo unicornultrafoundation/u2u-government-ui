@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react"
-import { WithdrawalRequest } from "../../types"
+import { useEffect } from "react"
 import { useRefresh } from "../useRefresh"
 import { QueryService } from "../../thegraph"
 import { DataProcessor } from "./dataProccesser"
+import { useDelegatorStore } from "../../store"
+import { useWeb3React } from "@web3-react/core"
 
-export const useFetchWithdrawRequest = (delegatorAddr: string) => {
-  const [wr, setWr] = useState<WithdrawalRequest[]>([])
-  const { mediumRefresh } = useRefresh()
+export const useFetchWithdrawRequest = () => {
+  const [updateWr] = useDelegatorStore(state => [
+    state.updateWr
+  ])
+  const { fastRefresh } = useRefresh()
+  const { account } = useWeb3React()
   useEffect(() => {
-    if (!delegatorAddr) return
+    if (!account) return
     (async () => {
-      const { data } = await QueryService.queryWithdrawalRequest(delegatorAddr)
+      const { data } = await QueryService.queryWithdrawalRequest(account.toLowerCase())
       if (data && data.withdrawalRequests.length > 0) {
-        setWr(data.withdrawalRequests.map((i: any) => DataProcessor.withdrawalRequest(i)))
+        updateWr(data.withdrawalRequests.map((i: any) => DataProcessor.withdrawalRequest(i)))
       }
     })()
-  }, [mediumRefresh, delegatorAddr])
-  return {
-    wr
-  }
+    // eslint-disable-next-line 
+  }, [fastRefresh, account])
 }

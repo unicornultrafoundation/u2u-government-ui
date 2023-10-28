@@ -94,6 +94,14 @@ export const Schema = () => {
               totalClaimedRewards
               validations {${VALIDATIONS_GQL}}
             }
+          stakings {
+            id
+            totalStaked
+            totalDelegated
+            totalSelfStaked
+            totalValidator
+            totalDelegator
+          }
       }
     `,
     WITHDRAWALREQUEST: gql`
@@ -120,10 +128,9 @@ export const Schema = () => {
       }
     `,
     LOCKE_STAKE: gql`
-      query LockedUp($delegatorAddress: String!, $valId: String!) {
+      query LockedUp($delegatorAddress: String!) {
         lockedUps (where:{
             delegator: $delegatorAddress
-            validator: $valId
           }) {
             delegator {
               id
