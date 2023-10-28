@@ -63,5 +63,7 @@
   "Validator Staked": "Validator Staked",
   "Choose a Staked Validator": "Choose a Staked Validator",
   "Your Staked (U2U)": "Your Staked (U2U)",
-  "Undelegate amount": "Undelegate amount"
+  "Undelegate amount": "Undelegate amount",
+  "Lock amount": "Lock amount",
+  "Lock duration": "Lock duration"
 }

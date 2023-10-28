@@ -11,7 +11,6 @@ export const useFetchLockedStake = () => {
   const [updateLockedStake] = useLockedStakeStore(state => [
     state.updateLockedStake
   ])
-
   useEffect(() => {
     if(!account) return
     (async() => {

@@ -3,13 +3,20 @@ import { QueryService } from "../../thegraph"
 import { useRefresh } from "../useRefresh"
 import { DataProcessor } from "./dataProccesser"
 import { BigNumber } from "ethers"
-import { useValidatorStore } from "../../store"
+import { useLockedStakeStore, useValidatorStore } from "../../store"
+import { LockedStake, Validator } from "../../types"
 
 export const useFetchAllValidator = () => {
-  const [updateAllValidator] = useValidatorStore(state => [
-    state.updateAllValidator
+  const [updateAllValidator, allValidators] = useValidatorStore(state => [
+    state.updateAllValidator,
+    state.allValidators
   ])
-  const { mediumRefresh } = useRefresh()
+
+  const [updateValAuthLockStake] = useLockedStakeStore(state => [
+    state.updateValAuthLockStake
+  ])
+
+  const { fastRefresh } = useRefresh()
   useEffect(() => {
     (async () => {
       const { data } = await QueryService.queryValidators()
@@ -25,5 +32,30 @@ export const useFetchAllValidator = () => {
       }
     })()
     // eslint-disable-next-line
-  }, [mediumRefresh])
+  }, [fastRefresh])
+
+  useEffect(() => {
+    if (allValidators && allValidators.length > 0) {
+      (async () => {
+        try {
+          const locks = await Promise.all(allValidators.map((val: Validator) => {
+            return QueryService.queryLockedStakeValidator(val.auth.toLowerCase(), val.id)
+          }))
+          if (locks && locks.length > 0) {
+            updateValAuthLockStake(locks.map((item: any) => {
+              if (item && item.data && item.data.lockedUps) {
+                return DataProcessor.lockedStake(item.data.lockedUps[0])
+              }
+              return {} as LockedStake
+            }).filter(ii => !!ii));
+          }
+        } catch (error) {
+
+        }
+      })()
+
+    }
+    // eslint-disable-next-line
+  }, [allValidators])
+
 }

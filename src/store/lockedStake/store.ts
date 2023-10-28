@@ -4,7 +4,8 @@ import { LockedStake } from "../../types";
 import { LockedStakeStoreAction, LockedStakeStoreType } from "./type";
 
 const defaultState: LockedStakeStoreType = {
-  lockedStake: []
+  lockedStake: [],
+  valAuthLockStake: []
 }
 
 export const useLockedStakeStore = create<LockedStakeStoreType & LockedStakeStoreAction>()(
@@ -14,6 +15,10 @@ export const useLockedStakeStore = create<LockedStakeStoreType & LockedStakeStor
       updateLockedStake: (lock: LockedStake[]) => set((state) => ({
         ...state,
         lockedStake: lock
+      })),
+      updateValAuthLockStake: (lock: LockedStake[]) => set((state) => ({
+        ...state,
+        valAuthLockStake: lock
       }))
     }), {
       name: 'locked-stake-storage'

@@ -9,6 +9,7 @@ export interface StakingStats {
 }
 
 export interface Validator {
+  id: string
   valId: string
   name: string
   auth: string
@@ -27,6 +28,7 @@ export interface Validator {
   votingPower?: number
   totalDelegator: number
   apr: number
+  authLockInfo?: LockedStake
 }
 
 export interface Validation {

@@ -5,6 +5,7 @@ import { delegation } from "./delegation"
 export const validator  = (data: any, totalStaked: BigNumber, apr: number): Validator => {  
   if (!data) return {} as Validator
   return {
+    id: data.id,
     valId: data.validatorId,
     name: `Validator ${data.validatorId}`,
     auth: data.auth || "",

@@ -43,6 +43,15 @@ const queryLockedStake = (delegator: string) => apolloClient.query({
   fetchPolicy: "no-cache"
 })
 
+const queryLockedStakeValidator = (delegator: string, validator: string) => apolloClient.query({
+  query: Schema().LOCKE_STAKE_VAL,
+  variables: {
+    delegatorAddress: delegator,
+    validator: validator
+  },
+  fetchPolicy: "no-cache"
+})
+
 const queryDelegationsPagination = (valId: number, skip: number) => apolloClient.query({
   query: Schema().DELEGATIONS_PAGINATION,
   variables: {
@@ -105,5 +114,6 @@ export const QueryService = {
   queryValidatorsApr,
   queryEpochOfValidator,
   queryLastEpoch,
-  queryStakingTxs
+  queryStakingTxs,
+  queryLockedStakeValidator
 }

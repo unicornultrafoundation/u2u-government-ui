@@ -9,8 +9,9 @@ export const useDelegator = () => {
   const [delegator] = useDelegatorStore(state => [
     state.delegator
   ])
-  const [lockedStake] = useLockedStakeStore(state => [
-    state.lockedStake
+  const [lockedStake, valAuthLockStake] = useLockedStakeStore(state => [
+    state.lockedStake,
+    state.valAuthLockStake
   ])
 
   useEffect(() => {
@@ -30,14 +31,19 @@ export const useDelegator = () => {
             }
           }
         }
+        const _authLock = valAuthLockStake.findIndex((lock: LockedStake) => Number(lock.validatorId) === Number(valId))
         return {
           ...item,
-          actualStakedAmount: _actualStakedAmount
+          actualStakedAmount: _actualStakedAmount,
+          validator: {
+            ...item.validator,
+          authLockInfo: _authLock > - 1 ? valAuthLockStake[_authLock] : undefined
+          }
         }
       })
     }
     setDelegatorState({...delegator, validations: _validations})
-  }, [delegator, lockedStake])
+  }, [delegator, lockedStake, valAuthLockStake])
 
   return {
     delegatorState

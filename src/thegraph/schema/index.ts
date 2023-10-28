@@ -146,6 +146,26 @@ export const Schema = () => {
           }
       }
     `,
+    LOCKE_STAKE_VAL: gql`
+    query LockedUp($delegatorAddress: String!, $validator: String!) {
+      lockedUps (where:{
+          delegator: $delegatorAddress,
+          validator: $validator
+        }) {
+          delegator {
+            id
+          }
+          validator {
+            id
+          }
+          duration
+          lockedAmount
+          unlockedAmount
+          penalty
+          endTime
+        }
+    }
+  `,
     DELEGATIONS_PAGINATION: gql`
       query Delegations($validatorId: Int!, $skip: Int!, $limit: Int!) {
         delegations(where:{
