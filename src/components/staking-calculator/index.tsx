@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { useDelegate } from "../../hooks"
 import { Button, ConnectWalletButton, buttonScale } from "../button"
-import { Input, Select, SelectOption } from "../form"
+import { Input, SelectOption } from "../form"
 import { RenderNumberFormat } from "../text"
 import { DelegateParams, Validator } from "../../types"
 import { useWeb3React } from "@web3-react/core"
@@ -9,6 +9,7 @@ import { toastDanger, toastSuccess } from "../toast"
 import { useTranslation } from "react-i18next"
 import { AmountSelection, SuggestionOptions } from "./AmountSelection"
 import { APRCalculator } from "./APRCalculator"
+import { Images } from "../../images"
 
 interface StakingCalculatorProps {
   validators: Validator[]
@@ -22,7 +23,6 @@ export const StakingCalculator = ({
 
   const { t } = useTranslation()
   // Local state
-  const [selection, setSelection] = useState<SelectOption[]>([])
   const [selected, setSelected] = useState<SelectOption | undefined>(undefined)
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
@@ -39,10 +39,8 @@ export const StakingCalculator = ({
         return {
           value: v,
           label: `Validator ${v.valId ? v.valId : ''}`,
-          subLabel: `(${v.apr ? `APR:${(v.apr).toFixed(2)}%` : ''} - ${v.votingPower ? `Power:${(v.votingPower / 10000).toFixed(2)}%` : ''})`
         } as SelectOption
       })
-      setSelection(_options)
       if (!selected || !selected.value || !selected.value.valId) {
         setSelected(_options[0])
       }
@@ -155,16 +153,13 @@ export const StakingCalculator = ({
       </div>
       <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
       <div className="text-base text-text mb-2 mt-4">{t("Validator")}</div>
-      <Select
-        options={selection}
-        placeholder="Select validator"
-        onChange={(option: any) => {
-          setSelected(option)
-        }}
-        selected={selected} />
-        <div className="mt-6">
+        <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer">
+        <img src={Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
+        <div className="text-base font-semibold text-text text-left">{selected && selected.value ? selected.value.name : ""}</div>
+      </div>
+      <div className="mt-6">
         <APRCalculator amount={Number(amount)} validator={selected && selected.value} />
-        </div>
+      </div>
       <div className="flex justify-center">
         {
           account ? (

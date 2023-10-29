@@ -102,6 +102,12 @@ export interface EpochInfo {
   totalRewards: BigNumber
 }
 
+export interface EpochReward {
+  epochId: number
+  totalRewards: BigNumber
+  totalStake: BigNumber
+}
+
 export interface StakingTransaction {
   txHash: string
   validator: number

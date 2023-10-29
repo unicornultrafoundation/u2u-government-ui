@@ -102,6 +102,19 @@ const queryStakingTxs = (from: string, skip: number) => apolloClient.query({
   fetchPolicy: "no-cache"
 })
 
+const queryEpochsRewards = () => apolloU2UNetworkClient.query({
+  query: Schema().GET_EPOCHS_REWARDS,
+  fetchPolicy: "no-cache"
+})
+
+const queryValidatorEpochsRewards = (valId: number) => apolloU2UNetworkClient.query({
+  query: Schema().GET_VALIDATOR_EPOCHS_REWARDS,
+  variables: {
+    validator: valId
+  },
+  fetchPolicy: "no-cache"
+})
+
 export const QueryService = {
   queryValidators,
   queryStakingStats,
@@ -115,5 +128,7 @@ export const QueryService = {
   queryEpochOfValidator,
   queryLastEpoch,
   queryStakingTxs,
-  queryLockedStakeValidator
+  queryLockedStakeValidator,
+  queryEpochsRewards,
+  queryValidatorEpochsRewards
 }

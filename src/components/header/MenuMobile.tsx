@@ -22,8 +22,8 @@ export const MenuMobile = ({ isShow, setIsShow }: MenuMobileProps) => {
       case pathname === "/":
       case pathname === "":
         return "home" === id
-      case pathname.indexOf("portfolio") > -1:
-        return "portfolio" === id
+      case pathname.indexOf("staking") > -1:
+        return "staking" === id
       case pathname.indexOf("validator") > -1:
         return "validator" === id
       default:

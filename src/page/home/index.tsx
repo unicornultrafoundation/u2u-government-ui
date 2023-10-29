@@ -67,7 +67,7 @@ export const Home = () => {
           <div className="text-text-title text-[24px] font-semibold">{t('Earn rewards while staking U2U network')}</div>
           <div className="text-sm text-text-secondary mt-2">{t('Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.')}</div>
           <div className="mt-8">
-            <Button onClick={() => navigate("/portfolio")} className="rounded-[44px]">{t('Stake your U2U')}</Button>
+            <Button onClick={() => navigate("/staking")} className="rounded-[44px]">{t('Stake your U2U')}</Button>
           </div>
         </div>
         <div className="px-8 my-[64px]">
@@ -148,7 +148,7 @@ export const Home = () => {
           <div className="text-text-title text-5xl font-semibold">{t('Earn rewards while staking U2U network')}</div>
           <div className="font-semibold text-[18px] text-text-secondary mt-4">{t('Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.')}</div>
           <div className="mt-8">
-            <Button onClick={() => navigate("/portfolio")} className="rounded-[44px]">{t('Stake your U2U')}</Button>
+            <Button onClick={() => navigate("/staking")} className="rounded-[44px]">{t('Stake your U2U')}</Button>
           </div>
         </div>
       </div>

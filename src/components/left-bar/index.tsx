@@ -23,11 +23,11 @@ export const navs: NavProps[] = [
     activeIcon: Images.homeActiveIcon,
     link: "/"
   }, {
-    id: "portfolio",
+    id: "staking",
     name: "Staking",
     icon: Images.profileIcon,
     activeIcon: Images.profileActiveIcon,
-    link: "portfolio"
+    link: "staking"
   }, {
     id: "validator",
     name: "Validators",
@@ -49,8 +49,8 @@ export const LeftBar = () => {
       case pathname === "/":
       case pathname === "":
         return "home" === id
-      case pathname.indexOf("portfolio") > -1:
-        return "portfolio" === id
+      case pathname.indexOf("staking") > -1:
+        return "staking" === id
       case pathname.indexOf("validator") > -1:
         return "validator" === id
       default:

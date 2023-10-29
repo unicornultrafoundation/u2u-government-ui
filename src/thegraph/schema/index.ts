@@ -255,6 +255,29 @@ export const Schema = () => {
           count
         }
       }
-    `
+    `,
+    GET_EPOCHS_REWARDS: gql`
+        query EpochsRewards {
+          epoches(orderBy: epoch, orderDirection: desc, first: 500) {
+            epoch
+            totalRewards
+            totalStake
+          }
+        }
+      `,
+    GET_VALIDATOR_EPOCHS_REWARDS: gql`
+      query EpochsRewards($validator: Int!) {
+        validators(
+          where: {validatorId: $validator}
+          orderBy: epoch__epoch
+          orderDirection: desc
+        ) {
+          totalRewards
+          epoch {
+            epoch
+          }
+        }
+      }
+    `,
   }
 }

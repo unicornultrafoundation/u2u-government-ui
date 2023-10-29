@@ -2,9 +2,10 @@ import { useTranslation } from "react-i18next"
 import { LineChart, RenderNumberFormat, ValidatorList } from "../../components"
 import { useMemo } from "react"
 import { bigFormatEther, classNames, shortenDisplayNumber } from "../../utils"
-import { useStakingStore, useValidatorStore } from "../../store"
+import { useEpochStore, useStakingStore, useValidatorStore } from "../../store"
 import { Images } from "../../images"
 import { isMobile } from 'mobile-device-detect';
+import { EpochReward } from "../../types"
 
 export const Validator = () => {
 
@@ -16,6 +17,36 @@ export const Validator = () => {
     state.allValidators
   ])
 
+  const [epochRewards] = useEpochStore(state => [
+    state.epochRewards
+  ])
+
+  const validatorRewards = useMemo(() => {
+    if (epochRewards && epochRewards.length > 0) {
+      let lastRewards = epochRewards[0]
+      return lastRewards.totalRewards
+    }
+    return 0
+  }, [epochRewards])
+
+  const validatorRewardsChart = useMemo(() => {
+    if (epochRewards && epochRewards.length > 0) {
+      return epochRewards.map((i: EpochReward) => {
+        return Number(bigFormatEther(i.totalRewards))
+      }).reverse()
+    }
+    return [0, 10, 15, 20, 10, 15, 20, 15, 10]
+  }, [epochRewards])
+
+  const validatorStakeChart = useMemo(() => {
+    if (epochRewards && epochRewards.length > 0) {
+      return epochRewards.map((i: EpochReward) => {
+        return Number(bigFormatEther(i.totalStake))
+      }).reverse()
+    }
+    return [0, 10, 15, 20, 10, 15, 20, 15, 10]
+  }, [epochRewards])
+    
   const {
     totalValidator,
     totalStaked,
@@ -29,7 +60,7 @@ export const Validator = () => {
           <div className="text-left">
             <div className="text-sm text-text">{t('Avg.APR')}</div>
             <div className="text-primary font-semibold text-lg">
-              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} className="mr-2" fractionDigits={2} />
+              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} fractionDigits={2} /><span className="ml-1">%</span>
             </div>
           </div>
           <div className="flex justify-end">
@@ -62,17 +93,17 @@ export const Validator = () => {
           <div className="text-left">
             <div className="text-sm text-text">{t('Validators Rewards')}</div>
             <div className="text-primary font-semibold text-lg">
-              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} className="mr-2" fractionDigits={2} />
+              <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
             </div>
           </div>
-          <LineChart />
+          <LineChart data={validatorRewardsChart} />
         </div>
         <div className={classNames("border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2", isMobile ? "col-span-12" : "col-span-3")}>
           <div className="text-left">
             <div className="text-sm text-text">{t('Total U2U Staked')}</div>
             <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(totalStaked))}</div>
           </div>
-          <LineChart />
+          <LineChart data={validatorStakeChart} />
         </div>
       </div>
       <div className="my-10">

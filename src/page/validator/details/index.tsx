@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom"
-import { useBalance, useFetchValidator } from "../../../hooks";
+import { useBalance, useFetchValidator, useFetchValidatorEpochRewards } from "../../../hooks";
 import { useMemo } from "react";
-import { bigFormatEther, exploreAddress, truncate } from "../../../utils";
+import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "../../../utils";
 import { LineChart, RenderNumberFormat, StakingCalculator } from "../../../components";
 import { VALIDATOR_COMMISSION } from "../../../contants"
 import { ListOfValidator } from "./list";
 import { Images } from "../../../images";
 import { isMobile } from 'mobile-device-detect';
+import { EpochReward } from "../../../types";
 
 export const ValidatorDetails = () => {
 
@@ -26,6 +27,28 @@ export const ValidatorDetails = () => {
     totalDelegator,
     apr
   } = useMemo(() => validator, [validator])
+
+  const { rewards } = useFetchValidatorEpochRewards(valId ? Number(valId) : 0)
+
+  const validatorRewards = useMemo(() => {
+    if (rewards && rewards.length > 0) {
+      let lastRewards = rewards[0]
+      return lastRewards.totalRewards
+    }
+    return 0
+  }, [rewards])
+
+  const validatorRewardsChart = useMemo(() => {
+    if (rewards && rewards.length > 0) {
+      return rewards.map((i: EpochReward) => {
+        return Number(bigFormatEther(i.totalRewards))
+      }).reverse()
+    }
+    return [0, 10, 15, 20, 10, 15, 20, 15, 10]
+  }, [rewards])
+
+  console.log("rewards", validatorRewardsChart);
+  
 
   if (!validator) return <></>
 
@@ -75,17 +98,17 @@ export const ValidatorDetails = () => {
           <div className="col-span-6 border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2">
             <div className="text-left">
               <div className="text-sm text-text">{t('Commission')}</div>
-              <div className="text-primary font-semibold text-lg">{VALIDATOR_COMMISSION} %</div>
+              <div className="text-primary font-semibold text-lg">{VALIDATOR_COMMISSION}<span className="ml-1">%</span></div>
             </div>
             <div className="flex justify-end">
-              <img src={Images.Staking4PNG} alt="u2u" className="w-[80px] height-[105px]" />
+              <img src={Images.Staking7PNG} alt="u2u" className="w-[80px] height-[105px]" />
             </div>
           </div>
           <div className="col-span-6 border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2">
             <div className="text-left">
               <div className="text-sm text-text">{t('APR')}</div>
               <div className="text-primary font-semibold text-lg">
-                <RenderNumberFormat amount={apr} className="mr-2" fractionDigits={2} />
+                <RenderNumberFormat amount={apr} fractionDigits={2} /><span className="ml-1">%</span>
               </div>
             </div>
             <div className="flex justify-end">
@@ -96,7 +119,7 @@ export const ValidatorDetails = () => {
             <div className="text-left">
               <div className="text-sm text-text">{t('Voting Power')}</div>
               <div className="text-primary font-semibold text-lg">
-                <RenderNumberFormat amount={(Number(votingPower) / 10000)} fractionDigits={2} /><span className="ml-2">%</span>
+                <RenderNumberFormat amount={(Number(votingPower) / 10000)} fractionDigits={2} /><span className="ml-1">%</span>
               </div>
             </div>
             <div className="flex justify-end">
@@ -116,12 +139,12 @@ export const ValidatorDetails = () => {
           </div>
           <div className="col-span-12 border border-border-ountline rounded-2xl p-4 pb-0 bg-neutral-surface shadow-2">
             <div className="text-left">
-              <div className="text-sm text-text">{t('Validators Rewards')}</div>
+              <div className="text-sm text-text">{t('Validator Rewards')}</div>
               <div className="text-primary font-semibold text-lg">
-                {/* <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} className="mr-2" fractionDigits={2} /> */}
+              <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
               </div>
             </div>
-            <LineChart />
+            <LineChart data={validatorRewardsChart} />
           </div>
         </div>
 
@@ -192,17 +215,17 @@ export const ValidatorDetails = () => {
           <div className="col-span-2 border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2">
             <div className="text-left">
               <div className="text-sm text-text">{t('Commission')}</div>
-              <div className="text-primary font-semibold text-lg">{VALIDATOR_COMMISSION} %</div>
+              <div className="text-primary font-semibold text-lg">{VALIDATOR_COMMISSION}<span className="ml-1">%</span></div>
             </div>
             <div className="flex justify-end">
-              <img src={Images.Staking4PNG} alt="u2u" className="w-[80px] height-[105px]" />
+              <img src={Images.Staking7PNG} alt="u2u" className="w-[80px] height-[105px]" />
             </div>
           </div>
           <div className="col-span-2 border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2">
             <div className="text-left">
               <div className="text-sm text-text">{t('APR')}</div>
               <div className="text-primary font-semibold text-lg">
-                <RenderNumberFormat amount={apr} className="mr-2" fractionDigits={2} />
+                <RenderNumberFormat amount={apr} fractionDigits={2} /><span className="ml-1">%</span>
               </div>
             </div>
             <div className="flex justify-end">
@@ -213,7 +236,7 @@ export const ValidatorDetails = () => {
             <div className="text-left">
               <div className="text-sm text-text">{t('Voting Power')}</div>
               <div className="text-primary font-semibold text-lg">
-                <RenderNumberFormat amount={(Number(votingPower) / 10000)} fractionDigits={2} /><span className="ml-2">%</span>
+                <RenderNumberFormat amount={(Number(votingPower) / 10000)} fractionDigits={2} /><span className="ml-1">%</span>
               </div>
             </div>
             <div className="flex justify-end">
@@ -233,12 +256,12 @@ export const ValidatorDetails = () => {
           </div>
           <div className="col-span-4 border border-border-ountline rounded-2xl p-4 pb-0 bg-neutral-surface shadow-2">
             <div className="text-left">
-              <div className="text-sm text-text">{t('Validators Rewards')}</div>
+              <div className="text-sm text-text">{t('Validator Rewards')}</div>
               <div className="text-primary font-semibold text-lg">
-                {/* <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} className="mr-2" fractionDigits={2} /> */}
+              <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
               </div>
             </div>
-            <LineChart />
+            <LineChart data={validatorRewardsChart} />
           </div>
         </div>
         <div className="w-full grid grid-cols-12 gap-8 mt-8">

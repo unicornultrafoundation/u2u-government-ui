@@ -2,6 +2,7 @@ import {
   useChangeLanguage,
   useFetchAllValidator,
   useFetchDelegator,
+  useFetchEpochRewards,
   useFetchLastEpoch,
   useFetchLockedStake,
   useFetchStakingStats,
@@ -18,5 +19,6 @@ export const Updater = () => {
   useFetchDelegator()
   useFetchWithdrawRequest()
   useFetchLockedStake()
+  useFetchEpochRewards()
   return <></>
 }

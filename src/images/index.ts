@@ -10,6 +10,7 @@ import Ellipse2PNG from "./ellipse2.png"
 import Staking4PNG from "./staking-4.png"
 import Staking5PNG from "./staking-5.png"
 import Staking6PNG from "./staking-6.png"
+import Staking7PNG from "./staking-7.png"
 import U2ULogoPNG from "./u2u-logo2.png"
 import CoinsPNG from "./coins.png"
 import twitterIcon from "./icons/twitter.svg"
@@ -69,5 +70,6 @@ export const Images = {
   homeIcon,
   layer2Image,
   homeActiveIcon,
-  enPNG
+  enPNG,
+  Staking7PNG
 }
