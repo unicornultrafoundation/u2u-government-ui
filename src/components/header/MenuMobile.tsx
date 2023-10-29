@@ -3,13 +3,17 @@ import { CloseIcon, Images } from "../../images"
 import { NavProps, navs } from "../left-bar"
 import { StakingLogo } from "../left-bar/StakingLogo"
 import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
+import { Languages } from "./Languages"
 
 interface MenuMobileProps {
   isShow: boolean
   setIsShow: (show: boolean) => void
 }
 
-export const MenuMobile = ({isShow, setIsShow}: MenuMobileProps) => {
+export const MenuMobile = ({ isShow, setIsShow }: MenuMobileProps) => {
+
+  const { t } = useTranslation()
 
   const navigate = useNavigate()
   let { pathname } = useLocation();
@@ -35,7 +39,7 @@ export const MenuMobile = ({isShow, setIsShow}: MenuMobileProps) => {
   if (!isShow) return <></>
   return (
     <div className="fixed top-0 left-0 w-screen h-screen border border-border-outline bg-neutral-surface p-4 z-50">
-      <div className="flex justify-between items-center"> 
+      <div className="flex justify-between items-center">
         <StakingLogo />
         <button
           className="w-[44px] h-[44px] rounded-full border-[1.5px] border-border-outline flex justify-center items-center cursor-pointer"
@@ -59,6 +63,10 @@ export const MenuMobile = ({isShow, setIsShow}: MenuMobileProps) => {
         }
       </div>
       <div className="w-full px-8 py-8 absolute bottom-0 left-0 ">
+        <div className="flex justify-between py-2 border-t border-b border-border-outline mb-4" >
+          <div className="text-base text-text-secondary">{t("Languages")}</div>
+          <div><Languages /></div>
+        </div>
         <div className="text-sm text-text">© 2023 Unicorn Ultra (U2U). All rights reserved</div>
         <div className="flex item-center justify-between mt-4">
           <a href="https://uniultra.xyz" target="_blank" rel="noopener noreferrer">

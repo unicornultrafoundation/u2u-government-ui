@@ -13,6 +13,7 @@ import { appConfig } from "../../contants"
 import { useCopyToClipboard } from 'usehooks-ts'
 import { toastSuccess } from "../toast"
 import { MenuMobile } from "./MenuMobile"
+import { Languages } from "./Languages"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -23,10 +24,13 @@ export const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isShowAccountDetail, setIsShowAccountDetail] = useState(false)
   const { logout } = useAuth()
+  const [isShowSetting, setIsShowSetting] = useState(false)
 
   const [, copy] = useCopyToClipboard()
 
   const accountDetailsRef = useRef(null)
+  const settingDetailsRef = useRef(null)
+
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (accountDetailsRef.current && !(accountDetailsRef.current as any).contains(event.target)) {
@@ -40,6 +44,20 @@ export const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [accountDetailsRef]);
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (settingDetailsRef.current && !(settingDetailsRef.current as any).contains(event.target)) {
+        setIsShowSetting(false)
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [settingDetailsRef]);
 
   const connect = useCallback(async () => {
     setIsOpen(true)
@@ -226,12 +244,25 @@ export const Header = () => {
           </div>
         )
       }
-      <Button
-        className="font-semibold w-[48px] h-[48px]"
-        scale={buttonScale.icon}
-        variant={buttonType.tertiary}>
-        <OptionIcon className="fill-border-outline" />
-      </Button>
+      <div className="relative">
+        <Button
+          onClick={() => setIsShowSetting(true)}
+          className="font-semibold w-[48px] h-[48px]"
+          scale={buttonScale.icon}
+          variant={buttonType.tertiary}>
+          <OptionIcon className="fill-border-outline" />
+        </Button>
+        {
+          isShowSetting && <div ref={settingDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[250px] bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-30">
+            <div className="py-3 px-6 flex gap-4 justify-center items-center">
+              <div className="text-base font-semibold text-text">{t("Languages")}</div>
+              <div>
+                <Languages />
+              </div>
+            </div>
+          </div>
+        }
+      </div>
       <WalletLoginModal isOpenModal={isOpen} setIsOpenModal={setIsOpen} />
     </div>
   )

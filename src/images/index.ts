@@ -24,6 +24,7 @@ import profileActiveIcon from "./icons/profile-active.svg"
 import homeIcon from "./icons/home.svg"
 import homeActiveIcon from "./icons/home-active.svg"
 import layer2Image from "./layer_2.png"
+import enPNG from "./icons/en.png"
 
 export * from "./icons/UserIcon"
 export * from "./icons/WalletIcon"
@@ -67,5 +68,6 @@ export const Images = {
   profileActiveIcon,
   homeIcon,
   layer2Image,
-  homeActiveIcon
+  homeActiveIcon,
+  enPNG
 }
