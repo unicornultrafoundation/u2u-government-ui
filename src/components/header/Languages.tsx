@@ -17,7 +17,7 @@ const langs: Lang[] = [
   {
     lng: "vi",
     label: "VN",
-    img: Images.enPNG
+    img: Images.vnPNG
   }
 ]
 
