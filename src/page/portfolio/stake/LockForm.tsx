@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { Images } from "../../../images"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Delegator, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
 import { Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, buttonScale } from "../../../components"
@@ -8,6 +8,8 @@ import { bigFormatEther } from "../../../utils"
 import { MIN_LOCKUP_DURATION } from "../../../contants"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
+import { ethers } from "ethers"
+import { QueryService } from "../../../thegraph"
 
 export const LockForm = () => {
 
@@ -43,6 +45,32 @@ export const LockForm = () => {
   const stakeDuration = useMemo(() => {
     return Math.round(durationSlideValue * maxDuration / 100)
   }, [durationSlideValue, maxDuration])
+
+  const [apr, setApr] = useState(0)
+
+
+  useEffect(() => {    
+    (async () => {
+      if (selectedValidator && selectedValidator.validator) {
+        try {
+          const valIds: number[] = [Number(selectedValidator.validator.valId)]
+          const amountDec = ethers.utils.parseEther(stakeAmount.toString()).toString();
+          const duration = stakeDuration * 24 * 60 * 60
+          let total = 0;
+          if (valIds && amountDec) {
+            const { data: dataApr } = await QueryService.queryValidatorsApr(valIds, amountDec, duration)
+            for (let i = 0; i < valIds.length; ++i) {
+              total += Number(dataApr[`apr${valIds[i]}`])
+            }
+            const _apr = total / valIds.length
+            setApr(_apr)
+          } else {
+            setApr(0)
+          }
+        } catch (error) { }
+      }
+    })()
+  }, [selectedValidator, stakeAmount, stakeDuration])
 
   const validateDuration = useCallback((value: any) => {
     if (Number(value) === 0) {
@@ -145,6 +173,12 @@ export const LockForm = () => {
         </div>
       </div>
       {durationErr && <div className="text-sm text-error italic mt-2 text-left">{durationErr}</div>}
+      <div className="flex justify-between mt-4">
+        <div className="text-sm text-text-secondary">{t("Estimated APR(%)")}</div>
+        <div className="text-sm text-text-secondary">
+        <RenderNumberFormat amount={apr} fractionDigits={2} />
+        </div>
+      </div>
       <div className="flex justify-center mt-10">
         {
           account ? (

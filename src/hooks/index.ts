@@ -20,6 +20,7 @@ export * from "./useEpochRewards"
 export * from "./useLockupInfo"
 export * from "./useChangeLanguage"
 export * from "./useDelegator"
+export * from "./useCalcPenalty"
 
 ////===== Fetch
 export * from "./fetch/useFetchAllValidator"

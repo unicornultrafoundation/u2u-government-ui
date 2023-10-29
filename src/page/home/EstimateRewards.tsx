@@ -21,6 +21,7 @@ export const EstimateRewards = () => {
   ])
 
   const [apr, setApr] = useState(0)
+  const [rewards, setRewards] = useState(0)
 
   const stakeAmount = useMemo(() => {
     return Math.round(stakeSlideValue * maxStake / 100)
@@ -45,7 +46,9 @@ export const EstimateRewards = () => {
             for (let i = 0; i < valIds.length; ++i) {
               total += Number(dataApr[`apr${valIds[i]}`])
             }
-            setApr(total / valIds.length)
+            const _apr = total / valIds.length
+            setApr(_apr)
+            setRewards(_apr/100*stakeAmount)
           } else {
             setApr(0)
           }
@@ -110,7 +113,7 @@ export const EstimateRewards = () => {
             <div>
               <div className="text-lg font-semibold text-text">{t("Estimated rewards")}</div>
               <div className="text-lg font-semibold text-primary">
-                <RenderNumberFormat amount={apr} fractionDigits={2} />
+                <RenderNumberFormat amount={rewards} fractionDigits={0} />
                 <span className="ml-1">U2U</span></div>
             </div>
             <div>

@@ -3,7 +3,7 @@ import { LeftBar } from "../left-bar"
 import { Header } from "../header"
 import { useAuth } from "../../hooks";
 import { connectorLocalStorageKey } from "../../contants";
-import { ConnectorNames } from "../../utils";
+import { ConnectorNames, classNames } from "../../utils";
 import { isMobile } from 'mobile-device-detect';
 
 interface Props {
@@ -28,7 +28,7 @@ export const Layout = ({ children }: Props) => {
   return (
     <div className="flex">
       {!isMobile && <LeftBar />}
-      <div className={`w-full`}>
+      <div className={classNames(`w-full`, !isMobile ? "ml-[270px]" : "ml-0")}>
         <div className="w-full">
           <Header />
         </div>

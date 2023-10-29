@@ -53,7 +53,7 @@ export const Home = () => {
               <div className="text-lg text-neutral font-semibold">-</div>
             </div>
             <div className="">
-              <div className="text-xs text-neutral">{t('Total staked market value (USD)')}</div>
+              <div className="text-xs text-neutral">{t('Staked value (USD)')}</div>
               <div className="text-lg text-neutral font-semibold">
                 -
               </div>
@@ -104,7 +104,7 @@ export const Home = () => {
 
   return (
     <div className="pt-6">
-      <div className="bg-gradient-primary px-[74px]">
+      <div className="bg-gradient-primary">
         <div className="w-full py-3 px-[41px] flex justify-around flex-wrap gap-6">
           <div className="">
             <div className="text-base text-neutral font-semibold">{t('Total Supply (U2U)')}</div>
@@ -133,7 +133,7 @@ export const Home = () => {
             <div className="text-2xl text-neutral font-bold">-</div>
           </div>
           <div className="">
-            <div className="ext-base text-neutral font-semibold">{t('Total staked market value (USD)')}</div>
+            <div className="ext-base text-neutral font-semibold">{t('Staked value (USD)')}</div>
             <div className="text-2xl text-neutral font-bold">
               <div className="text-2xl text-neutral font-bold">-</div>
             </div>

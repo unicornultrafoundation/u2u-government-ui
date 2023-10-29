@@ -7,7 +7,7 @@ import { RenderNumberFormat } from "../text"
 import { bigFormatEther, dateToUTCString } from "../../utils"
 import { Input } from "../form"
 import { Button, buttonScale } from "../button"
-import { useUnlockStake } from "../../hooks"
+import { useCalcPenalty, useUnlockStake } from "../../hooks"
 import { toastDanger, toastSuccess } from "../toast"
 
 interface UnlockStakeModalProps {
@@ -28,8 +28,16 @@ export const UnlockStakeModal = ({
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
   const [loading, setLoading] = useState(false)
+  const [penalty, setPennalty] = useState("0")
 
   const { unlockStake } = useUnlockStake()
+  const { calcPen } = useCalcPenalty()
+
+  const handleInput = useCallback(async (value: any) => {
+    const _pen = await calcPen(validatorId ? Number(validatorId) : 0, Number(value), lockedAmount)
+    setPennalty(bigFormatEther(_pen || 0))
+     // eslint-disable-next-line
+  }, [lockedAmount, validatorId])
 
 
 
@@ -104,13 +112,16 @@ export const UnlockStakeModal = ({
             const value = e.target.value
             validateAmount(value)
             setAmount(value)
+            handleInput(value)
           }}
         />
       </div>
       <div className="w-full flex justify-between mt-4 mb-2 flex-wrap">
         <div className="text-base text-text">{t("Penalty")}</div>
         <div className="flex gap-1">
-          <div className="text-base font-semibold text-text">0</div>
+          <div className="text-base font-semibold text-error">
+          <RenderNumberFormat amount={penalty} fractionDigits={6} />
+          </div>
           <div className="text-base text-text">U2U</div>
         </div>
       </div>

@@ -4,7 +4,7 @@
   "Total staked (U2U)": "Total staked (U2U)",
   "Circulating Supply (U2U)": "Circulating Supply (U2U)",
   "Market Cap (USD)": "Market Cap (USD)",
-  "Total staked market value (USD)": "Total staked market value (USD)",
+  "Staked value (USD)": "Staked value (USD)",
   "Earn rewards while staking U2U network": "Earn rewards while staking U2U network",
   "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.": "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.",
   "Stake your U2U": "Stake your U2U",
@@ -68,5 +68,6 @@
   "Lock duration": "Lock duration",
   "Claimable (U2U)": "Claimable (U2U)",
   "My Investment": "My Investment",
-  "Unlock amount": "Unlock amount"
+  "Unlock amount": "Unlock amount",
+  "Estimated APR(%)": "Estimated APR(%)"
 }

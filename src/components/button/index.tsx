@@ -103,11 +103,11 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     const heightClass = () => {
       switch (scale) {
         case buttonScale.sm:
-          return 'py-2 px-5'
+          return 'h-[36px] px-5'
         case buttonScale.md:
-          return 'py-[10px] px-5'
+          return 'h-[40px] px-5'
         case buttonScale.lg:
-          return 'py-3 px-5'
+          return 'h-[48px] px-6'
         case buttonScale.icon:
           return 'p-0'
       }

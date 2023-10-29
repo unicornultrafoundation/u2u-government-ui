@@ -24,7 +24,7 @@ export const navs: NavProps[] = [
     link: "/"
   }, {
     id: "portfolio",
-    name: "My Staking",
+    name: "Staking",
     icon: Images.profileIcon,
     activeIcon: Images.profileActiveIcon,
     link: "portfolio"
@@ -59,14 +59,14 @@ export const LeftBar = () => {
   }, [pathname])
 
   return (
-    <div className="px-8 py-2 w-[300px] bg-neutral-surface border-r-2 border-border-outline min-h-screen z-20">
+    <div className="overflow-y-auto fixed left-0 top-0 px-8 py-2 w-[270px] bg-neutral-surface border-r-2 border-border-outline h-screen z-20">
       <StakingLogo />
       <div className="mt-[24px] pt-2 pb-8 w-full">
         {
           navs.map((item: NavProps, index: number) => {
             return (
               <div
-                className={`${activeNav(item.id) ? "bg-primary" : ""} w-full flex items-center gap-4 cursor-pointer p-6 rounded-2xl font-semibold text-base`}
+                className={`${activeNav(item.id) ? "bg-primary" : ""} w-full flex items-center gap-4 cursor-pointer px-6 py-4 rounded-2xl font-semibold text-base`}
                 key={index}
                 onClick={() => { handleClick(index) }}>
                 <img src={activeNav(item.id) ? item.activeIcon : item.icon} className="w-[24px] h-[24px]" alt="_u2u" />
