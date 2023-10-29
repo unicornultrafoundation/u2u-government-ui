@@ -153,7 +153,7 @@ export const Home = () => {
         </div>
       </div>
       <div className="px-8 pb-16">
-        <div className="px-[224px] text-left flex justify-around gap-10">
+        <div className="px-[50px] text-left flex justify-around gap-10">
           <div className="w-4/12">
             <img src={Images.Staking1PNG} alt="u2u" className="w-[68px] h-[68px]" />
             <div className="text-text-title text-lg font-semibold">{t('Validators')}</div>
