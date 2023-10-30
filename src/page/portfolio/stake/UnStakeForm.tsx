@@ -25,6 +25,7 @@ export const UnStakeForm = () => {
 
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
+  const adjustedFeeU2U = 0.0000001 // 0.1 U2U
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
@@ -60,7 +61,7 @@ export const UnStakeForm = () => {
             amountCalculated = Number(balance) / 4 * 3;
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance)
+            amountCalculated = Number(balance) - adjustedFeeU2U
             break
         }
         setAmount(amountCalculated.toString());
@@ -92,6 +93,7 @@ export const UnStakeForm = () => {
       }
       console.log("UnDelegate tx: ", transactionHash)
     } catch (error) {
+      toastDanger('Sorry! Undelegate failed', t('Error'))
       console.log("error: ", error);
     }
     setIsLoading(false)

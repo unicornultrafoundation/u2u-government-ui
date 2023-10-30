@@ -9,6 +9,7 @@ import { Input } from "../form"
 import { Button, buttonScale } from "../button"
 import { useCalcPenalty, useUnlockStake } from "../../hooks"
 import { toastDanger, toastSuccess } from "../toast"
+import { AmountSelection, SuggestionOptions } from "../staking-calculator/AmountSelection"
 
 interface UnlockStakeModalProps {
   isOpenModal: boolean
@@ -25,13 +26,18 @@ export const UnlockStakeModal = ({
   const { t } = useTranslation()
 
   const { lockedAmount, endTime, duration, validatorId } = useMemo(() => lockStake, [lockStake])
+
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
   const [loading, setLoading] = useState(false)
   const [penalty, setPennalty] = useState("0")
+  const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
+
 
   const { unlockStake } = useUnlockStake()
   const { calcPen } = useCalcPenalty()
+  const adjustedFeeU2U = 0.0000001 
+
 
   const handleInput = useCallback(async (value: any) => {
     const _pen = await calcPen(validatorId ? Number(validatorId) : 0, Number(value), lockedAmount)
@@ -46,6 +52,7 @@ export const UnlockStakeModal = ({
       setAmountErr(t('This field is required'));
       return false;
     }
+    
     if (Number(value) > Number(bigFormatEther(lockedAmount))) {
       setAmountErr(t('Insufficient balance'));
       return false;
@@ -80,6 +87,39 @@ export const UnlockStakeModal = ({
     // eslint-disable-next-line
   }, [amount, validatorId])
 
+  const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
+    try {
+      const balance = bigFormatEther(lockedAmount)
+      if (option === suggestOp || Number(balance) < adjustedFeeU2U) {
+        setSuggestOp(SuggestionOptions.NONE)
+        setAmount('')
+        validateAmount('')
+      } else {
+        setSuggestOp(option)
+        let amountCalculated = 0;
+        switch (option) {
+          case SuggestionOptions.TWENTY_FIVE:
+            amountCalculated = Number(balance) / 4;
+            break
+          case SuggestionOptions.FIFTY:
+            amountCalculated = Number(balance) / 2;
+            break
+          case SuggestionOptions.SEVENTY_FIVE:
+            amountCalculated = Number(balance) / 4 * 3;
+            break
+          case SuggestionOptions.MAX:
+            amountCalculated = Number(balance) - adjustedFeeU2U
+            break
+        }
+        setAmount(amountCalculated.toString());
+        validateAmount(amountCalculated)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    // eslint-disable-next-line
+  }, [lockedAmount, suggestOp])
+
 
   return (
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
@@ -95,7 +135,7 @@ export const UnlockStakeModal = ({
         <div className="flex gap-1">
           <div className="text-base text-text-secondary mr-1">{t("U2U available")}</div>
           <div className="text-base font-semibold text-primary">
-            <RenderNumberFormat amount={bigFormatEther(lockedAmount)} />
+            <RenderNumberFormat amount={bigFormatEther(lockedAmount)} fractionDigits={8} />
           </div>
           <div className="text-base text-text">U2U</div>
         </div>
@@ -116,6 +156,7 @@ export const UnlockStakeModal = ({
           }}
         />
       </div>
+      <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
       <div className="w-full flex justify-between mt-4 mb-2 flex-wrap">
         <div className="text-base text-text">{t("Penalty")}</div>
         <div className="flex gap-1">

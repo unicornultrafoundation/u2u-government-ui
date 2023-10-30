@@ -3,13 +3,14 @@ import { Images } from "../../../images"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Delegator, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
-import { Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, buttonScale } from "../../../components"
+import { AmountSelection, Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
 import { MIN_LOCKUP_DURATION } from "../../../contants"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { ethers } from "ethers"
 import { QueryService } from "../../../thegraph"
+import { Input } from "../../../components/form"
 
 export const LockForm = () => {
 
@@ -24,6 +25,9 @@ export const LockForm = () => {
   const [durationErr, setDurationErr] = useState("")
   const { relockStake } = useRelockStake()
   const { lockStake } = useLockStake()
+  const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
+  const adjustedFeeU2U = 0.0000001
+
 
   let maxDuration = useMemo(() => {
     if (!selectedValidator || !selectedValidator.validator || !selectedValidator.validator.authLockInfo) return 0
@@ -35,13 +39,9 @@ export const LockForm = () => {
     return duration
   }, [selectedValidator])
 
-  const [stakeSlideValue, setStakeSlideValue] = useState(0)
   const [durationSlideValue, setDurationSlideValue] = useState(0)
 
-  const stakeAmount = useMemo(() => {
-    return (stakeSlideValue * Number(bigFormatEther(selectedValidator.actualStakedAmount || 0)) / 100)
-  }, [stakeSlideValue, selectedValidator])
-
+  const [stakeAmount, setstakeAmount] = useState("")
   const stakeDuration = useMemo(() => {
     return Math.round(durationSlideValue * maxDuration / 100)
   }, [durationSlideValue, maxDuration])
@@ -115,10 +115,43 @@ export const LockForm = () => {
       toastDanger('Sorry! Lock stake failed', t('Error'))
     }
     setIsLoading(false)
-    setStakeSlideValue(0)
+    setstakeAmount('')
     setDurationSlideValue(0)
     // eslint-disable-next-line
   }, [stakeAmount, selectedValidator, stakeDuration])
+
+  const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
+    try {
+      const balance = Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))
+      if (option === suggestOp || Number(balance) < adjustedFeeU2U) {
+        setSuggestOp(SuggestionOptions.NONE)
+        setstakeAmount('')
+        validateAmount('')
+      } else {
+        setSuggestOp(option)
+        let amountCalculated = 0;
+        switch (option) {
+          case SuggestionOptions.TWENTY_FIVE:
+            amountCalculated = Number(balance) / 4;
+            break
+          case SuggestionOptions.FIFTY:
+            amountCalculated = Number(balance) / 2;
+            break
+          case SuggestionOptions.SEVENTY_FIVE:
+            amountCalculated = Number(balance) / 4 * 3;
+            break
+          case SuggestionOptions.MAX:
+            amountCalculated = Number(balance) - adjustedFeeU2U
+            break
+        }
+        setstakeAmount(amountCalculated.toString());
+        validateAmount(amountCalculated)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    // eslint-disable-next-line
+  }, [selectedValidator, suggestOp])
 
   return (
     <div className="w-full">
@@ -129,27 +162,34 @@ export const LockForm = () => {
         <img src={Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
         <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
       </div>
-      <div className="w-full flex justify-between mt-6 mb-4">
-        <div className="text-base text-text">{t("Lock amount")}</div>
-        <div className="flex gap-1">
+      <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
+        <div className="text-base text-text whitespace-nowrap">{t("Lock amount")}</div>
+        <div className="flex gap-1 flex-wrap">
+          <div className="text-base text-text-secondary mr-1 whitespace-nowrap">{t("U2U available")}</div>
           <div className="text-base font-semibold text-primary">
-            <RenderNumberFormat amount={stakeAmount} fractionDigits={4} />
+          <RenderNumberFormat amount={Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))} fractionDigits={6} /><span className="ml-1">U2U</span>
           </div>
-          <div className="text-base text-text">U2U</div>
         </div>
       </div>
-      <SliderComponent
-        value={stakeSlideValue}
-        defaultValue={0}
-        onChange={(e) => {
-          setStakeSlideValue(Number(e.target.value))
-        }} />
-      <div className="flex justify-between mt-4">
-        <div className="text-sm text-text-secondary">0</div>
-        <div className="text-sm text-text-secondary">
-          <RenderNumberFormat amount={Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))} fractionDigits={4} /><span className="ml-1">U2U</span>
-        </div>
+      <div>
+        <Input
+          className="w-full"
+          value={stakeAmount}
+          type="number"
+          placeholder={"Ex: 10000"}
+          error={!!amountErr}
+          errorMessage={amountErr}
+          onInput={() => {
+            setSuggestOp(SuggestionOptions.NONE)
+          }}
+          onChange={(e) => {
+            const value = e.target.value
+            validateAmount(value)
+            setstakeAmount(value)
+          }}
+        />
       </div>
+      <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
       <div className="w-full flex justify-between mt-4 mb-4">
         <div className="text-base text-text">{t("Lock duration")}</div>
         <div className="flex gap-1">

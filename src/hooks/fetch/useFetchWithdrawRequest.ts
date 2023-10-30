@@ -17,6 +17,8 @@ export const useFetchWithdrawRequest = () => {
       const { data } = await QueryService.queryWithdrawalRequest(account.toLowerCase())
       if (data && data.withdrawalRequests.length > 0) {
         updateWr(data.withdrawalRequests.map((i: any) => DataProcessor.withdrawalRequest(i)))
+      } else {
+        updateWr([])
       }
     })()
     // eslint-disable-next-line 
