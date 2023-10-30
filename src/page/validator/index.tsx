@@ -46,7 +46,7 @@ export const Validator = () => {
     }
     return [0, 10, 15, 20, 10, 15, 20, 15, 10]
   }, [epochRewards])
-    
+
   const {
     totalValidator,
     totalStaked,
@@ -55,7 +55,7 @@ export const Validator = () => {
   return (
     <div className="px-8 py-6">
       <div className="text-[32px] font-semibold text-left mb-2 text-text">{`${t('Validators')}`}</div>
-      <div className="w-full grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-4">
         <div className={classNames("border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2", isMobile ? "col-span-6" : "col-span-2")}>
           <div className="text-left">
             <div className="text-sm text-text">{t('Avg.APR')}</div>
@@ -106,8 +106,10 @@ export const Validator = () => {
           <LineChart data={validatorStakeChart} />
         </div>
       </div>
-      <div className="my-10">
-        <ValidatorList validators={allValidators} />
+      <div className="w-full grid grid-cols-12 gap-6 my-10">
+        <div className={classNames("col-span-12")}>
+          <ValidatorList validators={allValidators} />
+        </div>
       </div>
     </div>
 
