@@ -31,7 +31,7 @@ const appConfigs: {[k: string]: AppConfig} = {
     tokenName: "U2U",
     rpc: "https://rpc-nebulas-testnet.uniultra.xyz/",
     explorer: "https://testnet.u2uscan.xyz/",
-    sfcSubgraph: "https://subgraph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph-v1",
+    sfcSubgraph: "https://subgraph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph-v2",
     u2uNetworkSubgraph: "https://subgraph.uniultra.xyz/subgraphs/name/u2u/sfc-network",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 604800,

@@ -34,6 +34,7 @@ const VALIDATIONS_GQL = `
         id
         validator {${VALIDATOR_GQL}}
         stakedAmount
+        totalLockStake
 `
 
 const EPOCH_OF_VAL_GQL = `
