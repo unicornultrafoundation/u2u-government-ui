@@ -1,12 +1,14 @@
 import { useTranslation } from "react-i18next"
 import { useFetchStakingTxs } from "../../hooks"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useWeb3React } from "@web3-react/core"
 import { ChangePageParams, Pagination } from "../../components/pagination"
 import { TableLimit } from "../../contants"
-import { StakingTransaction } from "../../types"
+import { StakingTransaction, Validator } from "../../types"
 import { Images, LinkIcon } from "../../images"
-import {exploreTransaction, millisecondToHMS, truncate } from "../../utils"
+import { exploreTransaction, millisecondToHMS, truncate } from "../../utils"
+import { useValidatorStore } from "../../store"
+import { useNavigate } from "react-router-dom"
 
 export const TxHistory = () => {
 
@@ -14,7 +16,7 @@ export const TxHistory = () => {
   const { t } = useTranslation()
   const [skip, setSkip] = useState(0)
   const { txs, total } = useFetchStakingTxs(account || "", skip)
-  
+
   const onChangePage = async (params: ChangePageParams) => {
     let _skip = params.page ? params.page - 1 : 0
     setSkip(_skip)
@@ -63,14 +65,12 @@ export const TxHistory = () => {
                       {renderTxType(row.type)}
                     </td>
                     <td className="text-base font-semibold text-text py-3 text-right ">
-                      <div className="flex gap-4 items-center whitespace-nowrap">
-                        <img src={Images.U2ULogoPNG} alt="u2u" />
-                        <div>{`Validator ${row.validator}`}</div>
-                      </div>
+
+                      <RenderValidator validatorId={row.validator} />
                     </td>
                     <td className="text-base font-semibold text-primary py-3 text-right px-6 min-w-[220px]">
                       <a href={exploreTransaction(row.txHash)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center justify-end">
-                        <span>{truncate({ str: row.txHash, headCount: 5, tailCount: 3 })}</span>  
+                        <span>{truncate({ str: row.txHash, headCount: 5, tailCount: 3 })}</span>
                         <LinkIcon className="stroke-primary" />
                       </a>
                     </td>
@@ -88,6 +88,40 @@ export const TxHistory = () => {
           total={total}
           onChangePage={onChangePage}
         />
+      </div>
+    </div>
+  )
+}
+
+
+
+const RenderValidator = ({ validatorId }: {
+  validatorId: number
+}) => {
+  const navigate = useNavigate()
+
+  const [validator, setValidator] = useState<Validator | undefined>(undefined)
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+  useEffect(() => {
+    if (allValidators && !validator) {
+      const _index = allValidators.findIndex((val: Validator) => Number(val.valId) === validatorId);
+      if (_index > -1) {
+        setValidator(allValidators[_index])
+      }
+    }
+  }, [allValidators, validatorId, validator])
+
+  return (
+    <div className="flex gap-4 items-center whitespace-nowrap">
+      <img src={validator ? validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[40px] h-[40px]" />
+      <div className="text-left cursor-pointer" onClick={() => navigate(`${validator ? `/validator/${validator.valId}` : ""}`)}>
+        {validator ? validator.name : `Validator ${validatorId}`}
+        {validator && validator.auth && 
+        <div className="flex gap-1 items-center text-text-secondary text-sm">
+          <span>{truncate({ str: validator.auth, headCount: 5, tailCount: 3 })}</span>
+        </div>}
       </div>
     </div>
   )

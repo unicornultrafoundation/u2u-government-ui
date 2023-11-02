@@ -18,7 +18,7 @@ export const useFetchDelegator = () => {
       const {data} = await QueryService.queryDelegatorDetail(account.toLowerCase())      
       const totalNetworkStaked = data && data.stakings ? BigNumber.from(data.stakings[0].totalStaked || 0) : BigNumber.from(0)
       if (data && data?.delegators) {
-        updateDelegator(DataProcessor.delegator(data?.delegators[0], totalNetworkStaked));
+        updateDelegator(await DataProcessor.delegator(data?.delegators[0], totalNetworkStaked));
       }
     })()
     // eslint-disable-next-line 

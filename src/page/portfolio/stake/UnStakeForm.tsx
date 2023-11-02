@@ -108,7 +108,7 @@ export const UnStakeForm = () => {
         <div className="text-base text-text whitespace-nowrap">{t("Validator Staked")}</div>
       </div>
       <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
-        <img src={Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
+        <img src={selectedValidator.validator ? selectedValidator.validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
         <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
       </div>
       <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">

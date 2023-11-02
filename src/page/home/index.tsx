@@ -21,6 +21,14 @@ export const Home = () => {
   const { epochRewards } = useMemo(() => lastEpoch, [lastEpoch])
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
 
+  const stakingRatio = useMemo(() => {
+    try {
+      return  Number(bigFormatEther(totalStaked)) / Number(totalSupply) * 100
+    } catch (error) {
+      return 0
+    }
+  }, [totalSupply, totalStaked])
+
   if (isMobile) {
     return (
       <div className="pt-4 px-4">
@@ -46,6 +54,12 @@ export const Home = () => {
               <div className="text-xs text-neutral">{t('Circulating Supply (U2U)')}</div>
               <div className="text-lg text-neutral font-semibold">
                 {shortenDisplayNumber(totalSupply)}
+              </div>
+            </div>
+            <div className="">
+              <div className="text-xs text-neutral">{t('Staking Ratio (%)')}</div>
+              <div className="text-lg text-neutral font-semibold">
+                <RenderNumberFormat amount={stakingRatio} className="mr-2" fractionDigits={2} />
               </div>
             </div>
             <div className="">
@@ -126,6 +140,12 @@ export const Home = () => {
             <div className="text-base text-neutral font-semibold">{t('Circulating Supply (U2U)')}</div>
             <div className="text-2xl text-neutral font-bold">
               {shortenDisplayNumber(totalSupply)}
+            </div>
+          </div>
+          <div className="">
+            <div className="text-base text-neutral font-semibold">{t('Staking Ratio (%)')}</div>
+            <div className="text-2xl text-neutral font-bold">
+              <RenderNumberFormat amount={stakingRatio} className="mr-2" fractionDigits={2} />
             </div>
           </div>
           <div className="">

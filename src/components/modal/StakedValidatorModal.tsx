@@ -1,7 +1,6 @@
 import { Modal, modalScale } from "."
 import { useTranslation } from "react-i18next"
 import { Validation } from "../../types"
-import { Images } from "../../images"
 import { bigFormatEther, classNames, truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
 
@@ -40,10 +39,10 @@ export const StakedValidatorModal = ({
                   setIsOpenModal(false)
                 }}>
                 <div className="flex gap-4 items-center whitespace-nowrap">
-                  <img src={Images.U2ULogoPNG} className="w-[40px] h-[40px]" alt="u2u" />
+                  <img src={row.validator.avatar} className="w-[40px] h-[40px]" alt="u2u" />
                   <div>
                     <div className="text-base font-semibold text-text whitespace-nowrap">{row.validator.name}</div>
-                    <div className="flex gap-1 items-center justify-end text-primary">
+                    <div className="flex gap-1 items-center text-text-secondary">
                       <span>{truncate({ str: row.validator.auth, headCount: 5, tailCount: 3 })}</span>
                     </div>
                   </div>

@@ -5,7 +5,6 @@ import { Input } from "../../../components/form"
 import { useCallback, useState } from "react"
 import { useValidatorStore } from "../../../store"
 import { DelegateParams, Validator } from "../../../types"
-import { Images } from "../../../images"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 
@@ -129,7 +128,7 @@ export const StakeForm = () => {
       <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
       <div className="text-base text-text mb-2 mt-4 text-left">{t("Validator")}</div>
       <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
-        <img src={Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
+        <img src={selectedValidator.avatar} alt="u2u" className="w-[24px] h-[24px]" />
         <div className="text-base font-semibold text-text text-left">{selectedValidator.name}</div>
       </div>
       <div className="mt-6">

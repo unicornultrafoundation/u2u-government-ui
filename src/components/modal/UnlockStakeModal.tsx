@@ -1,15 +1,17 @@
 import { Modal, modalScale } from "."
 import { useTranslation } from "react-i18next"
-import { LockedStake, UnlockStakeParams } from "../../types"
+import { LockedStake, UnlockStakeParams, Validator } from "../../types"
 import { Images } from "../../images"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { RenderNumberFormat } from "../text"
-import { bigFormatEther, dateToUTCString } from "../../utils"
+import { bigFormatEther, dateToUTCString, truncate } from "../../utils"
 import { Input } from "../form"
 import { Button, buttonScale } from "../button"
 import { useCalcPenalty, useUnlockStake } from "../../hooks"
 import { toastDanger, toastSuccess } from "../toast"
 import { AmountSelection, SuggestionOptions } from "../staking-calculator/AmountSelection"
+import { useNavigate } from "react-router-dom"
+import { useValidatorStore } from "../../store"
 
 interface UnlockStakeModalProps {
   isOpenModal: boolean
@@ -125,10 +127,11 @@ export const UnlockStakeModal = ({
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
       <div className="text-[24px] font-bold text-text whitespace-nowrap">{t("Unlock Stake")}</div>
       <div className="w-full mt-6">
-        <div className="flex gap-4 items-center">
+        {/* <div className="flex gap-4 items-center">
           <img src={Images.U2ULogoPNG} alt="u2u" />
           <div>{`Validator ${Number(lockStake.validatorId)}`}</div>
-        </div>
+        </div> */}
+        <RenderValidator validatorId={Number(lockStake.validatorId)}/>
       </div>
       <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
         <div className="text-base text-text">{t("Unlock amount")}</div>
@@ -187,5 +190,38 @@ export const UnlockStakeModal = ({
       <Button loading={loading} className="w-full" scale={buttonScale.lg} onClick={onUnLockStake}>{t("UnLock")}</Button>
       </div>
     </Modal>
+  )
+}
+
+
+const RenderValidator = ({ validatorId }: {
+  validatorId: number
+}) => {
+  const navigate = useNavigate()
+
+  const [validator, setValidator] = useState<Validator | undefined>(undefined)
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+  useEffect(() => {
+    if (allValidators && !validator) {
+      const _index = allValidators.findIndex((val: Validator) => Number(val.valId) === validatorId);
+      if (_index > -1) {
+        setValidator(allValidators[_index])
+      }
+    }
+  }, [allValidators, validatorId, validator])
+
+  return (
+    <div className="flex gap-4 items-center whitespace-nowrap">
+      <img src={validator ? validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[40px] h-[40px]" />
+      <div className="text-left cursor-pointer" onClick={() => navigate(`${validator ? `/validator/${validator.valId}` : ""}`)}>
+        {validator ? validator.name : `Validator ${validatorId}`}
+        {validator && validator.auth && 
+        <div className="flex gap-1 items-center text-text-secondary text-sm">
+          <span>{truncate({ str: validator.auth, headCount: 5, tailCount: 3 })}</span>
+        </div>}
+      </div>
+    </div>
   )
 }

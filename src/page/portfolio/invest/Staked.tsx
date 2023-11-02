@@ -1,16 +1,19 @@
 import { useTranslation } from "react-i18next"
 import { Delegator, Validation } from "../../../types"
 import { Images } from "../../../images"
-import { bigFormatEther } from "../../../utils"
+import { bigFormatEther, truncate } from "../../../utils"
 import { ChangePageParams, Pagination, RenderNumberFormat } from "../../../components"
 import { useEffect, useMemo, useState } from "react"
 import { TableLimit } from "../../../contants"
 import { useDelegator } from "../../../hooks"
 import { useLockedStakeStore } from "../../../store"
+import { useNavigate } from "react-router-dom"
 
 export const Staked = () => {
   const { t } = useTranslation()
-  const { delegatorState } = useDelegator()  
+  const navigate = useNavigate()
+
+  const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
   const [lockedStake] = useLockedStakeStore(state => [
     state.lockedStake
@@ -33,7 +36,7 @@ export const Staked = () => {
       }
     }
   }, [validations, skip])
-  
+
   if (!clientRecords) return <></>
   return (
     <div className="w-full overflow-x-auto mt-4">
@@ -50,9 +53,14 @@ export const Staked = () => {
               return (
                 <tr key={index} className="border-y border-border-outline font-semibold hover:bg-neutral-surface-hover">
                   <td className="text-base font-bold text-text py-3 text-left px-6">
-                    <div className="flex gap-4 items-center whitespace-nowrap">
-                      <img src={Images.U2ULogoPNG} alt="u2u" />
-                      <div>{`${row.validator.name}`}</div>
+                    <div className="flex gap-4 items-center whitespace-nowrap cursor-pointer" onClick={() => navigate(`${row.validator ? `/validator/${row.validator.valId}` : ""}`)}>
+                      <img src={row.validator ? row.validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[40px] h-[40px]" />
+                      <div className="text-left">
+                        {`${row.validator.name}`}
+                        <div className="flex gap-1 items-center text-text-secondary text-sm">
+                          <span>{truncate({ str: row.validator.auth, headCount: 5, tailCount: 3 })}</span>
+                        </div>
+                      </div>
                     </div>
                   </td>
                   <td className="text-base font-semibold text-text py-3 text-right ">

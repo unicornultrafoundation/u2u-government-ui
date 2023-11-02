@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Images } from "../../images";
+import { LinkIcon } from "../../images";
 import { Validator } from "../../types"
-import { bigFormatEther } from "../../utils";
+import { bigFormatEther, exploreAddress, truncate } from "../../utils";
 import { RenderNumberFormat } from "../text";
 import { useNavigate } from "react-router-dom";
 import { isMobile } from 'mobile-device-detect';
@@ -23,9 +23,15 @@ export const ValidatorList = ({
           return (
             <div className="py-4 px-6 border border-borer-outline rounded-[16px] shadow-2 mb-6" key={index} onClick={() => navigate(`/validator/${row.valId}`)}>
               <div className="flex justify-between items-center">
-                <div className="flex gap-4 items-center">
-                  <img src={Images.U2ULogoPNG} alt="u2u" />
-                  <div>{row.name}</div>
+                <div className="flex gap-2 items-center">
+                  <img src={row.avatar} alt="u2u" className="w-[40px] h-[40px]" />
+                  <div className="text-left">
+                    <div>{row.name}</div>
+                    <a href={exploreAddress(row.auth)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center text-primary text-sm">
+                      <span>{truncate({ str: row.auth, headCount: 5, tailCount: 3 })}</span>
+                      <LinkIcon className="stroke-primary" />
+                    </a>
+                  </div>
                 </div>
                 <div className="text-white flex justify-end items-center">
                   {!!row.active ? <div className="text-xs text-neutral px-3 text-center bg-success rounded-[40px] h-[20px] leading-5">{t("Active")}</div> :
@@ -96,8 +102,14 @@ export const ValidatorList = ({
                   <td className="py-4 px-6 text-left">{index + 1}</td>
                   <td className="text-base font-semibold text-text py-4">
                     <div className="flex gap-4 items-center">
-                      <img src={Images.U2ULogoPNG} alt="u2u" />
-                      <div className="whitespace-nowrap">{row.name}</div>
+                      <img src={row.avatar} alt="u2u" className="w-[40xp] h-[40px]" />
+                      <div className="whitespace-nowrap text-left">
+                        <div className="text-base">{row.name}</div>
+                        <a href={exploreAddress(row.auth)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center text-primary text-sm">
+                          <span>{truncate({ str: row.auth, headCount: 5, tailCount: 3 })}</span>
+                          <LinkIcon className="stroke-primary" />
+                        </a>
+                      </div>
                     </div>
                   </td>
                   <td className="text-base font-semibold text-text py-4 text-right">

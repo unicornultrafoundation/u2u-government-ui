@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useClaimRewards, useDelegator, usePendingReward, useRestakeRewards } from "../../../hooks"
 import { ClaimRewardsParams, Delegator, RestakeRewardsParams, Validation } from "../../../types"
 import { classNames, exploreAddress, truncate } from "../../../utils"
-import { Images } from "../../../images"
+import { LinkIcon } from "../../../images"
 import { useTranslation } from "react-i18next"
 import { Button, RenderNumberFormat, buttonScale, buttonType } from "../../../components"
 import { toastDanger, toastSuccess } from "../../../components/toast"
@@ -22,11 +22,12 @@ export const Rewards = () => {
               <div className={classNames("w-full flex px-4 py-2 items-center justify-between border border-border-outline rounded-[8px] mb-2 cursor-pointer hover:bg-neutral-surface-hover")}
                 key={index}>
                 <div className="flex gap-4 items-center whitespace-nowrap">
-                  <img src={Images.U2ULogoPNG} className="w-[40px] h-[40px]" alt="u2u" />
-                  <div>
+                  <img src={row.validator.avatar} className="w-[40px] h-[40px]" alt="u2u" />
+                  <div className="text-left">
                     <div className="text-base font-semibold text-text">{row.validator.name}</div>
-                    <a href={exploreAddress(row.validator.auth)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center justify-end text-primary">
+                    <a href={exploreAddress(row.validator.auth)} target="_blank" rel="noopener noreferrer" className="flex gap-1 items-center text-primary">
                       <span>{truncate({ str: row.validator.auth, headCount: 5, tailCount: 3 })}</span>
+                      <LinkIcon className="stroke-primary" />
                     </a>
                   </div>
                 </div>

@@ -154,7 +154,7 @@ export const StakingCalculator = ({
       <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
       <div className="text-base text-text mb-2 mt-4">{t("Validator")}</div>
         <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer">
-        <img src={Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
+        <img src={selected && selected.value ? selected.value.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
         <div className="text-base font-semibold text-text text-left">{selected && selected.value ? selected.value.name : ""}</div>
       </div>
       <div className="mt-6">

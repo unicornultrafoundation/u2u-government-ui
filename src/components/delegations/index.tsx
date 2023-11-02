@@ -6,7 +6,7 @@ import { RenderNumberFormat } from "../text";
 import { useFetchDelegations } from "../../hooks";
 import { TableLimit } from "../../contants";
 import { useTranslation } from "react-i18next";
-
+import { LinkIcon } from "../../images";
 
 interface DelegationListProps {
   validationId: number,
@@ -41,7 +41,10 @@ export const DelegationList = ({ validationId, totalDelegator }: DelegationListP
               return (
                 <tr key={index} className="border-y border-border-outline font-semibold hover:bg-neutral-surface-hover cursor-pointer">
                   <td className="text-base font-semibold text-primary py-4 text-left px-6">
-                    <a href={exploreAddress(row.delegatorAddress)} target="_blank" rel="noopener noreferrer">{truncate({ str: row.delegatorAddress })}</a>
+                    <a href={exploreAddress(row.delegatorAddress)} className="flex items-center gap-1" target="_blank" rel="noopener noreferrer">
+                      {truncate({ str: row.delegatorAddress })}
+                      <LinkIcon className="stroke-primary" />
+                    </a>
                   </td>
                   <td className="text-base font-semibold text-text py-4 text-right">
                     <RenderNumberFormat amount={bigFormatEther(row.stakedAmount)} fractionDigits={2} />

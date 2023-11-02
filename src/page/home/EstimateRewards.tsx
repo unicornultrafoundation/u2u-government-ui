@@ -41,7 +41,7 @@ export const EstimateRewards = () => {
           const amountDec = ethers.utils.parseEther(stakeAmount.toString()).toString();
           const duration = lockDays * 24 * 60 * 60
           let total = 0;
-          if (valIds && amountDec) {
+          if (valIds && stakeAmount) {
             const { data: dataApr } = await QueryService.queryValidatorsApr(valIds, amountDec, duration)
             for (let i = 0; i < valIds.length; ++i) {
               total += Number(dataApr[`apr${valIds[i]}`])

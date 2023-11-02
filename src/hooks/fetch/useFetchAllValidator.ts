@@ -25,10 +25,12 @@ export const useFetchAllValidator = () => {
       if (data && data.validators.length > 0) {
         let valIds: number[] = data.validators.map((v: any) => Number(v.validatorId))
         const { data: dataApr } = await QueryService.queryValidatorsApr(valIds)
-        updateAllValidator(data.validators.map((v: any) => {
+        const valPromises = data.validators.map((v: any) => {
           let apr = dataApr[`apr${v.validatorId}`]
           return DataProcessor.validator(v, totalNetworkStaked, Number(apr))
-        }))
+        })
+        const vals = await Promise.all(valPromises)        
+        updateAllValidator(vals)
       }
     })()
     // eslint-disable-next-line

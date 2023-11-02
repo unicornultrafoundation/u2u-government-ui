@@ -12,6 +12,7 @@ export interface Validator {
   id: string
   valId: string
   name: string
+  avatar: any
   auth: string
   createdEpoch: string
   createdTime: string
@@ -28,7 +29,10 @@ export interface Validator {
   votingPower?: number
   totalDelegator: number
   apr: number
-  authLockInfo?: LockedStake
+  authLockInfo?: LockedStake,
+  website?: string
+  description?: string
+  image?: string
 }
 
 export interface Validation {

@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next"
-import { WithdrawalRequest } from "../../../types"
+import { Validator, WithdrawalRequest } from "../../../types"
 import { Images } from "../../../images"
-import { bigFormatEther, millisecondToDay, nowTime } from "../../../utils"
+import { bigFormatEther, millisecondToDay, nowTime, truncate } from "../../../utils"
 import { ChangePageParams, Pagination, RenderNumberFormat } from "../../../components"
 import { useEffect, useMemo, useState } from "react"
 import { TableLimit } from "../../../contants"
+import { useValidatorStore } from "../../../store"
+import { useNavigate } from "react-router-dom"
 
 interface WithdrawPendingProps {
   wr: WithdrawalRequest[]
@@ -51,10 +53,7 @@ export const WithdrawPending = ({wr}: WithdrawPendingProps) => {
                       {row.wrId}
                     </td>
                     <td className="text-base font-semibold text-text py-3 text-right ">
-                      <div className="flex gap-4 items-center whitespace-nowrap">
-                        <img src={Images.U2ULogoPNG} alt="u2u" />
-                        <div>{`Validator ${row.validatorId}`}</div>
-                      </div>
+                      <RenderValidator validatorId={Number(row.validatorId)}/>
                     </td>
                     <td className="text-base font-semibold text-text py-3 text-right px-6">
                     <RenderNumberFormat amount={bigFormatEther(row.unbondingAmount)} />
@@ -76,4 +75,37 @@ export const WithdrawPending = ({wr}: WithdrawPendingProps) => {
       </div>
   )
   
+}
+
+
+const RenderValidator = ({ validatorId }: {
+  validatorId: number
+}) => {
+  const navigate = useNavigate()
+
+  const [validator, setValidator] = useState<Validator | undefined>(undefined)
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+  useEffect(() => {
+    if (allValidators && !validator) {
+      const _index = allValidators.findIndex((val: Validator) => Number(val.valId) === validatorId);
+      if (_index > -1) {
+        setValidator(allValidators[_index])
+      }
+    }
+  }, [allValidators, validatorId, validator])
+
+  return (
+    <div className="flex gap-4 items-center whitespace-nowrap">
+      <img src={validator ? validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[40px] h-[40px]" />
+      <div className="text-left cursor-pointer" onClick={() => navigate(`${validator ? `/validator/${validator.valId}` : ""}`)}>
+        {validator ? validator.name : `Validator ${validatorId}`}
+        {validator && validator.auth && 
+        <div className="flex gap-1 items-center text-text-secondary text-sm">
+          <span>{truncate({ str: validator.auth, headCount: 5, tailCount: 3 })}</span>
+        </div>}
+      </div>
+    </div>
+  )
 }

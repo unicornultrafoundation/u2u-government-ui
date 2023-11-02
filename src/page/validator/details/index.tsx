@@ -6,7 +6,7 @@ import { bigFormatEther, exploreAddress, shortenDisplayNumber, truncate } from "
 import { LineChart, RenderNumberFormat, StakingCalculator } from "../../../components";
 import { VALIDATOR_COMMISSION } from "../../../contants"
 import { ListOfValidator } from "./list";
-import { Images } from "../../../images";
+import { Images, LinkIcon } from "../../../images";
 import { isMobile } from 'mobile-device-detect';
 import { EpochReward } from "../../../types";
 
@@ -25,7 +25,8 @@ export const ValidatorDetails = () => {
     active,
     votingPower,
     totalDelegator,
-    apr
+    apr,
+    avatar
   } = useMemo(() => validator, [validator])
 
   const { rewards } = useFetchValidatorEpochRewards(valId ? Number(valId) : 0)
@@ -48,7 +49,7 @@ export const ValidatorDetails = () => {
   }, [rewards])
 
   console.log("rewards", validatorRewardsChart);
-  
+
 
   if (!validator) return <></>
 
@@ -56,7 +57,7 @@ export const ValidatorDetails = () => {
     return (
       <div className="p-4">
         <div className="flex gap-4">
-          <img src={Images.U2ULogoPNG} alt="u2u" className="w-[48px] h-[48px]" />
+          <img src={avatar} alt="u2u" className="w-[48px] h-[48px]" />
           <div className="text-left">
             <div className="text-text-secondary text-sm">{t("Validator")}</div>
             <div className="flex gap-4">
@@ -71,8 +72,9 @@ export const ValidatorDetails = () => {
         <div className="mt-4">
           <div className="flex gap-2 items-center">
             <div className="text-base text-text-secondary">{t("Validator Auth")}</div>
-            <div className="text-base font-semibold text-primary">
+            <div className="text-base font-semibold text-primary flex items-center gap-1">
               <a href={exploreAddress(auth)} target="_blank" rel="noopener noreferrer">{truncate({ str: auth, headCount: 5, tailCount: 3 })}</a>
+              <LinkIcon className="stroke-primary" />
             </div>
           </div>
           <div className="flex gap-2 items-center">
@@ -82,7 +84,17 @@ export const ValidatorDetails = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between items-center gap-10 mt-2">
+        {
+          validator.website && <div className="flex mt-4">
+            <div className="bg-border-divider px-4 py-1 inline-block border-[1.5px] border-border-divider rounded-[8px] cursor-pointer">
+              <a href={validator.website} className="flex gap-1 items-center" target="_blank" rel="noopener noreferrer" >
+                <LinkIcon className="stroke-text-disabled" />
+                <div className="text-md text-text-disabled">{t("Link website")}</div>
+              </a>
+            </div>
+          </div>
+        }
+        <div className="flex justify-between items-center gap-10 mt-4">
           <div className="flex gap-1 items-center">
             <img src={Images.CoinsPNG} alt="u2u" className="w-[24px]" />
             <div className="text-base font-semibold text-text-secondary">{t("Total Staked Amount")}</div>
@@ -141,7 +153,7 @@ export const ValidatorDetails = () => {
             <div className="text-left">
               <div className="text-sm text-text">{t('Validator Rewards')}</div>
               <div className="text-primary font-semibold text-lg">
-              <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
+                <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
               </div>
             </div>
             <LineChart data={validatorRewardsChart} />
@@ -168,18 +180,28 @@ export const ValidatorDetails = () => {
   return (
     <div className="py-6">
       <div className="w-full bg-gradient-3 py-4 px-[74px] flex justify-between">
-        <div className="flex gap-4">
-          <img src={Images.U2ULogoPNG} alt="u2u" className="w-[48px] h-[48px]" />
-          <div className="text-left">
-            <div className="text-text-secondary text-sm">{t("Validator")}</div>
-            <div className="flex gap-4">
-              <div className="text-lg text-text font-semibold">{name}</div>
-              <div>
-                {!!active ? <div className="text-xs text-neutral px-3 text-center bg-success rounded-[40px] h-[20px] leading-5">{t("Active")}</div> :
-                  <div className="text-xs text-neutral px-3 text-center bg-neutral-surface-disabled rounded-[40px] h-[20px] leading-5">{t("Deactive")}</div>}
+        <div>
+          <div className="flex gap-4">
+            <img src={avatar} alt="u2u" className="w-[48px] h-[48px]" />
+            <div className="text-left">
+              <div className="text-text-secondary text-sm">{t("Validator")}</div>
+              <div className="flex gap-4">
+                <div className="text-lg text-text font-semibold">{name}</div>
+                <div>
+                  {!!active ? <div className="text-xs text-neutral px-3 text-center bg-success rounded-[40px] h-[20px] leading-5">{t("Active")}</div> :
+                    <div className="text-xs text-neutral px-3 text-center bg-neutral-surface-disabled rounded-[40px] h-[20px] leading-5">{t("Deactive")}</div>}
+                </div>
               </div>
             </div>
           </div>
+          {validator.website && <div className="flex mt-4">
+            <div className="bg-border-divider px-4 py-1 inline-block border-[1.5px] border-border-divider rounded-[8px] cursor-pointer">
+              <a href={validator.website} className="flex gap-1 items-center" target="_blank" rel="noopener noreferrer" >
+                <LinkIcon className="stroke-text-disabled" />
+                <div className="text-md text-text-disabled">{t("Link website")}</div>
+              </a>
+            </div>
+          </div>}
         </div>
         <div className="p-4 bg-neutral-surface rounded-[16px]">
           <div className="flex justify-between items-center gap-10 mb-2">
@@ -197,8 +219,9 @@ export const ValidatorDetails = () => {
           <div className="flex justify-between items-center gap-10">
             <div className="flex gap-2 items-center">
               <div className="text-base text-text-secondary">{t("Validator Auth")}</div>
-              <div className="text-base font-semibold text-primary">
+              <div className="text-base font-semibold text-primary flex items-center gap-1">
                 <a href={exploreAddress(auth)} target="_blank" rel="noopener noreferrer">{truncate({ str: auth, headCount: 5, tailCount: 3 })}</a>
+                <LinkIcon className="stroke-primary" />
               </div>
             </div>
             <div className="flex gap-2 items-center">
@@ -258,7 +281,7 @@ export const ValidatorDetails = () => {
             <div className="text-left">
               <div className="text-sm text-text">{t('Validator Rewards')}</div>
               <div className="text-primary font-semibold text-lg">
-              <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
+                <div className="text-primary font-semibold text-lg">{shortenDisplayNumber(bigFormatEther(validatorRewards))}</div>
               </div>
             </div>
             <LineChart data={validatorRewardsChart} />

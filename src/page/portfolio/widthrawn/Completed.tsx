@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { WithdrawParams, WithdrawalRequest } from "../../../types"
+import { Validator, WithdrawParams, WithdrawalRequest } from "../../../types"
 import { Images, LinkIcon } from "../../../images"
 import { bigFormatEther, exploreTransaction, truncate } from "../../../utils"
 import { Button, ChangePageParams, Pagination, RenderNumberFormat, buttonScale, buttonType } from "../../../components"
@@ -7,6 +7,8 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { TableLimit } from "../../../contants"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { useWidthdraw } from "../../../hooks"
+import { useValidatorStore } from "../../../store"
+import { useNavigate } from "react-router-dom"
 
 interface WithdrawCompletedProps {
   wr: WithdrawalRequest[]
@@ -77,20 +79,17 @@ export const WithdrawCompleted = ({ wr }: WithdrawCompletedProps) => {
                     {row.wrId}
                   </td>
                   <td className="text-base font-semibold text-text py-3 text-right ">
-                    <div className="flex gap-4 items-center whitespace-nowrap">
-                      <img src={Images.U2ULogoPNG} alt="u2u" />
-                      <div>{`Validator ${row.validatorId}`}</div>
-                    </div>
+                    <RenderValidator validatorId={Number(row.validatorId)} />
                   </td>
                   <td className="text-base font-semibold text-text py-3 text-right px-6">
                     <RenderNumberFormat amount={bigFormatEther(row.withdrawalAmount)} />
                   </td>
-                  <td className="text-base font-semibold text-text-secondary py-3 text-right px-6 whitespace-nowrap flex gap-1 items-center justify-end">
+                  <td className="text-base font-semibold text-primary py-3 text-right px-6 whitespace-nowrap flex gap-1 items-center justify-end">
                     {
                       row.withdrawable && !row.withdrawal ? <Button onClick={() => onWithdraw(Number(row.validatorId), Number(row.wrId))} variant={buttonType.secondary} scale={buttonScale.sm}>{t('Withdraw')}</Button> : (
                         <a href={exploreTransaction(row.withdrawalHash)} className="flex gap-1 items-center justify-end" target="_blank" rel="noopener noreferrer">
                           <span>{truncate({ str: row.withdrawalHash, headCount: 5, tailCount: 3 })}</span>
-                          <LinkIcon className="stroke-text-secondary" />
+                          <LinkIcon className="stroke-primary" />
                         </a>
                       )
                     }
@@ -109,4 +108,37 @@ export const WithdrawCompleted = ({ wr }: WithdrawCompletedProps) => {
     </div>
   )
 
+}
+
+
+const RenderValidator = ({ validatorId }: {
+  validatorId: number
+}) => {
+  const navigate = useNavigate()
+
+  const [validator, setValidator] = useState<Validator | undefined>(undefined)
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+  useEffect(() => {
+    if (allValidators && !validator) {
+      const _index = allValidators.findIndex((val: Validator) => Number(val.valId) === validatorId);
+      if (_index > -1) {
+        setValidator(allValidators[_index])
+      }
+    }
+  }, [allValidators, validatorId, validator])
+
+  return (
+    <div className="flex gap-4 items-center whitespace-nowrap">
+      <img src={validator ? validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[40px] h-[40px]" />
+      <div className="text-left cursor-pointer" onClick={() => navigate(`${validator ? `/validator/${validator.valId}` : ""}`)}>
+        {validator ? validator.name : `Validator ${validatorId}`}
+        {validator && validator.auth && 
+        <div className="flex gap-1 items-center text-text-secondary text-sm">
+          <span>{truncate({ str: validator.auth, headCount: 5, tailCount: 3 })}</span>
+        </div>}
+      </div>
+    </div>
+  )
 }

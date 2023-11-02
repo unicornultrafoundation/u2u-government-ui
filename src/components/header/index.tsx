@@ -14,6 +14,7 @@ import { useCopyToClipboard } from 'usehooks-ts'
 import { toastSuccess } from "../toast"
 import { MenuMobile } from "./MenuMobile"
 import { Languages } from "./Languages"
+import Jazzicon from "react-jazzicon"
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -30,6 +31,13 @@ export const Header = () => {
 
   const accountDetailsRef = useRef(null)
   const settingDetailsRef = useRef(null)
+
+  // useEffect(() => {
+  //   (async() => {
+  //     var el = jazzicon(100, Math.round(Math.random() * 10000000))
+ 
+  //   })()
+  // })
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -96,7 +104,7 @@ export const Header = () => {
               <div className="flex justify-end">
                 <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline">
                   <div className="flex items-center gap-2">
-                    <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                    <Jazzicon diameter={36} seed={1} />
                     <div>
                       <div className="text-base text-text font-semibold">
                         {truncate({ str: account || "", headCount: 5 })}
@@ -181,7 +189,7 @@ export const Header = () => {
           <div className="flex justify-end">
             <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
               <div className="flex items-center gap-2">
-                <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                <Jazzicon diameter={36} seed={1} />
                 <div>
                   <div className="text-base text-text font-semibold">
                     {truncate({ str: account || "", headCount: 5 })}

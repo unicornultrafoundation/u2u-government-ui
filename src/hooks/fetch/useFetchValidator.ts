@@ -27,7 +27,8 @@ export const useFetchValidator = (valId: number) => {
       if (data && data.validators.length > 0) {
         const { data: dataApr } = await QueryService.queryValidatorsApr([valId])
         let apr = dataApr[`apr${valId}`]
-        setValidator(DataProcessor.validator(data.validators[0], totalNetworkStaked, Number(apr)))
+        const _val = await DataProcessor.validator(data.validators[0], totalNetworkStaked, Number(apr))
+        setValidator(_val)
       }
     })()
   }, [mediumRefresh, valId, allValidators])
