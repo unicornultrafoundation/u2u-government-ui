@@ -1,9 +1,10 @@
 import { delegation } from "./delegation"
 import { delegator } from "./delegator"
-import { epoch } from "./epoch"
+import { epoch, epochRewards, validatorEpochRewards } from "./epoch"
 import { epochOfvalidator } from "./epochOfvalidator"
 import { lockedStake } from "./lockedStake"
 import { stakingStats } from "./stats"
+import { transaction } from "./transaction"
 import { validation } from "./validation"
 import { validator } from "./validator"
 import { withdrawalRequest } from "./withdrawalRequest"
@@ -18,5 +19,8 @@ export const DataProcessor = {
   withdrawalRequest,
   lockedStake,
   epochOfvalidator,
-  epoch
+  epoch,
+  transaction,
+  epochRewards,
+  validatorEpochRewards
 }

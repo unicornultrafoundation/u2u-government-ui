@@ -1,12 +1,21 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { QueryService } from "../../thegraph"
 import { useRefresh } from "../useRefresh"
 import { DataProcessor } from "./dataProccesser"
-import { Validator } from "../../types"
 import { BigNumber } from "ethers"
+import { useLockedStakeStore, useValidatorStore } from "../../store"
+import { LockedStake, Validator } from "../../types"
 
 export const useFetchAllValidator = () => {
-  const [validators, setValidators] = useState<Validator[]>([])
+  const [updateAllValidator, allValidators] = useValidatorStore(state => [
+    state.updateAllValidator,
+    state.allValidators
+  ])
+
+  const [updateValAuthLockStake] = useLockedStakeStore(state => [
+    state.updateValAuthLockStake
+  ])
+
   const { fastRefresh } = useRefresh()
   useEffect(() => {
     (async () => {
@@ -16,14 +25,39 @@ export const useFetchAllValidator = () => {
       if (data && data.validators.length > 0) {
         let valIds: number[] = data.validators.map((v: any) => Number(v.validatorId))
         const { data: dataApr } = await QueryService.queryValidatorsApr(valIds)
-        setValidators(data.validators.map((v: any) => {
+        const valPromises = data.validators.map((v: any) => {
           let apr = dataApr[`apr${v.validatorId}`]
           return DataProcessor.validator(v, totalNetworkStaked, Number(apr))
-        }))
+        })
+        const vals = await Promise.all(valPromises)        
+        updateAllValidator(vals)
       }
     })()
+    // eslint-disable-next-line
   }, [fastRefresh])
-  return {
-    validators
-  }
+
+  useEffect(() => {
+    if (allValidators && allValidators.length > 0) {
+      (async () => {
+        try {
+          const locks = await Promise.all(allValidators.map((val: Validator) => {
+            return QueryService.queryLockedStakeValidator(val.auth.toLowerCase(), val.id)
+          }))
+          if (locks && locks.length > 0) {
+            updateValAuthLockStake(locks.map((item: any) => {
+              if (item && item.data && item.data.lockedUps) {
+                return DataProcessor.lockedStake(item.data.lockedUps[0])
+              }
+              return {} as LockedStake
+            }).filter(ii => !!ii));
+          }
+        } catch (error) {
+
+        }
+      })()
+
+    }
+    // eslint-disable-next-line
+  }, [allValidators])
+
 }

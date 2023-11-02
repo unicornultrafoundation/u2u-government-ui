@@ -2,29 +2,11 @@ import { useState } from "react";
 import { Delegation } from "../../types";
 import { bigFormatEther, exploreAddress, truncate } from "../../utils";
 import { ChangePageParams, Pagination } from "../pagination";
-import { Tbody, Td, Th, Thead } from "../table"
 import { RenderNumberFormat } from "../text";
 import { useFetchDelegations } from "../../hooks";
 import { TableLimit } from "../../contants";
-
-interface Header {
-  name: string;
-  subName?: string
-}
-
-const headers: Header[] = [
-  {
-    name: "Address"
-  },
-  {
-    name: "Staked",
-    subName: "(U2U)"
-  },
-  {
-    name: "Claimed Rewards",
-    subName: "(U2U)"
-  }
-]
+import { useTranslation } from "react-i18next";
+import { LinkIcon } from "../../images";
 
 interface DelegationListProps {
   validationId: number,
@@ -32,6 +14,8 @@ interface DelegationListProps {
 }
 
 export const DelegationList = ({ validationId, totalDelegator }: DelegationListProps) => {
+
+  const { t } = useTranslation()
 
   const [skip, setSkip] = useState(0)
   const { delegations } = useFetchDelegations(validationId, skip)
@@ -44,43 +28,35 @@ export const DelegationList = ({ validationId, totalDelegator }: DelegationListP
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full">
-        <Thead>
-          <tr>
-            {
-              headers.map((header: Header, index: number) => {
-                return (
-                  <Th index={index} length={headers.length} key={index}>
-                    <div className={`${index === 1 ? "text-right" : ""}`}>
-                      <div className={`text-lg font-normal`}>{header.name}</div>
-                      {
-                        header.subName ? <div className="text-xs text-gray font-light">{header.subName}</div> : <></>
-                      }
-                    </div>
-                  </Th>
-                )
-              })
-            }
+        <thead>
+          <tr className="border-y border-border-outline text-text-secondary font-medium">
+            <th className="py-6 text-left px-6 font-medium whitespace-nowrap">{t("Address")}</th>
+            <th className="py-6 text-right font-medium whitespace-nowrap">{t("Staked (U2U)")}</th>
+            <th className="py-6 text-right font-medium px-6 whitespace-nowrap">{t("Claimed Rewards (U2U)")}</th>
           </tr>
-        </Thead>
-        <Tbody>
+        </thead>
+        <tbody>
           {
             delegations.length > 0 && delegations.map((row: Delegation, index: number) => {
               return (
-                <tr key={index}>
-                  <Td index={index} className={`text-green ${index === delegations.length - 1 ? "rounded-bl-lg" : ""}`}>
-                    <a href={exploreAddress(row.delegatorAddress)} target="_blank" rel="noopener noreferrer">{truncate({ str: row.delegatorAddress })}</a>
-                  </Td>
-                  <Td index={index} className="text-right text-base font-medium">
+                <tr key={index} className="border-y border-border-outline font-semibold hover:bg-neutral-surface-hover cursor-pointer">
+                  <td className="text-base font-semibold text-primary py-4 text-left px-6">
+                    <a href={exploreAddress(row.delegatorAddress)} className="flex items-center gap-1" target="_blank" rel="noopener noreferrer">
+                      {truncate({ str: row.delegatorAddress })}
+                      <LinkIcon className="stroke-primary" />
+                    </a>
+                  </td>
+                  <td className="text-base font-semibold text-text py-4 text-right">
                     <RenderNumberFormat amount={bigFormatEther(row.stakedAmount)} fractionDigits={2} />
-                  </Td>
-                  <Td index={index} className={`text-right font-medium ${index === delegations.length - 1 ? "rounded-br-lg" : ""}`}>
-                    <RenderNumberFormat amount={bigFormatEther(row.totalClaimedRewards)} fractionDigits={2} />
-                  </Td>
+                  </td>
+                  <td className="text-base font-semibold text-text py-4 text-right px-6">
+                  <RenderNumberFormat amount={bigFormatEther(row.totalClaimedRewards)} fractionDigits={2} />
+                  </td>
                 </tr>
               )
             })
           }
-        </Tbody>
+        </tbody>
       </table>
       <Pagination
         limit={TableLimit}

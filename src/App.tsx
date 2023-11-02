@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-neutral-bg min-h-screen">
       <Layout>
         <Router />
       </Layout>

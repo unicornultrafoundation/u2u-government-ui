@@ -4,12 +4,22 @@ import { useRefresh } from "../useRefresh"
 import { QueryService } from "../../thegraph"
 import { DataProcessor } from "./dataProccesser"
 import { BigNumber } from "ethers"
+import { useValidatorStore } from "../../store"
 
 export const useFetchValidator = (valId: number) => {
   const [validator, setValidator] = useState<Validator>({} as Validator)
-  const { fastRefresh } = useRefresh()
+  const { mediumRefresh } = useRefresh()
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
+
   useEffect(() => {
     if (!valId) return
+    const _findIndex = allValidators.findIndex((val: Validator) => Number(val.valId) === valId);
+    if (_findIndex > -1) {
+      setValidator(allValidators[_findIndex])
+      return
+    }
     (async () => {
       const { data } = await QueryService.queryValidatorDetail(valId)
       const {data: stakingStats} = await QueryService.queryStakingStats()
@@ -17,10 +27,11 @@ export const useFetchValidator = (valId: number) => {
       if (data && data.validators.length > 0) {
         const { data: dataApr } = await QueryService.queryValidatorsApr([valId])
         let apr = dataApr[`apr${valId}`]
-        setValidator(DataProcessor.validator(data.validators[0], totalNetworkStaked, Number(apr)))
+        const _val = await DataProcessor.validator(data.validators[0], totalNetworkStaked, Number(apr))
+        setValidator(_val)
       }
     })()
-  }, [fastRefresh, valId])
+  }, [mediumRefresh, valId, allValidators])
   return {
     validator
   }

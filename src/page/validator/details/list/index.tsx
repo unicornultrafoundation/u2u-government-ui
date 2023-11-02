@@ -22,12 +22,9 @@ export const ListOfValidator = ({
   return (
     <div>
       <TabsCard tabs={tabs}>
-        <div>
-           <DelegationList validationId={valId} totalDelegator={totalDelegator} />
-        </div>
-        <div><ValidatorEpochs validationId={valId} /></div>
+        <DelegationList validationId={valId} totalDelegator={totalDelegator} />
+        <ValidatorEpochs validationId={valId} />
       </TabsCard>
-
     </div>
   )
 }

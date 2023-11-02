@@ -6,7 +6,7 @@ import { DataProcessor } from "./dataProccesser"
 
 export const useFetchDelegations = (valId: number, skip: number = 0) => {
   const [delegations, setDelegations] = useState<Delegation[]>([])
-  const { fastRefresh } = useRefresh()
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     if (!valId) return
     (async () => {
@@ -15,7 +15,7 @@ export const useFetchDelegations = (valId: number, skip: number = 0) => {
         setDelegations(data.delegations.map((i: any) => DataProcessor.delegation(i)))
       }
     })()
-  }, [fastRefresh, valId, skip])
+  }, [mediumRefresh, valId, skip])
   return {
     delegations
   }
