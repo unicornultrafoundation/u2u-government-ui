@@ -32,13 +32,6 @@ export const Header = () => {
   const accountDetailsRef = useRef(null)
   const settingDetailsRef = useRef(null)
 
-  // useEffect(() => {
-  //   (async() => {
-  //     var el = jazzicon(100, Math.round(Math.random() * 10000000))
- 
-  //   })()
-  // })
-
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (accountDetailsRef.current && !(accountDetailsRef.current as any).contains(event.target)) {
@@ -119,7 +112,7 @@ export const Header = () => {
                       <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
                       <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
                         <div className="flex items-center gap-2">
-                          <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                          <Jazzicon diameter={36} seed={1} />
                           <div>
                             <div className="text-base text-text font-semibold">
                               {truncate({ str: account || "", headCount: 5 })}
@@ -205,7 +198,7 @@ export const Header = () => {
                   <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
                   <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
                     <div className="flex items-center gap-2">
-                      <img src={Images.AvatarImage} alt="u2u" className="w-[36px] h-[36px] rounded-full" />
+                      <Jazzicon diameter={36} seed={1} />
                       <div>
                         <div className="text-base text-text font-semibold">
                           {truncate({ str: account || "", headCount: 5 })}
