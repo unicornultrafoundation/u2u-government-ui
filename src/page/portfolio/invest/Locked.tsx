@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import { LockedStake, Validator } from "../../../types"
 import { Images } from "../../../images"
 import { bigFormatEther, millisecondToDay, nowTime, truncate } from "../../../utils"
-import { Button, ChangePageParams, Pagination, RenderNumberFormat, UnlockStakeModal, buttonScale, buttonType } from "../../../components"
+import { Button, ChangePageParams, EmptyComponent, Pagination, RenderNumberFormat, UnlockStakeModal, buttonScale, buttonType } from "../../../components"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { TableLimit } from "../../../contants"
 import { useLockedStakeStore, useValidatorStore } from "../../../store"
@@ -33,7 +33,7 @@ export const Locked = () => {
   }, [lockedStake, skip])
 
 
-  if (!clientRecords) return <></>
+  if (!clientRecords || clientRecords.length === 0) return <EmptyComponent />
   return (
     <div className="w-full overflow-x-auto mt-4">
       <table className="w-full">

@@ -4,7 +4,7 @@ import { ClaimRewardsParams, Delegator, RestakeRewardsParams, Validation } from 
 import { classNames, exploreAddress, truncate } from "../../../utils"
 import { LinkIcon } from "../../../images"
 import { useTranslation } from "react-i18next"
-import { Button, RenderNumberFormat, buttonScale, buttonType } from "../../../components"
+import { Button, EmptyComponent, RenderNumberFormat, buttonScale, buttonType } from "../../../components"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 
 export const Rewards = () => {
@@ -17,7 +17,7 @@ export const Rewards = () => {
     <div className="w-full">
       <div className="w-full mt-6 min-w-[550px]">
         {
-          validations && validations.length > 0 && validations.map((row: Validation, index: number) => {
+          validations && validations.length > 0 ? validations.map((row: Validation, index: number) => {
             return (
               <div className={classNames("w-full flex px-4 py-2 items-center justify-between border border-border-outline rounded-[8px] mb-2 cursor-pointer hover:bg-neutral-surface-hover")}
                 key={index}>
@@ -47,7 +47,7 @@ export const Rewards = () => {
                 </div>
               </div>
             )
-          })
+          }) : <EmptyComponent />
         }
       </div>
     </div>

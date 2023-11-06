@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import { Validator, WithdrawParams, WithdrawalRequest } from "../../../types"
 import { Images, LinkIcon } from "../../../images"
 import { bigFormatEther, exploreTransaction, truncate } from "../../../utils"
-import { Button, ChangePageParams, Pagination, RenderNumberFormat, buttonScale, buttonType } from "../../../components"
+import { Button, ChangePageParams, EmptyComponent, Pagination, RenderNumberFormat, buttonScale, buttonType } from "../../../components"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { TableLimit } from "../../../contants"
 import { toastDanger, toastSuccess } from "../../../components/toast"
@@ -58,7 +58,7 @@ export const WithdrawCompleted = ({ wr }: WithdrawCompletedProps) => {
     // eslint-disable-next-line 
   }, [t])
 
-  if (!clientRecords) return <></>
+  if (!clientRecords || clientRecords.length === 0) return <EmptyComponent />
   return (
     <div className="w-full overflow-x-auto mt-4">
       <table className="w-full">

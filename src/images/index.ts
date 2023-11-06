@@ -27,6 +27,7 @@ import homeActiveIcon from "./icons/home-active.svg"
 import layer2Image from "./layer_2.png"
 import enPNG from "./icons/en.png"
 import vnPNG from "./icons/vn.png"
+import EmptyPNG from "./empty.png"
 
 export * from "./icons/UserIcon"
 export * from "./icons/WalletIcon"
@@ -73,5 +74,6 @@ export const Images = {
   homeActiveIcon,
   enPNG,
   Staking7PNG,
-  vnPNG
+  vnPNG,
+  EmptyPNG
 }

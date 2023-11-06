@@ -5,8 +5,8 @@
   "Circulating Supply (U2U)": "Lượng cung lưu hành (U2U)",
   "Market Cap (USD)": "Vốn hóa thị trường (USD)",
   "Staked value (USD)": "Tổng giá trị đã stake (USD)",
-  "Earn rewards while staking U2U network": "Nhận phần thưởng hấp dẫn khi stake trên mạng lưới U2U",
-  "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.": "Tham gia stake để góp phần bảo vệ mạng lưới U2U và nhận về phần thưởng là U2U token. Bạn có thể tham gia stake trực tiếp qua điện thoại hoặc PC mà không cần bất kỳ thiết bị hay phần cứng chuyên dụng nào",
+  "Earn rewards while staking U2U network": "Hãy tham gia vào hành trình của chúng tôi",
+  "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.": "Staking là một cách đơn giản và dễ dàng để bạn có thể tham gia vào mạng lưới U2U. Bằng việc staking, bạn đang hỗ trợ cho việc tăng cường độ bảo mật và tính ổn định của mạng lưới U2U và nhận phần thưởng là U2U token.",
   "Stake your U2U": "Stake U2U token của bạn",
   "Validators": "Những người xác thực (Validators)",
   "Validator": "Người xác thực (Validator)",
@@ -70,5 +70,6 @@
   "My Investment": "Doanh mục đầu tư của tôi",
   "Unlock amount": "Số token mở khóa",
   "Estimated APR(%)": "Tỷ suất lợi nhuận ước tính (%)",
-  "Staking Ratio (%)": "Staking Ratio (%)"
+  "Staking Ratio (%)": "Staking Ratio (%)",
+  "No data yet": "Chưa có dữ liệu"
 }
