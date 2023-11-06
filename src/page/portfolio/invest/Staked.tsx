@@ -34,6 +34,8 @@ export const Staked = () => {
       } else {
         setClientRecord(validations)
       }
+    } else {
+      setClientRecord([])
     }
   }, [validations, skip])
 

@@ -17,6 +17,8 @@ export const useFetchLockedStake = () => {
       const {data} = await QueryService.queryLockedStake(account.toLowerCase())
       if (data && data?.lockedUps) {
         updateLockedStake(data.lockedUps.map((item: any) => DataProcessor.lockedStake(item)));
+      } else {
+        updateLockedStake([])
       }
     })()
     // eslint-disable-next-line

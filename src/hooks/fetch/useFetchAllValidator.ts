@@ -52,7 +52,6 @@ export const useFetchAllValidator = () => {
             }).filter(ii => !!ii));
           }
         } catch (error) {
-
         }
       })()
 

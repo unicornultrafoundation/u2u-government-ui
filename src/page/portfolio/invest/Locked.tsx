@@ -29,6 +29,8 @@ export const Locked = () => {
       } else {
         setClientRecord(lockedStake)
       }
+    } else {
+      setClientRecord([])
     }
   }, [lockedStake, skip])
 

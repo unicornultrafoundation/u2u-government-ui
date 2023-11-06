@@ -33,6 +33,8 @@ export const WithdrawCompleted = ({ wr }: WithdrawCompletedProps) => {
       } else {
         setClientRecord(wr)
       }
+    } else {
+      setClientRecord([])
     }
   }, [wr, skip])
 

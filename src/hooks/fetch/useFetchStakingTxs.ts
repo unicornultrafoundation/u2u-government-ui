@@ -16,6 +16,9 @@ export const useFetchStakingTxs = (from: string, skip: number = 0) => {
         if (data && data.transations.length > 0) {
           setTxs(data.transations.map((i: any) => DataProcessor.transaction(i)))
           setTotal(Number(data.transactionCounts[0].count))
+        } else {
+          setTxs([])
+          setTotal(0)
         }
       } catch (error) {}
     })()
