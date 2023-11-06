@@ -29,6 +29,8 @@ export const WithdrawPending = ({wr}: WithdrawPendingProps) => {
       } else {
         setClientRecord(wr)
       }
+    } else {
+      setClientRecord([])
     }
   }, [wr, skip])
 
