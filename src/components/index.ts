@@ -13,6 +13,7 @@ export * from "./validator-epoches"
 export * from "./chart"
 export * from "./slider"
 export * from "./pagination"
+export * from "./empty"
 
 export * from "./staking-calculator/APRCalculator"
 export * from "./staking-calculator/AmountSelection"

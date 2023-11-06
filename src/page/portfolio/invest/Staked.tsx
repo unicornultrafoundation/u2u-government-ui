@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import { Delegator, Validation } from "../../../types"
 import { Images } from "../../../images"
 import { bigFormatEther, truncate } from "../../../utils"
-import { ChangePageParams, Pagination, RenderNumberFormat } from "../../../components"
+import { ChangePageParams, EmptyComponent, Pagination, RenderNumberFormat } from "../../../components"
 import { useEffect, useMemo, useState } from "react"
 import { TableLimit } from "../../../contants"
 import { useDelegator } from "../../../hooks"
@@ -37,7 +37,9 @@ export const Staked = () => {
     }
   }, [validations, skip])
 
-  if (!clientRecords) return <></>
+  
+
+  if (!clientRecords || clientRecords.length === 0) return <EmptyComponent />
   return (
     <div className="w-full overflow-x-auto mt-4">
       <table className="w-full">

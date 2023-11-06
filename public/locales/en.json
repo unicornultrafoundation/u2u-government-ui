@@ -5,8 +5,8 @@
   "Circulating Supply (U2U)": "Circulating Supply (U2U)",
   "Market Cap (USD)": "Market Cap (USD)",
   "Staked value (USD)": "Staked value (USD)",
-  "Earn rewards while staking U2U network": "Earn rewards while staking U2U network",
-  "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.": "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.",
+  "Earn rewards while staking U2U network": "Become a participant on our journey",
+  "Participate in staking to secure U2U network and earn U2U tokens as a reward. To stake, you don’t need any particular hardware or device. You can do it directly from your phone or PC.": "Staking is simple and accessible process. You can contribute to the security and stability of the U2U Network while earning U2U Tokens as reward.",
   "Stake your U2U": "Stake your U2U",
   "Validators": "Validators",
   "Validator": "Validator",
@@ -70,5 +70,6 @@
   "My Investment": "My Investment",
   "Unlock amount": "Unlock amount",
   "Estimated APR(%)": "Estimated APR(%)", 
-  "Staking Ratio (%)": "Staking Ratio (%)"
+  "Staking Ratio (%)": "Staking Ratio (%)",
+  "No data yet": "No data yet"
 }
