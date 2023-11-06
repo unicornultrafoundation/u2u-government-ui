@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { isMobile } from 'mobile-device-detect';
 import { useCallback, useEffect, useRef, useState } from "react"
 import { WalletLoginModal } from "../modal/WalletLoginModal"
-import { ArrowDownIcon, CopyIcon, GlobeIcon, Images, LogoutIcon, MenuIcon, OptionIcon, UserIcon, WalletIcon } from "../../images"
+import { ArrowDownIcon, CopyIcon, GlobeIcon, LogoutIcon, MenuIcon, OptionIcon, UserIcon, WalletIcon } from "../../images"
 import { appConfig } from "../../contants"
 import { useCopyToClipboard } from 'usehooks-ts'
 import { toastSuccess } from "../toast"
