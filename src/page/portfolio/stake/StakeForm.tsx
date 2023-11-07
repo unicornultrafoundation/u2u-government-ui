@@ -7,6 +7,7 @@ import { useValidatorStore } from "../../../store"
 import { DelegateParams, Validator } from "../../../types"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
+import { ArrowDownIcon } from "../../../images"
 
 export const StakeForm = () => {
 
@@ -127,9 +128,12 @@ export const StakeForm = () => {
       </div>
       <AmountSelection handleOnclickSuggest={handleOnclickSuggest} suggestOp={suggestOp} />
       <div className="text-base text-text mb-2 mt-4 text-left">{t("Validator")}</div>
-      <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
-        <img src={selectedValidator.avatar} alt="u2u" className="w-[24px] h-[24px]" />
-        <div className="text-base font-semibold text-text text-left">{selectedValidator.name}</div>
+      <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer justify-between" onClick={() => setIsShow(true)}>
+        <div className="flex gap-[10px]">
+          <img src={selectedValidator.avatar} alt="u2u" className="w-[24px] h-[24px]" />
+          <div className="text-base font-semibold text-text text-left">{selectedValidator.name}</div>
+        </div>
+        <ArrowDownIcon />
       </div>
       <div className="mt-6">
         <APRCalculator amount={Number(amount)} validator={selectedValidator} />
@@ -137,7 +141,7 @@ export const StakeForm = () => {
       <div className="flex justify-center">
         {
           account ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
+            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Stake")}</Button>
           ) : (
             <ConnectWalletButton />
           )

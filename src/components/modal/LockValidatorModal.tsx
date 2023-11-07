@@ -35,7 +35,7 @@ export const LockValidatorModal = ({
               const _endTime  = row.validator.authLockInfo.endTime
               let now = Math.ceil((new Date()).getTime())
               if (_endTime < now) return 0
-              let duration = Math.ceil((_endTime - now) / 86400000)
+              let duration = Math.ceil((_endTime - now) / 86400000) - 1
               if (duration < MIN_LOCKUP_DURATION) return 0
               return duration
             }

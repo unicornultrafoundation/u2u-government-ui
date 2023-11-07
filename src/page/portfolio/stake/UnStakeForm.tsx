@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { Images } from "../../../images"
+import { ArrowDownIcon, Images } from "../../../images"
 import { Delegator, UnDelegateParams, Validation } from "../../../types"
 import { useCallback, useMemo, useState } from "react"
 import { AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, StakedValidatorModal, SuggestionOptions, buttonScale } from "../../../components"
@@ -14,7 +14,7 @@ export const UnStakeForm = () => {
 
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { delegatorState } = useDelegator()  
+  const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
   const [isShow, setIsShow] = useState(false)
   const [selectedValidator, setSelectedValidator] = useState<Validation>(validations && validations.length > 0 ? validations[0] : {} as Validation)
@@ -107,9 +107,12 @@ export const UnStakeForm = () => {
       <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
         <div className="text-base text-text whitespace-nowrap">{t("Validator Staked")}</div>
       </div>
-      <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
-        <img src={selectedValidator.validator ? selectedValidator.validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
-        <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
+      <div className="justify-between border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
+        <div className="flex gap-[10px]">
+          <img src={selectedValidator.validator ? selectedValidator.validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
+          <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
+        </div>
+        <ArrowDownIcon />
       </div>
       <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
         <div className="text-base text-text whitespace-nowrap">{t("Undelegate amount")}</div>
@@ -144,7 +147,7 @@ export const UnStakeForm = () => {
       <div className="flex justify-center mt-10">
         {
           account ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("UnDelegate")}</Button>
+            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("Unstake")}</Button>
           ) : (
             <ConnectWalletButton />
           )

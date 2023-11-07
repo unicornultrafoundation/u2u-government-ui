@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { Images } from "../../../images"
+import { ArrowDownIcon, Images } from "../../../images"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Delegator, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
@@ -34,7 +34,7 @@ export const LockForm = () => {
     const endTime = selectedValidator.validator.authLockInfo.endTime
     let now = Math.ceil((new Date()).getTime())
     if (endTime < now) return 0
-    let duration = Math.ceil((endTime - now) / 86400000)
+    let duration = Math.ceil((endTime - now) / 86400000) - 1
     if (duration < MIN_LOCKUP_DURATION) return 0
     return duration
   }, [selectedValidator])
@@ -49,7 +49,7 @@ export const LockForm = () => {
   const [apr, setApr] = useState(0)
 
 
-  useEffect(() => {    
+  useEffect(() => {
     (async () => {
       if (selectedValidator && selectedValidator.validator) {
         try {
@@ -73,8 +73,8 @@ export const LockForm = () => {
   }, [selectedValidator, stakeAmount, stakeDuration])
 
   const validateDuration = useCallback((value: any) => {
-    if (Number(value) === 0) {
-      setDurationErr(t('Lockup duration wrong'));
+    if (Number(value) < MIN_LOCKUP_DURATION) {
+      setDurationErr(t('Minimum lockup is 14 days'));
       return false;
     }
     setDurationErr("")
@@ -158,16 +158,19 @@ export const LockForm = () => {
       <div className="w-full flex justify-between mt-6 mb-2">
         <div className="text-base text-text">{t("Validator Staked")}</div>
       </div>
-      <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer" onClick={() => setIsShow(true)}>
-        <img src={selectedValidator.validator ? selectedValidator.validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
-        <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
+      <div className="border border-border-outline rounded-[8px] py-3 px-4 flex items-center gap-[10px] cursor-pointer justify-between" onClick={() => setIsShow(true)}>
+        <div className="flex gap-[10px]">
+          <img src={selectedValidator.validator ? selectedValidator.validator.avatar : Images.U2ULogoPNG} alt="u2u" className="w-[24px] h-[24px]" />
+          <div className="text-base font-semibold text-text text-left">{selectedValidator.validator && selectedValidator.validator.name ? selectedValidator.validator.name : "No validator"}</div>
+        </div>
+        <ArrowDownIcon />
       </div>
       <div className="w-full flex justify-between mt-6 mb-2 flex-wrap">
         <div className="text-base text-text whitespace-nowrap">{t("Lock amount")}</div>
         <div className="flex gap-1 flex-wrap">
           <div className="text-base text-text-secondary mr-1 whitespace-nowrap">{t("U2U available")}</div>
           <div className="text-base font-semibold text-primary">
-          <RenderNumberFormat amount={Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))} fractionDigits={6} /><span className="ml-1">U2U</span>
+            <RenderNumberFormat amount={Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))} fractionDigits={6} /><span className="ml-1">U2U</span>
           </div>
         </div>
       </div>
@@ -216,7 +219,7 @@ export const LockForm = () => {
       <div className="flex justify-between mt-4">
         <div className="text-sm text-text-secondary">{t("Estimated APR(%)")}</div>
         <div className="text-sm text-text-secondary">
-        <RenderNumberFormat amount={apr} fractionDigits={2} />
+          <RenderNumberFormat amount={apr} fractionDigits={2} />
         </div>
       </div>
       <div className="flex justify-center mt-10">

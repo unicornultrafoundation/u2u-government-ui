@@ -6,6 +6,7 @@ import { LockForm } from "./LockForm"
 import { UnStakeForm } from "./UnStakeForm"
 import { Rewards } from "./Rewards"
 import { isMobile } from 'mobile-device-detect';
+import { useTranslation } from "react-i18next"
 
 const tabs: TabOption[] = [
   {
@@ -18,7 +19,7 @@ const tabs: TabOption[] = [
   },
   {
     key: "unstake",
-    label: "UnStake"
+    label: "Unstake"
   },
   {
     key: "rewards",
@@ -27,6 +28,8 @@ const tabs: TabOption[] = [
 ]
 
 export const StakingContainer = () => {
+
+  const { t } = useTranslation()
 
   const [activeTab, setActiveTab] = useState(tabs[0].key)
   const activeTabIndex = useMemo(() => {
@@ -59,7 +62,7 @@ export const StakingContainer = () => {
             tabs.map((item: TabOption, index: number) => {
               return (
                 <div key={index} className={classNames(isMobile ? "col-span-6 mb-2" : "col-span-3", index < 3 && "border-r border-border-outline")} onClick={() => handleChangeTab(item)}>
-                  <div className={classNames("text-[20px] font-bold cursor-pointer", index === activeTabIndex ? "text-text" : "text-text-disabled")}>{item.label}</div>
+                  <div className={classNames("text-[20px] font-bold cursor-pointer", index === activeTabIndex ? "text-text" : "text-text-disabled")}>{t(item.label)}</div>
                 </div>
               )
             })

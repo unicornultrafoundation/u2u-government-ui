@@ -48,9 +48,6 @@ export const ValidatorDetails = () => {
     return [0, 10, 15, 20, 10, 15, 20, 15, 10]
   }, [rewards])
 
-  console.log("rewards", validatorRewardsChart);
-
-
   if (!validator) return <></>
 
   if (isMobile) {

@@ -26,21 +26,21 @@ export const TxHistory = () => {
   const renderTxType = (type: number) => {
     switch (type) {
       case 1:
-        return "Create Validator"
+        return t("Create Validator")
       case 2:
-        return "Delegate"
+        return t("Stake")
       case 3:
-        return "Undelegate"
+        return t("Unstake")
       case 4:
-        return "Withdrawn"
+        return t("Withdrawn")
       case 5:
-        return "Claim Rewards"
+        return t("Claim Rewards")
       case 6:
-        return "Restake"
+        return t("Re-stake")
       case 7:
-        return "Lock"
+        return t("Lock")
       case 8:
-        return "Unlock"
+        return t("Un-lock")
     }
   }
 
@@ -64,7 +64,7 @@ export const TxHistory = () => {
                   txs.map((row: StakingTransaction, index: number) => {
                     return (
                       <tr key={index} className="border-y border-border-outline font-semibold hover:bg-neutral-surface-hover">
-                        <td className="text-base font-bold text-text py-3 text-left px-6">
+                        <td className="text-base font-bold text-text py-3 text-left px-6 whitespace-nowrap">
                           {renderTxType(row.type)}
                         </td>
                         <td className="text-base font-semibold text-text py-3 text-right ">

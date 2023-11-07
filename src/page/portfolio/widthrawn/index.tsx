@@ -56,7 +56,7 @@ export const WithdrawalList = () => {
               <div
                 onClick={() => handleChangeTab(item)}
                 className={classNames("text-base font-semibold cursor-pointer", index === activeTabIndex ? "text-primary" : "text-text-disabled")}
-                key={index}>{item.label}</div>
+                key={index}>{t(item.label)}</div>
             )
           })
         }

@@ -15,7 +15,7 @@ export const Rewards = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full mt-6 min-w-[550px]">
+      <div className="w-full mt-6 min-w-[700px]">
         {
           validations && validations.length > 0 ? validations.map((row: Validation, index: number) => {
             return (
@@ -84,6 +84,7 @@ const RenderReStakeButton = ({ validatorID }: {
   }, [validatorID, t])
   return (
     <Button
+      className="whitespace-nowrap"
       loading={loading}
       scale={buttonScale.sm}
       variant={buttonType.secondary}

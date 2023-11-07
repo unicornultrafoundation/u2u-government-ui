@@ -1,8 +1,11 @@
 import { Modal, modalScale } from "."
 import { useTranslation } from "react-i18next"
-import { Validator } from "../../types"
+import { LockedStake, Validator } from "../../types"
 import { bigFormatEther, classNames, truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
+import { MIN_LOCKUP_DURATION } from "../../contants"
+import { useLockedStakeStore } from "../../store"
+import { useMemo } from "react"
 
 interface ValidatorStakeModalProps {
   isOpenModal: boolean
@@ -23,9 +26,9 @@ export const ValidatorStakeModal = ({
   const { t } = useTranslation()
 
   return (
-    <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
+    <Modal isOpen={isOpenModal} scale={modalScale.lg} setIsOpen={setIsOpenModal}>
       <div className="text-[24px] font-bold text-text text-center whitespace-nowrap">{t("Choose a Validator")}</div>
-      <div className="w-full mt-6 min-w-[500px]">
+      <div className="w-full mt-6 min-w-[600px]">
         {
           validators.map((row: Validator, index: number) => {
             return (
@@ -47,6 +50,7 @@ export const ValidatorStakeModal = ({
                   </div>
                 </div>
                 <div className="flex gap-8">
+                  <RenderMaxLock validatorId={Number(row.valId)} />
                   <div>
                     <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("APR (%)")}</div>
                     <div className="text-base text-text whitespace-nowrap">
@@ -72,5 +76,36 @@ export const ValidatorStakeModal = ({
         }
       </div>
     </Modal>
+  )
+}
+
+const RenderMaxLock = ({validatorId}: {
+  validatorId: number
+}) => {
+  const { t } = useTranslation()
+  const [valAuthLockStake] = useLockedStakeStore(state => [
+    state.valAuthLockStake
+  ])
+  let maxDuration = useMemo(() => {
+    const _authLock = valAuthLockStake.findIndex((lock: LockedStake) => Number(lock.validatorId) === Number(validatorId))
+    if (_authLock > -1) {
+      const authLockInfo = valAuthLockStake[_authLock]
+      const _endTime = authLockInfo.endTime
+      let now = Math.ceil((new Date()).getTime())
+      if (_endTime < now) return 0
+      let duration = Math.ceil((_endTime - now) / 86400000) - 1
+      if (duration < MIN_LOCKUP_DURATION) return 0
+      return duration
+    }
+    return 0
+  }, [valAuthLockStake, validatorId])
+
+  return (
+    <div>
+    <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Max lock (Days)")}</div>
+    <div className="text-base text-text whitespace-nowrap">
+      {maxDuration}
+    </div>
+  </div>
   )
 }
