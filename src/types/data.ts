@@ -9,8 +9,10 @@ export interface StakingStats {
 }
 
 export interface Validator {
+  id: string
   valId: string
   name: string
+  avatar: any
   auth: string
   createdEpoch: string
   createdTime: string
@@ -27,12 +29,17 @@ export interface Validator {
   votingPower?: number
   totalDelegator: number
   apr: number
+  authLockInfo?: LockedStake,
+  website?: string
+  description?: string
+  image?: string
 }
 
 export interface Validation {
   id: string
   validator: Validator
   stakedAmount: BigNumber
+  actualStakedAmount: BigNumber
 }
 
 export interface Delegation {
@@ -97,4 +104,19 @@ export interface EpochInfo {
   endTime: number
   epochRewards: BigNumber
   totalRewards: BigNumber
+}
+
+export interface EpochReward {
+  epochId: number
+  totalRewards: BigNumber
+  totalStake: BigNumber
+}
+
+export interface StakingTransaction {
+  txHash: string
+  validator: number
+  from: string
+  type: number
+  createdAt: number
+  age: number
 }

@@ -14,6 +14,7 @@ i18next
     react: {
       useSuspense: false
     },
+    lng: "en",
     fallbackLng: 'en',
     preload: ['en'],
     interpolation: { escapeValue: false }

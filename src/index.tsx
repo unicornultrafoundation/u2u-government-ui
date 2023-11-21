@@ -6,6 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Providers from './Providers';
 import { BrowserRouter } from 'react-router-dom'
+import { Updater } from './Updater';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,6 +15,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Providers>
+        <Updater />
         <App />
       </Providers>
     </BrowserRouter>

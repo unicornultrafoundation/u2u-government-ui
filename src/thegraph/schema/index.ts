@@ -34,6 +34,7 @@ const VALIDATIONS_GQL = `
         id
         validator {${VALIDATOR_GQL}}
         stakedAmount
+        totalLockStake
 `
 
 const EPOCH_OF_VAL_GQL = `
@@ -94,13 +95,20 @@ export const Schema = () => {
               totalClaimedRewards
               validations {${VALIDATIONS_GQL}}
             }
+          stakings {
+            id
+            totalStaked
+            totalDelegated
+            totalSelfStaked
+            totalValidator
+            totalDelegator
+          }
       }
     `,
     WITHDRAWALREQUEST: gql`
-      query WithdrawalRequest($delegatorAddress: String!, $validatorId: Int!) {
+      query WithdrawalRequest($delegatorAddress: String!) {
         withdrawalRequests (where:{
           delegatorAddress: $delegatorAddress
-          validatorId: $validatorId
         }
         orderBy: time
         orderDirection: desc
@@ -110,7 +118,6 @@ export const Schema = () => {
           delegatorAddress
           validatorId
           delegatorAddress
-          validatorId
           wrID
           time
           unbondingAmount
@@ -122,10 +129,9 @@ export const Schema = () => {
       }
     `,
     LOCKE_STAKE: gql`
-      query LockedUp($delegatorAddress: String!, $valId: String!) {
+      query LockedUp($delegatorAddress: String!) {
         lockedUps (where:{
             delegator: $delegatorAddress
-            validator: $valId
           }) {
             delegator {
               id
@@ -141,6 +147,26 @@ export const Schema = () => {
           }
       }
     `,
+    LOCKE_STAKE_VAL: gql`
+    query LockedUp($delegatorAddress: String!, $validator: String!) {
+      lockedUps (where:{
+          delegator: $delegatorAddress,
+          validator: $validator
+        }) {
+          delegator {
+            id
+          }
+          validator {
+            id
+          }
+          duration
+          lockedAmount
+          unlockedAmount
+          penalty
+          endTime
+        }
+    }
+  `,
     DELEGATIONS_PAGINATION: gql`
       query Delegations($validatorId: Int!, $skip: Int!, $limit: Int!) {
         delegations(where:{
@@ -161,16 +187,16 @@ export const Schema = () => {
         )
       }
     `,
-    VALIDATORS_APR(vals: any[]) {
+    VALIDATORS_APR(vals: any[], amount: string, duration: number) {
       let queryString = `query stakingApr {`;
       queryString += vals.map(
         (val) => `
           apr${val}: calculateApr(
             validatorId: ${val}
-            amount: "1000000000000000000000"
-            duration: 0
+            amount: "${amount}"
+            duration: ${duration}
           )
-            `
+        `
       );
       queryString += "}";
       return gql(queryString);
@@ -207,7 +233,52 @@ export const Schema = () => {
           totalRewards
         }
       }
-    `
-
+    `,
+    STAKING_TXS: gql`
+      query StakingTxs($from: String!, $skip: Int!, $limit: Int!) {
+        transations (where:{
+          from: $from
+        }, 
+        first: $limit
+        skip: $skip
+        orderBy:block 
+        orderDirection: desc) {
+          block
+          txHash
+          from
+          type
+          validatorId
+          createdAt
+        }
+        transactionCounts (where:{
+          id: $from
+        }) {
+          count
+        }
+      }
+    `,
+    GET_EPOCHS_REWARDS: gql`
+        query EpochsRewards {
+          epoches(orderBy: epoch, orderDirection: desc, first: 500) {
+            epoch
+            totalRewards
+            totalStake
+          }
+        }
+      `,
+    GET_VALIDATOR_EPOCHS_REWARDS: gql`
+      query EpochsRewards($validator: Int!) {
+        validators(
+          where: {validatorId: $validator}
+          orderBy: epoch__epoch
+          orderDirection: desc
+        ) {
+          totalRewards
+          epoch {
+            epoch
+          }
+        }
+      }
+    `,
   }
 }

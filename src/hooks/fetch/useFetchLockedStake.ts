@@ -1,23 +1,26 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRefresh } from "../useRefresh"
 import { QueryService } from "../../thegraph"
 import { DataProcessor } from "./dataProccesser"
-import { LockedStake } from "../../types"
+import { useLockedStakeStore } from "../../store"
+import { useWeb3React } from "@web3-react/core"
 
-export const useFetchLockedStake = (delAddress: string, valId: number) => {
-  const [lockedStake, setLockedStake] = useState<LockedStake>({} as LockedStake)
+export const useFetchLockedStake = () => {
   const { fastRefresh } = useRefresh()
+  const { account } = useWeb3React()
+  const [updateLockedStake] = useLockedStakeStore(state => [
+    state.updateLockedStake
+  ])
   useEffect(() => {
-    if(!delAddress) return
+    if(!account) return
     (async() => {
-      const vaIdlHex = `0x${valId.toString(16)}`
-      const {data} = await QueryService.queryLockedStake(delAddress.toLowerCase(), vaIdlHex)
+      const {data} = await QueryService.queryLockedStake(account.toLowerCase())
       if (data && data?.lockedUps) {
-        setLockedStake(DataProcessor.lockedStake(data?.lockedUps[0]));
+        updateLockedStake(data.lockedUps.map((item: any) => DataProcessor.lockedStake(item)));
+      } else {
+        updateLockedStake([])
       }
     })()
-  }, [fastRefresh, delAddress, valId])
-  return {
-    lockedStake
-  }
+    // eslint-disable-next-line
+  }, [fastRefresh, account])
 }

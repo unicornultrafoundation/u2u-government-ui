@@ -1,7 +1,6 @@
 import { useCallback } from "react"
 import { ConnectorNames, connectorsByName, setupNetwork } from "../utils"
 import { appConfig, connectorLocalStorageKey } from "../contants"
-import { clearWcCache } from "../utils/clearCache"
 
 export const useAuth = () => {
   const login = useCallback(async (connectorID: ConnectorNames) => {
@@ -9,7 +8,6 @@ export const useAuth = () => {
     const [connector,] = connectors
     try {
       if (connector) {
-        clearWcCache();
         window.localStorage.setItem(connectorLocalStorageKey, connectorID);
         connector.activate(appConfig.chainID).catch(async (error: any) => {
           if (error.code === 4902) {

@@ -7,7 +7,7 @@ import { DataProcessor } from "./dataProccesser"
 export const useFetchEpochOfValidator = (valId: number, skip: number = 0) => {
   const [epoches, setEpoches] = useState<ValidatorEpochInfo[]>([])
   const [totalCount, setTotalCount] = useState(0)
-  const { slowRefresh } = useRefresh()
+  const { mediumRefresh } = useRefresh()
   useEffect(() => {
     if (!valId) return
     (async () => {
@@ -18,7 +18,7 @@ export const useFetchEpochOfValidator = (valId: number, skip: number = 0) => {
         setTotalCount(data.validatorCounters[0] ? Number(data.validatorCounters[0].total) : 0)
       }
     })()
-  }, [slowRefresh, valId, skip])
+  }, [mediumRefresh, valId, skip])
   return {
     epoches,
     totalCount

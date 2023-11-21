@@ -1,14 +1,11 @@
 import { useNavigate } from "react-router-dom"
-import DesktopLogo from "../../images/u2u-logo.png"
-
+import { Images } from "../../images"
 
 export const StakingLogo = () => {
   const navigate = useNavigate()
   return (
-    <div className="flex items-center justify-center gap-1 cursor-pointer" onClick={() => navigate("")}>
-      <img src={DesktopLogo} alt="_u2u" />
-      <div className="text-green text-[27px] font-semibold">U2U</div>
-      <div className="text-black text-[27px]">Staking</div>
+    <div className="py-4 px-[22px] flex items-center justify-center gap-1 cursor-pointer" onClick={() => navigate("")}>
+      <img src={Images.StakingLogoPNG} alt="u2u" className="w-full" />
     </div>
   )
 }

@@ -24,6 +24,27 @@ export const exploreTransaction = (_address: string): string => `${appConfig.exp
 export const millisecondToDay = (time: number) => {
 	if (!time) return '-'
 	const timeInSeconds = Math.floor(time / 1000);
+  const days = Math.floor((timeInSeconds / 86400))
+  const hours = Math.floor((timeInSeconds % 86400) / 3600)
+  const minutes = Math.floor((timeInSeconds % 3600) / 60)
+  // const seconds = timeInSeconds - days*86400 - hours * 3600 - minutes * 60;
+	const dayString = days ? `${days} ${days > 1 ? "days" : "day"}` : '0H';
+  const hourString = hours ? `${hours}h` : '0h';
+  const minuteString = minutes ? `${minutes}m` : '0m';
+  // const secondString = seconds ? `${seconds}s` : '0s';
+	return `${dayString} ${hourString}:${minuteString}`
+};
+
+export const dateToUTCString = (time: any) => {
+	const d = new Date(time);
+	return d.toUTCString()
+}
+
+
+export const nowTime = () => (new Date()).getTime();
+
+export const millisecondToHMS = (time: number) => {
+	const timeInSeconds = Math.floor(time / 1000);
 	const days = Math.floor((timeInSeconds / 86400))
 	const hours = Math.floor((timeInSeconds % 86400) / 3600)
 	const minutes = Math.floor((timeInSeconds % 3600) / 60)
@@ -35,21 +56,13 @@ export const millisecondToDay = (time: number) => {
 	const daysString = days ? `${days} day${days > 1 ? 's' : ''}` : '';
 
 	if(daysString) {
-			return `${daysString}`
+			return `${daysString} ago`
 	}
 	if(hourString) {
-			return `${hourString}`
+			return `${hourString} ago`
 	}
 	if(minuteString) {
-			return `${minuteString}`
+			return `${minuteString} ago`
 	}
-	return `${secondString}`
+	return `${secondString} ago`
 };
-
-export const dateToUTCString = (time: any) => {
-	const d = new Date(time);
-	return d.toUTCString()
-}
-
-
-export const nowTime = () => (new Date()).getTime();

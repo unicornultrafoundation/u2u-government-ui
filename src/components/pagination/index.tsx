@@ -21,7 +21,7 @@ export const Pagination = ({ limit, total, defaultPage, onChangePage }: Props) =
   }, [limit, total])
 
   const getItemProps = (index: number) => ({
-    className: `text-base rounded w-[35px] text-white ${active === index ? "bg-green" : "bg-gray-2"}`,
+    className: `text-base rounded w-[32px] ${active === index ? "bg-neutral-surface-active shadow-2 text-neutral" : "text-text-disabled"}`,
     onClick: async () => {
       if (onChangePage) {
         await onChangePage({
@@ -74,11 +74,11 @@ export const Pagination = ({ limit, total, defaultPage, onChangePage }: Props) =
         className="flex items-center gap-2 mr-4"
         onClick={prev}
       >
-        <button disabled={active === 1} className="bg-gray-2 text-base rounded px-3 text-white"><i className="fa fa-angle-left"></i></button>
+        <button disabled={active === 1} className="text-lg px-3 text-neutral-surface-active font-bold"><i className="fa fa-angle-left"></i></button>
       </div>
       <div className="flex items-center gap-2">
         {
-          active > MAX_ITEMS && totalPages > MAX_ITEMS && <span className="text-gray-2 text-xl">..</span>
+          active > MAX_ITEMS && totalPages > MAX_ITEMS && <span className="text-text-disabled text-xl">..</span>
         }
         {
           Array.from({ length: totalPages }, (x, i) => i + 1).map(pageNum => {
@@ -91,14 +91,14 @@ export const Pagination = ({ limit, total, defaultPage, onChangePage }: Props) =
           })
         }
         {
-          active <= MAX_ITEMS && totalPages > MAX_ITEMS && <span className="text-gray-2 text-xl">..</span>
+          active <= MAX_ITEMS && totalPages > MAX_ITEMS && <span className="text-text-disabled text-xl">..</span>
         }
       </div>
       <div
         className="flex items-center gap-2 ml-4"
         onClick={next}
       >
-        <button disabled={active === totalPages} className="bg-gray-2 text-base rounded px-3 text-white"><i className="fa fa-angle-right"></i></button>
+        <button disabled={active === totalPages} className="text-neutral-surface-active font-bold text-lg rounded px-3"><i className="fa fa-angle-right"></i></button>
       </div>
     </div>
   );

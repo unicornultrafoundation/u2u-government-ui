@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Validator } from "../../types"
 import { RenderNumberFormat } from "../text"
 import { useValidatorApr } from "../../hooks"
+import { useTranslation } from "react-i18next"
 
 interface APRCalculatorProp {
   amount: number
@@ -18,6 +19,7 @@ export interface AprResult {
 }
 
 export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
+  const { t } = useTranslation()
   const { apr } = useValidatorApr(Number(validator ? validator.valId : 0), amount)
   const [aprResult, serAprResult] = useState<AprResult>({} as AprResult)
 
@@ -40,24 +42,24 @@ export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
   return (
     <div className="mb-6">
       <div className="flex justify-between">
-        <div className="text-sm text-black">Current estimated APR(%)</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._apr} fractionDigits={2} /></div>
+        <div className="text-base text-text-secondary">{t("Current estimated APR(%)")}</div>
+        <div className="text-base text-text"><RenderNumberFormat amount={aprResult._apr} fractionDigits={2} /></div>
       </div>
       <div className="flex justify-between">
-        <div className="text-sm text-black">30 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._30days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
+        <div className="text-base text-text-secondary">{t("30 days")}</div>
+        <div className="text-base text-text"><RenderNumberFormat amount={aprResult._30days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
       <div className="flex justify-between">
-        <div className="text-sm text-black">90 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._90days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
+        <div className="text-base text-text-secondary">{t("90 days")}</div>
+        <div className="text-base text-text"><RenderNumberFormat amount={aprResult._90days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
       <div className="flex justify-between">
-        <div className="text-sm text-black">180 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._180days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
+        <div className="text-base text-text-secondary">{t("180 days")}</div>
+        <div className="text-base text-text"><RenderNumberFormat amount={aprResult._180days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
       <div className="flex justify-between">
-        <div className="text-sm text-black">365 days</div>
-        <div className="text-sm text-black"><RenderNumberFormat amount={aprResult._365days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
+        <div className="text-base text-text-secondary">{t("365 days")}</div>
+        <div className="text-base text-text"><RenderNumberFormat amount={aprResult._365days} fractionDigits={2} /><span className="ml-1">U2U</span></div>
       </div>
     </div>
   )

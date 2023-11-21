@@ -23,6 +23,7 @@ module.exports = override(
       https: require.resolve('https-browserify'),
       os: require.resolve('os-browserify'),
       url: require.resolve('url'),
+      "buffer": false,
       'process/browser': require.resolve('process/browser')
     });
     config.resolve.fallback = fallback;

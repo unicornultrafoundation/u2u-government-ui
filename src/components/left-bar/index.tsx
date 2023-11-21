@@ -1,15 +1,11 @@
 import { StakingLogo } from "./StakingLogo"
-import bookIcon from "../../images/icons/book.svg"
-import bookActiveIcon from "../../images/icons/book-active.svg"
-import peopleIcon from "../../images/icons/people.svg"
-import peopleActiveIcon from "../../images/icons/people-active.svg"
-import homeIcon from "../../images/icons/home.svg"
-import homeActiveIcon from "../../images/icons/home-active.svg"
 import { useCallback } from "react"
 import { useNavigate } from "react-router"
 import { useLocation } from "react-router-dom"
 import AppStore from "../../images/appstore.png"
 import GgPlay from "../../images/ggplay.png"
+import { useTranslation } from "react-i18next"
+import { Images } from "../../images"
 
 export interface NavProps {
   id: string
@@ -23,25 +19,26 @@ export const navs: NavProps[] = [
   {
     id: "home",
     name: "Home",
-    icon: homeIcon,
-    activeIcon: homeActiveIcon,
+    icon: Images.homeIcon,
+    activeIcon: Images.homeActiveIcon,
     link: "/"
   }, {
-    id: "portfolio",
-    name: "My Staking",
-    icon: peopleIcon,
-    activeIcon: peopleActiveIcon,
-    link: "portfolio"
+    id: "staking",
+    name: "Staking",
+    icon: Images.profileIcon,
+    activeIcon: Images.profileActiveIcon,
+    link: "staking"
   }, {
     id: "validator",
     name: "Validators",
-    icon: bookIcon,
-    activeIcon: bookActiveIcon,
+    icon: Images.userIcon,
+    activeIcon: Images.userActiveIcon,
     link: "validators"
   }
 ]
 
 export const LeftBar = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const handleClick = (index: number) => {
     navigate(navs[index].link)
@@ -52,8 +49,8 @@ export const LeftBar = () => {
       case pathname === "/":
       case pathname === "":
         return "home" === id
-      case pathname.indexOf("portfolio") > -1:
-        return "portfolio" === id
+      case pathname.indexOf("staking") > -1:
+        return "staking" === id
       case pathname.indexOf("validator") > -1:
         return "validator" === id
       default:
@@ -62,66 +59,67 @@ export const LeftBar = () => {
   }, [pathname])
 
   return (
-    <div className="py-[29px] w-[300px] bg-white min-h-screen border-r-2 border-lightGray fixed top-0 left-0">
+    <div className="overflow-y-auto fixed left-0 top-0 px-8 py-2 w-[270px] bg-neutral-surface border-r-2 border-border-outline h-screen z-20">
       <StakingLogo />
-      <div className="mt-[70px]">
+      <div className="mt-[24px] pt-2 pb-8 w-full">
         {
           navs.map((item: NavProps, index: number) => {
             return (
               <div
-                className="flex items-center gap-2 my-3 p-3 bg-white font-semibold cursor-pointer ml-[40px]"
+                className={`${activeNav(item.id) ? "bg-primary" : ""} w-full flex items-center gap-4 cursor-pointer px-6 py-4 rounded-2xl font-semibold text-base`}
                 key={index}
                 onClick={() => { handleClick(index) }}>
-                <img src={activeNav(item.id) ? item.activeIcon : item.icon} alt="_u2u" />
-                <div className={`${activeNav(item.id) ? "text-green" : "text-black-1"} text-base`} >{item.name}</div>
+                <img src={activeNav(item.id) ? item.activeIcon : item.icon} className="w-[24px] h-[24px]" alt="_u2u" />
+                <div className={`${activeNav(item.id) ? "text-neutral-surface" : "text-text-disabled"}`} >{item.name}</div>
               </div>
             )
           })
         }
       </div>
-      <div className="absolute bottom-0 left-0 p-6 w-full">
-        <div className="text-left text-sm font-semibold mb-2">Download U2U Wallet</div>
-        <div className="flex item-center gap-2 mb-6">
+      <div className="w-full rounded-[18px] bg-gradient-1 px-4 pt-8 pb-6">
+        <div className="font-bold text-base text-neutral">{t('Explore U2U wallet to get more secret gift!')}</div>
+        <div className="flex justify-center my-4">
+          <img src={Images.layer2Image} alt="u2u" />
+        </div>
+        <div className="flex justify-center mt-8">
           <a href="https://play.google.com/store/apps/details?id=org.u2u.wallet" target="_blank" rel="noopener noreferrer">
-            <img src={GgPlay} alt="u2u" />
-          </a>
-          <a href="https://apps.apple.com/vn/app/u2u-wallet/id6446194312" target="_blank" rel="noopener noreferrer">
-            <img src={AppStore} alt="u2u" />
+            <img src={GgPlay} alt="u2u" width={180} />
           </a>
         </div>
-        <div className="text-left text-sm font-semibold mb-2">Find us on:</div>
-        <div className="flex item-center justify-between">
+        <div className="flex justify-center mt-2">
+          <a href="https://apps.apple.com/vn/app/u2u-wallet/id6446194312" target="_blank" rel="noopener noreferrer">
+            <img src={AppStore} alt="u2u" width={180} />
+          </a>
+        </div>
+      </div>
+      <div className="w-full px-4 pt-8 pb-6">
+        <div className="text-sm text-text">© 2023 Unicorn Ultra (U2U). All rights reserved</div>
+        <div className="flex item-center justify-between mt-4">
           <a href="https://uniultra.xyz" target="_blank" rel="noopener noreferrer">
-            <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
-              <i className="fa fa fa-globe"></i>
+            <div className="flex items-center w-[28px] h-[28px] justify-center">
+              <img src={Images.u2uIcon} alt="u2u" />
             </div>
           </a>
           <a href="https://www.facebook.com/profile.php?id=100095507674287" target="_blank" rel="noopener noreferrer">
-            <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
-              <i className="fa fa-facebook"></i>
+            <div className="flex items-center w-[28px] h-[28px] justify-center">
+              <img src={Images.facebookIcon} alt="u2u" />
             </div>
           </a>
           <a href="https://www.youtube.com/@UnicornUltra" target="_blank" rel="noopener noreferrer">
-            <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
-              <i className="fa fa-youtube"></i>
+            <div className="flex items-center w-[28px] h-[28px] justify-center">
+              <img src={Images.youtubeIcon} alt="u2u" />
             </div>
           </a>
           <a href="https://twitter.com/uniultra_xyz" target="_blank" rel="noopener noreferrer">
-            <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
-              <i className="fa fa-twitter"></i>
+            <div className="flex items-center w-[28px] h-[28px] justify-center">
+              <img src={Images.twitterIcon} alt="" />
             </div>
           </a>
           <a href="https://t.me/UnicornUltra" target="_blank" rel="noopener noreferrer">
-            <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
-              <i className="fa fa-telegram"></i>
+            <div className="flex items-center w-[28px] h-[28px] justify-center">
+              <img src={Images.telegramIcon} alt="u2u" />
             </div>
           </a>
-        </div>
-
-        <div className="w-full h-[2px] bg-lightGray my-6"></div>
-        <div className="text-left text-sm font-semibold pb-6">
-          <div>© 2023 Unicorn Ultra (U2U).</div>
-          <div>All rights reserved</div>
         </div>
       </div>
     </div>

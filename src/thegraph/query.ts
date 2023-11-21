@@ -27,20 +27,27 @@ const queryDelegatorDetail = (address: string) => apolloClient.query({
   fetchPolicy: "no-cache"
 })
 
-const queryWithdrawalRequest = (delegator: string, validatorId: number) => apolloClient.query({
+const queryWithdrawalRequest = (delegator: string) => apolloClient.query({
   query: Schema().WITHDRAWALREQUEST,
   variables: {
-    delegatorAddress: delegator,
-    validatorId: validatorId
+    delegatorAddress: delegator
   },
   fetchPolicy: "no-cache"
 })
 
-const queryLockedStake = (delegator: string, valIdHex: string) => apolloClient.query({
+const queryLockedStake = (delegator: string) => apolloClient.query({
   query: Schema().LOCKE_STAKE,
   variables: {
+    delegatorAddress: delegator
+  },
+  fetchPolicy: "no-cache"
+})
+
+const queryLockedStakeValidator = (delegator: string, validator: string) => apolloClient.query({
+  query: Schema().LOCKE_STAKE_VAL,
+  variables: {
     delegatorAddress: delegator,
-    valId: valIdHex
+    validator: validator
   },
   fetchPolicy: "no-cache"
 })
@@ -64,8 +71,8 @@ const queryValidatorApr = (valId: number, stakingAmount: string) => apolloStakin
   fetchPolicy: "no-cache"
 })
 
-const queryValidatorsApr = (vals: number[]) => apolloStakingClient.query({
-  query: Schema().VALIDATORS_APR(vals),
+const queryValidatorsApr = (vals: number[], amount = "1000000000000000000000", duration = 0) => apolloStakingClient.query({
+  query: Schema().VALIDATORS_APR(vals, amount, duration),
   fetchPolicy: "no-cache"
 })
 
@@ -85,6 +92,29 @@ const queryLastEpoch = () => apolloU2UNetworkClient.query({
   fetchPolicy: "no-cache"
 })
 
+const queryStakingTxs = (from: string, skip: number) => apolloClient.query({
+  query: Schema().STAKING_TXS,
+  variables: {
+    from: from,
+    skip: skip*TableLimit,
+    limit: TableLimit
+  },
+  fetchPolicy: "no-cache"
+})
+
+const queryEpochsRewards = () => apolloU2UNetworkClient.query({
+  query: Schema().GET_EPOCHS_REWARDS,
+  fetchPolicy: "no-cache"
+})
+
+const queryValidatorEpochsRewards = (valId: number) => apolloU2UNetworkClient.query({
+  query: Schema().GET_VALIDATOR_EPOCHS_REWARDS,
+  variables: {
+    validator: valId
+  },
+  fetchPolicy: "no-cache"
+})
+
 export const QueryService = {
   queryValidators,
   queryStakingStats,
@@ -96,5 +126,9 @@ export const QueryService = {
   queryValidatorApr,
   queryValidatorsApr,
   queryEpochOfValidator,
-  queryLastEpoch
+  queryLastEpoch,
+  queryStakingTxs,
+  queryLockedStakeValidator,
+  queryEpochsRewards,
+  queryValidatorEpochsRewards
 }
