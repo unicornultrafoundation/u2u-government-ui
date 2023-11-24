@@ -5,12 +5,12 @@ import { Delegator, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
 import { AmountSelection, Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
-import { MIN_LOCKUP_DURATION } from "../../../contants"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { ethers } from "ethers"
 import { QueryService } from "../../../thegraph"
 import { Input } from "../../../components/form"
+import { appConfig } from "../../../contants"
 
 export const LockForm = () => {
 
@@ -26,8 +26,6 @@ export const LockForm = () => {
   const { relockStake } = useRelockStake()
   const { lockStake } = useLockStake()
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
-  const adjustedFeeU2U = 0.0000001
-
 
   let maxDuration = useMemo(() => {
     if (!selectedValidator || !selectedValidator.validator || !selectedValidator.validator.authLockInfo) return 0
@@ -35,7 +33,7 @@ export const LockForm = () => {
     let now = Math.ceil((new Date()).getTime())
     if (endTime < now) return 0
     let duration = Math.ceil((endTime - now) / 86400000) - 1
-    if (duration < MIN_LOCKUP_DURATION) return 0
+    if (duration < appConfig.minLockupDuration) return 0
     return duration
   }, [selectedValidator])
 
@@ -73,13 +71,13 @@ export const LockForm = () => {
   }, [selectedValidator, stakeAmount, stakeDuration])
 
   const validateDuration = useCallback((value: any) => {
-    if (Number(value) < MIN_LOCKUP_DURATION) {
-      setDurationErr(t('Minimum lockup is 14 days'));
+    if (Number(value) < appConfig.minLockupDuration) {
+      setDurationErr(`Minimum lockup is ${appConfig.minLockupDuration} days`);
       return false;
     }
     setDurationErr("")
     return true
-  }, [t])
+  }, [])
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
@@ -123,7 +121,7 @@ export const LockForm = () => {
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
       const balance = Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))
-      if (option === suggestOp || Number(balance) < adjustedFeeU2U) {
+      if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setstakeAmount('')
         validateAmount('')
@@ -141,7 +139,7 @@ export const LockForm = () => {
             amountCalculated = Number(balance) / 4 * 3;
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance) - adjustedFeeU2U
+            amountCalculated = Number(balance)
             break
         }
         setstakeAmount(amountCalculated.toString());

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { LockedStake, Validator } from "../../types"
 import { bigFormatEther, classNames, truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
-import { MIN_LOCKUP_DURATION } from "../../contants"
+import { appConfig } from "../../contants"
 import { useLockedStakeStore } from "../../store"
 import { useMemo } from "react"
 
@@ -94,7 +94,7 @@ const RenderMaxLock = ({validatorId}: {
       let now = Math.ceil((new Date()).getTime())
       if (_endTime < now) return 0
       let duration = Math.ceil((_endTime - now) / 86400000) - 1
-      if (duration < MIN_LOCKUP_DURATION) return 0
+      if (duration < appConfig.minLockupDuration) return 0
       return duration
     }
     return 0

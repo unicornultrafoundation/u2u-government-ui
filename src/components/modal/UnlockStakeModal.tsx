@@ -38,7 +38,6 @@ export const UnlockStakeModal = ({
 
   const { unlockStake } = useUnlockStake()
   const { calcPen } = useCalcPenalty()
-  const adjustedFeeU2U = 0.0000001 
 
 
   const handleInput = useCallback(async (value: any) => {
@@ -92,7 +91,7 @@ export const UnlockStakeModal = ({
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
       const balance = bigFormatEther(lockedAmount)
-      if (option === suggestOp || Number(balance) < adjustedFeeU2U) {
+      if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setAmount('')
         validateAmount('')
@@ -110,7 +109,7 @@ export const UnlockStakeModal = ({
             amountCalculated = Number(balance) / 4 * 3;
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance) - adjustedFeeU2U
+            amountCalculated = Number(balance)
             break
         }
         setAmount(amountCalculated.toString());

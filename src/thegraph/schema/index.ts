@@ -93,7 +93,7 @@ export const Schema = () => {
               stakedAmount
               createdOn
               totalClaimedRewards
-              validations {${VALIDATIONS_GQL}}
+              validations(where: {stakedAmount_gt: "10000000000"}) {${VALIDATIONS_GQL}}
             }
           stakings {
             id
@@ -131,7 +131,8 @@ export const Schema = () => {
     LOCKE_STAKE: gql`
       query LockedUp($delegatorAddress: String!) {
         lockedUps (where:{
-            delegator: $delegatorAddress
+            delegator: $delegatorAddress,
+            lockedAmount_gt: "10000000000"
           }) {
             delegator {
               id
