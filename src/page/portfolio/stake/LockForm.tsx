@@ -7,7 +7,7 @@ import { AmountSelection, Button, ConnectWalletButton, LockValidatorModal, Rende
 import { bigFormatEther } from "../../../utils"
 import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import { QueryService } from "../../../thegraph"
 import { Input } from "../../../components/form"
 import { appConfig } from "../../../contants"
@@ -95,7 +95,7 @@ export const LockForm = () => {
     const params: any = {
       toValidatorID: Number(selectedValidator.validator.valId),
       lockupDuration: stakeDuration * 86400,
-      amount: Number(stakeAmount)
+      amount: stakeAmount
     }
     try {
       const _isLocked = selectedValidator.validator && selectedValidator.validator.authLockInfo && selectedValidator.validator.authLockInfo.isLockedUp
@@ -120,30 +120,30 @@ export const LockForm = () => {
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      const balance = Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))
+      const balance = selectedValidator.actualStakedAmount
       if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setstakeAmount('')
         validateAmount('')
       } else {
         setSuggestOp(option)
-        let amountCalculated = 0;
+        let amountCalculated: any = 0;
         switch (option) {
           case SuggestionOptions.TWENTY_FIVE:
-            amountCalculated = Number(balance) / 4;
+            amountCalculated = balance.div(BigNumber.from(4));
             break
           case SuggestionOptions.FIFTY:
-            amountCalculated = Number(balance) / 2;
+            amountCalculated = balance.div(BigNumber.from(2));
             break
           case SuggestionOptions.SEVENTY_FIVE:
-            amountCalculated = Number(balance) / 4 * 3;
+            amountCalculated = balance.mul(BigNumber.from(3)).div(BigNumber.from(4));
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance)
+            amountCalculated = balance
             break
         }
-        setstakeAmount(amountCalculated.toString());
-        validateAmount(amountCalculated)
+        setstakeAmount(bigFormatEther(amountCalculated));
+        validateAmount(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)

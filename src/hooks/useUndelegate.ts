@@ -7,7 +7,7 @@ import { GAS_LIMIT_HARD } from "../contants";
 export const useUndelegate = () => {
   const stakingContract = useStakingContract()
   const undegegate = useCallback(async (params: UnDelegateParams) => {
-    const amountDec = ethers.utils.parseEther(params.amount.toString()).toString();
+    const amountDec = ethers.utils.parseEther(params.amount).toString();
     // Random wrID
     const _wrID = Math.floor(Math.random() * 100000)
     console.log("Undelegate params: ", params, _wrID)

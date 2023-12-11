@@ -7,7 +7,7 @@ import { GAS_LIMIT_HARD } from "../contants";
 export const useRelockStake = () => {
   const stakingContract = useStakingContract()
   const relockStake = useCallback(async (params: RelockStakeParams) => {
-    const amountDec = ethers.utils.parseEther(params.amount.toString()).toString();
+    const amountDec = ethers.utils.parseEther(params.amount).toString();
     console.log("RelockStake params: ", params)
     const tx = await stakingContract.relockStake(params.toValidatorID, params.lockupDuration, amountDec, { gasLimit: GAS_LIMIT_HARD });
     const receipt = await tx.wait();

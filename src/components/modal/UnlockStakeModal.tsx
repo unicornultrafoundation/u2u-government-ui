@@ -12,6 +12,7 @@ import { toastDanger, toastSuccess } from "../toast"
 import { AmountSelection, SuggestionOptions } from "../staking-calculator/AmountSelection"
 import { useNavigate } from "react-router-dom"
 import { useValidatorStore } from "../../store"
+import { BigNumber, ethers } from "ethers"
 
 interface UnlockStakeModalProps {
   isOpenModal: boolean
@@ -53,8 +54,8 @@ export const UnlockStakeModal = ({
       setAmountErr(t('This field is required'));
       return false;
     }
-    
-    if (Number(value) > Number(bigFormatEther(lockedAmount))) {
+    const parseValue =  ethers.utils.parseEther(value)
+    if (!lockedAmount.gte(BigNumber.from(parseValue.toString()))) {
       setAmountErr(t('Insufficient balance'));
       return false;
     }
@@ -67,7 +68,7 @@ export const UnlockStakeModal = ({
     setLoading(true)
     const params: UnlockStakeParams = {
       toValidatorID: Number(validatorId),
-      amount: Number(amount)
+      amount: amount
     }
     try {
       const { status, transactionHash } = await unlockStake(params)
@@ -90,30 +91,30 @@ export const UnlockStakeModal = ({
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      const balance = bigFormatEther(lockedAmount)
+      const balance = lockedAmount
       if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setAmount('')
         validateAmount('')
       } else {
         setSuggestOp(option)
-        let amountCalculated = 0;
+        let amountCalculated: any = 0;
         switch (option) {
           case SuggestionOptions.TWENTY_FIVE:
-            amountCalculated = Number(balance) / 4;
+            amountCalculated = balance.div(BigNumber.from(4));
             break
           case SuggestionOptions.FIFTY:
-            amountCalculated = Number(balance) / 2;
+            amountCalculated = balance.div(BigNumber.from(2));
             break
           case SuggestionOptions.SEVENTY_FIVE:
-            amountCalculated = Number(balance) / 4 * 3;
+            amountCalculated = balance.mul(BigNumber.from(3)).div(BigNumber.from(4));
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance)
+            amountCalculated = balance
             break
         }
-        setAmount(amountCalculated.toString());
-        validateAmount(amountCalculated)
+        setAmount(bigFormatEther(amountCalculated));
+        validateAmount(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)

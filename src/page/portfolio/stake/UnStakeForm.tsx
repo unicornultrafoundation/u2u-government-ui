@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react"
 import { AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, StakedValidatorModal, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
 import { Input } from "../../../components/form"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import { useWeb3React } from "@web3-react/core"
 import { useDelegator, useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../../components/toast"
@@ -31,7 +31,8 @@ export const UnStakeForm = () => {
       setAmountErr(t('This field is required'));
       return false;
     }
-    if (Number(value) > Number(ethers.utils.formatEther(selectedValidator.actualStakedAmount))) {
+    const parseValue =  ethers.utils.parseEther(value)
+    if (parseValue.gt(selectedValidator.actualStakedAmount)) {
       setAmountErr(t('Insufficient balance'));
       return false;
     }
@@ -41,30 +42,30 @@ export const UnStakeForm = () => {
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      if (option === suggestOp || !selectedValidator.actualStakedAmount) {
+      const balance = selectedValidator.actualStakedAmount
+      if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setAmount('')
         validateAmount('')
       } else {
         setSuggestOp(option)
-        let amountCalculated = 0;
-        const balance = Number(ethers.utils.formatEther(selectedValidator.actualStakedAmount))
+        let amountCalculated: any = 0;
         switch (option) {
           case SuggestionOptions.TWENTY_FIVE:
-            amountCalculated = Number(balance) / 4;
+            amountCalculated = balance.div(BigNumber.from(4));
             break
           case SuggestionOptions.FIFTY:
-            amountCalculated = Number(balance) / 2;
+            amountCalculated = balance.div(BigNumber.from(2));
             break
           case SuggestionOptions.SEVENTY_FIVE:
-            amountCalculated = Number(balance) / 4 * 3;
+            amountCalculated = balance.mul(BigNumber.from(3)).div(BigNumber.from(4));
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance)
+            amountCalculated = balance
             break
         }
-        setAmount(amountCalculated.toString());
-        validateAmount(amountCalculated)
+        setAmount(bigFormatEther(amountCalculated));
+        validateAmount(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)
@@ -80,7 +81,7 @@ export const UnStakeForm = () => {
     setIsLoading(true)
     const params: UnDelegateParams = {
       toValidatorID: Number(selectedValidator.validator.valId),
-      amount: Number(amount)
+      amount: amount
     }
     try {
       const { status, transactionHash } = await undegegate(params)

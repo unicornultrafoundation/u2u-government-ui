@@ -1,12 +1,12 @@
 export * from "./data"
 export interface DelegateParams {
   toValidatorID: number
-  amount: number
+  amount: string
 }
 
 export interface UnDelegateParams {
   toValidatorID: number
-  amount: number
+  amount: string
 }
 
 export interface WithdrawParams {
@@ -30,16 +30,16 @@ export interface CreateValidatorParams {
 export interface LockStakeParams {
   toValidatorID: number
   lockupDuration: number
-  amount: number
+  amount: string
 }
 
 export interface RelockStakeParams {
   toValidatorID: number
   lockupDuration: number
-  amount: number
+  amount: string
 }
 
 export interface UnlockStakeParams {
   toValidatorID: number
-  amount: number
+  amount: string
 }

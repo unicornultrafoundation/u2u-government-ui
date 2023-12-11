@@ -7,7 +7,7 @@ import { GAS_LIMIT_HARD } from "../contants"
 export const useDelegate = () => {
   const stakingContract = useStakingContract()
   const degegate = useCallback(async (params: DelegateParams) => {
-    const delAmountDec = ethers.utils.parseEther(params.amount.toString()).toString();
+    const delAmountDec = ethers.utils.parseEther(params.amount).toString();
     const tx = await stakingContract.delegate(params.toValidatorID, { value: delAmountDec, gasLimit: GAS_LIMIT_HARD });
     const receipt = await tx.wait();
     return receipt
