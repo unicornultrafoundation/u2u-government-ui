@@ -35,6 +35,7 @@ const VALIDATIONS_GQL = `
         validator {${VALIDATOR_GQL}}
         stakedAmount
         totalLockStake
+        lockedEndtime
 `
 
 const EPOCH_OF_VAL_GQL = `
@@ -129,10 +130,11 @@ export const Schema = () => {
       }
     `,
     LOCKE_STAKE: gql`
-      query LockedUp($delegatorAddress: String!) {
+      query LockedUp($delegatorAddress: String!, $timeNow:  Int!) {
         lockedUps (where:{
             delegator: $delegatorAddress,
-            lockedAmount_gt: "0"
+            lockedAmount_gt: "0",
+            endTime_gt: $timeNow
           }) {
             delegator {
               id

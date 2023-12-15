@@ -1,4 +1,5 @@
 import { TableLimit } from "../contants";
+import { nowTime } from "../utils";
 import { apolloClient, apolloStakingClient, apolloU2UNetworkClient } from "./client";
 import { Schema } from "./schema";
 
@@ -38,7 +39,8 @@ const queryWithdrawalRequest = (delegator: string) => apolloClient.query({
 const queryLockedStake = (delegator: string) => apolloClient.query({
   query: Schema().LOCKE_STAKE,
   variables: {
-    delegatorAddress: delegator
+    delegatorAddress: delegator,
+    timeNow: Math.round(nowTime()/1000)
   },
   fetchPolicy: "no-cache"
 })
