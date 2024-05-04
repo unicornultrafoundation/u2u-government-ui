@@ -5,10 +5,10 @@ import { useCallback, useMemo, useState } from "react"
 import { AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, StakedValidatorModal, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
 import { Input } from "../../../components/form"
-import { BigNumber, ethers } from "ethers"
 import { useWeb3React } from "@web3-react/core"
 import { useDelegator, useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../../components/toast"
+import { BigNumber, ethers } from "ethers"
 
 export const UnStakeForm = () => {
 
@@ -16,12 +16,17 @@ export const UnStakeForm = () => {
   const { account } = useWeb3React()
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
+
+  const validationsFilter = useMemo(() => {
+    if (!validations || validations.length === 0) return [] 
+    return validations.filter(i => (BigNumber.from(0)).lt(i.stakedAmount))
+  }, [validations])
+
   const [isShow, setIsShow] = useState(false)
-  const [selectedValidator, setSelectedValidator] = useState<Validation>(validations && validations.length > 0 ? validations[0] : {} as Validation)
+  const [selectedValidator, setSelectedValidator] = useState<Validation>(validationsFilter && validationsFilter.length > 0 ? validationsFilter[0] : {} as Validation)
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
   const [isLoading, setIsLoading] = useState(false)
   const { undegegate } = useUndelegate()
-
 
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
@@ -156,7 +161,7 @@ export const UnStakeForm = () => {
       <StakedValidatorModal
         isOpenModal={isShow}
         setIsOpenModal={setIsShow}
-        validations={validations || []}
+        validations={validationsFilter || []}
         selected={selectedValidator}
         setSelected={setSelectedValidator} />
     </div>

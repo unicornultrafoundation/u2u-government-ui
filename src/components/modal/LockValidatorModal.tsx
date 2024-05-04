@@ -4,6 +4,8 @@ import { Validation } from "../../types"
 import { bigFormatEther, classNames, truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
 import { appConfig } from "../../contants"
+import { useMemo } from "react"
+import { BigNumber } from "ethers"
 
 interface LockValidatorModallProps {
   isOpenModal: boolean
@@ -23,12 +25,17 @@ export const LockValidatorModal = ({
 
   const { t } = useTranslation()
 
+  const validationsFilter = useMemo(() => {
+    if (!validations || validations.length === 0) return [] 
+    return validations.filter(i => (BigNumber.from(0)).lt(i.stakedAmount))
+  }, [validations])
+
   return (
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
       <div className="text-[24px] font-bold text-text text-center whitespace-nowrap">{t("Choose a Staked Validator")}</div>
       <div className="w-full mt-6 min-w-[500px]">
         {
-          validations && validations.length > 0 && validations.map((row: Validation, index: number) => {
+          validationsFilter && validationsFilter.length > 0 && validationsFilter.map((row: Validation, index: number) => {
 
             let maxDuration = () => {
               if (!row.validator || !row.validator.authLockInfo) return 0

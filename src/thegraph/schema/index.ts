@@ -94,7 +94,7 @@ export const Schema = () => {
               stakedAmount
               createdOn
               totalClaimedRewards
-              validations(where: {stakedAmount_gt: "0"}) {${VALIDATIONS_GQL}}
+              validations {${VALIDATIONS_GQL}}
             }
           stakings {
             id
