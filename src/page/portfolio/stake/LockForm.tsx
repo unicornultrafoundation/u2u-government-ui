@@ -28,8 +28,9 @@ export const LockForm = () => {
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
   let maxDuration = useMemo(() => {
-    if (!selectedValidator || !selectedValidator.validator || !selectedValidator.validator.authLockInfo) return 0
-    if (selectedValidator.validator.auth && account && selectedValidator.validator.auth.toLowerCase() === account?.toLowerCase()) return 365    
+    if (!selectedValidator || !selectedValidator.validator) return 0
+    if (selectedValidator.validator.auth && account && selectedValidator.validator.auth.toLowerCase() === account?.toLowerCase()) return 365  
+    if (!selectedValidator.validator.authLockInfo) return 0
     const endTime = selectedValidator.validator.authLockInfo.endTime
     let now = Math.ceil((new Date()).getTime())
     if (endTime < now) return 0
