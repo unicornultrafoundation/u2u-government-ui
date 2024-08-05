@@ -29,13 +29,14 @@ export const LockForm = () => {
 
   let maxDuration = useMemo(() => {
     if (!selectedValidator || !selectedValidator.validator || !selectedValidator.validator.authLockInfo) return 0
+    if (selectedValidator.validator.auth && account && selectedValidator.validator.auth.toLowerCase() === account?.toLowerCase()) return 365    
     const endTime = selectedValidator.validator.authLockInfo.endTime
     let now = Math.ceil((new Date()).getTime())
     if (endTime < now) return 0
     let duration = Math.ceil((endTime - now) / 86400000) - 1
     if (duration < appConfig.minLockupDuration) return 0
     return duration
-  }, [selectedValidator])
+  }, [selectedValidator, account])
 
   const [durationSlideValue, setDurationSlideValue] = useState(0)
 
