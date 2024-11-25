@@ -1,15 +1,15 @@
 import { Slider, SliderProps } from "@material-tailwind/react"
 interface SliderComponentProps extends SliderProps {
-  
+
 }
 
 export const SliderComponent = ({
-  defaultValue,
+  defaultValue = 0,
   min = 0,
   max = 100,
   value,
   onChange,
-  step
+  step = 0
 }: SliderComponentProps) => {
 
   return (
@@ -32,6 +32,9 @@ export const SliderComponent = ({
       "
       value={value}
       onChange={onChange}
+      placeholder="" 
+      onPointerEnterCapture={(e: any) => {}} 
+      onPointerLeaveCapture={(e: any) => {}} 
     />
   )
 }

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client"
+import { QueryAPRPayload } from "../../types";
 
 const DELEGATIONS_GQL = `
           id
@@ -190,14 +191,14 @@ export const Schema = () => {
         )
       }
     `,
-    VALIDATORS_APR(vals: any[], amount: string, duration: number) {
+    VALIDATORS_APR(vals: QueryAPRPayload[]) {
       let queryString = `query stakingApr {`;
       queryString += vals.map(
         (val) => `
-          apr${val}: calculateApr(
-            validatorId: ${val}
-            amount: "${amount}"
-            duration: ${duration}
+          apr${val.validator}: calculateApr(
+            validatorId: ${val.validator}
+            amount: "${val.amount}"
+            duration: ${val.duration}
           )
         `
       );
