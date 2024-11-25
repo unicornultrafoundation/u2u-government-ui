@@ -44,7 +44,7 @@ const appConfigs: {[k: string]: AppConfig} = {
     chainID: 39,
     networkName: "U2U Solaris Mainnet",
     tokenName: "U2U",
-    rpc: "https://rpc-mainnet.uniultra.xyz/",
+    rpc: "https://rpc-mainnet.u2u.xyz/",
     explorer: "https://u2uscan.xyz/",
     sfcSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph-v3",
     u2uNetworkSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-network",
