@@ -8,6 +8,7 @@ import { QueryService } from "../../thegraph"
 import { ethers } from "ethers"
 import { isMobile } from 'mobile-device-detect';
 import { classNames } from "../../utils"
+import { QueryAPRPayload } from "../../types"
 
 export const EstimateRewards = () => {
   const { t } = useTranslation()
@@ -37,16 +38,22 @@ export const EstimateRewards = () => {
     (async () => {
       if (allValidators && allValidators.length > 0) {
         try {
-          const valIds: number[] = allValidators.map((v: any) => Number(v.valId))
           const amountDec = ethers.utils.parseEther(stakeAmount.toString()).toString();
           const duration = lockDays * 24 * 60 * 60
           let total = 0;
-          if (valIds && stakeAmount) {
-            const { data: dataApr } = await QueryService.queryValidatorsApr(valIds, amountDec, duration)
-            for (let i = 0; i < valIds.length; ++i) {
-              total += Number(dataApr[`apr${valIds[i]}`])
+          const valsPayload: QueryAPRPayload[] = allValidators.map((v: any) => {
+            return  {
+              validator: Number(v.valId),
+              amount: amountDec,
+              duration: duration
+            } as QueryAPRPayload
+          })
+          if (valsPayload && stakeAmount) {
+            const { data: dataApr } = await QueryService.queryValidatorsApr(valsPayload)
+            for (let i = 0; i < valsPayload.length; ++i) {
+              total += Number(dataApr[`apr${valsPayload[i].validator}`])
             }
-            const _apr = total / valIds.length
+            const _apr = total / valsPayload.length
             setApr(_apr)
             setRewards(_apr/100*stakeAmount)
           } else {

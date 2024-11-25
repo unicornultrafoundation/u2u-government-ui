@@ -20,6 +20,13 @@ export const ValidatorList = ({
     return (
       <div>
         {validators.length > 0 && validators.map((row: Validator, index: number) => {
+           let maxDuration = () => {
+            const _endTime = row.authLockInfo ? row.authLockInfo.endTime : 0
+            let now = Math.ceil((new Date()).getTime())
+            if (_endTime < now) return 0
+            let duration = Math.ceil((_endTime - now) / 86400000) - 1
+            return duration
+          }
           return (
             <div className="py-4 px-6 border border-borer-outline rounded-[16px] shadow-2 mb-6" key={index} onClick={() => navigate(`/validator/${row.valId}`)}>
               <div className="flex justify-between items-center">
@@ -49,10 +56,28 @@ export const ValidatorList = ({
                 </div>
                 <div className="text-right">
                   <div className="text-md text-text-secondary">
-                    {t("APR (%)")}
+                    {t("Max Lock (Days)")}
                   </div>
                   <div className="text-md text-text font-semibold">
-                    <RenderNumberFormat amount={row.apr} fractionDigits={2} />
+                  <RenderNumberFormat amount={maxDuration()} fractionDigits={2} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <div className="text-left">
+                  <div className="text-md text-text-secondary">
+                    {t("Min.Apr(%)")}
+                  </div>
+                  <div className="text-md text-text font-semibold">
+                  <RenderNumberFormat amount={row.minApr} fractionDigits={2} />
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-md text-text-secondary">
+                    {t("Max.Apr(%)")}
+                  </div>
+                  <div className="text-md text-text font-semibold">
+                    <RenderNumberFormat amount={row.maxApr} fractionDigits={2} />
                   </div>
                 </div>
               </div>
@@ -88,7 +113,9 @@ export const ValidatorList = ({
             <th className="py-6 text-left px-6 font-medium">{"#"}</th>
             <th className="py-6 text-left font-medium whitespace-nowrap">{t("Validator")}</th>
             <th className="py-6 text-right font-medium whitespace-nowrap">{t("Staked Amount (U2U)")}</th>
-            <th className="py-6 text-right font-medium whitespace-nowrap">{t("APR (%)")}</th>
+            <th className="py-6 text-right font-medium whitespace-nowrap">{t("Min.Apr(%)")}</th>
+            <th className="py-6 text-right font-medium whitespace-nowrap">{t("Max.Apr(%)")}</th>
+            <th className="py-6 text-right font-medium whitespace-nowrap">{t("Max Lock (Days)")}</th>
             <th className="py-6 text-right font-medium whitespace-nowrap">{t("Voting Power (%)")}</th>
             <th className="py-6 text-right font-medium whitespace-nowrap">{t("Delegators")}</th>
             <th className="py-6 text-right font-medium px-6">{t("Status")}</th>
@@ -97,6 +124,13 @@ export const ValidatorList = ({
         <tbody>
           {
             validators.length > 0 && validators.map((row: Validator, index: number) => {
+              let maxDuration = () => {
+                const _endTime = row.authLockInfo ? row.authLockInfo.endTime : 0
+                let now = Math.ceil((new Date()).getTime())
+                if (_endTime < now) return 0
+                let duration = Math.ceil((_endTime - now) / 86400000) - 1
+                return duration
+              }
               return (
                 <tr key={index} className="border-y border-border-outline font-semibold hover:bg-neutral-surface-hover cursor-pointer" onClick={() => navigate(`/validator/${row.valId}`)}>
                   <td className="py-4 px-6 text-left">{index + 1}</td>
@@ -116,7 +150,13 @@ export const ValidatorList = ({
                     <RenderNumberFormat amount={bigFormatEther(row.totalStakedAmount || 0) || 0} fractionDigits={0} />
                   </td>
                   <td className={`text-right font-medium`}>
-                    <RenderNumberFormat amount={row.apr} fractionDigits={2} />
+                    <RenderNumberFormat amount={row.minApr} fractionDigits={2} />
+                  </td>
+                  <td className={`text-right font-medium`}>
+                    <RenderNumberFormat amount={row.maxApr} fractionDigits={2} />
+                  </td>
+                  <td className={`text-right font-medium`}>
+                    <RenderNumberFormat amount={maxDuration()} fractionDigits={2} />
                   </td>
                   <td className={`text-right font-medium`}>
                     <RenderNumberFormat amount={Number(row.votingPower) / 10000} fractionDigits={2} />
