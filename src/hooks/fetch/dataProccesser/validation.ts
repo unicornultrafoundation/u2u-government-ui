@@ -10,7 +10,7 @@ export const validation  = async (data: any, totalStaked: BigNumber, apr: number
     actualStakedAmount = actualStakedAmount.sub(BigNumber.from(data.totalLockStake))
   }
   
-  const _validator = await validator(data.validator, totalStaked, apr)
+  const _validator = await validator(data.validator, totalStaked, apr, apr)
   return {
     id: data.id,
     stakedAmount: BigNumber.from(data.stakedAmount),

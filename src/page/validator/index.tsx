@@ -58,9 +58,11 @@ export const Validator = () => {
       <div className="grid grid-cols-12 gap-4">
         <div className={classNames("border border-border-ountline rounded-2xl p-4 pl-6 bg-neutral-surface shadow-2", isMobile ? "col-span-6" : "col-span-2")}>
           <div className="text-left">
-            <div className="text-sm text-text">{t('Avg.APR')}</div>
+            <div className="text-sm text-text">{t('APR %')}</div>
             <div className="text-primary font-semibold text-lg">
-              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].apr : 0} fractionDigits={2} /><span className="ml-1">%</span>
+              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].minApr : 0} fractionDigits={2} />
+              <span className="mx-2">-</span>
+              <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].maxApr : 0} fractionDigits={2} />
             </div>
           </div>
           <div className="flex justify-end">

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { ArrowDownIcon, Images } from "../../../images"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Delegator, Validation } from "../../../types"
+import { Delegator, QueryAPRPayload, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
 import { AmountSelection, Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
@@ -29,7 +29,7 @@ export const LockForm = () => {
 
   let maxDuration = useMemo(() => {
     if (!selectedValidator || !selectedValidator.validator) return 0
-    if (selectedValidator.validator.auth && account && selectedValidator.validator.auth.toLowerCase() === account?.toLowerCase()) return 365  
+    if (selectedValidator.validator.auth && account && selectedValidator.validator.auth.toLowerCase() === account?.toLowerCase()) return 365
     if (!selectedValidator.validator.authLockInfo) return 0
     const endTime = selectedValidator.validator.authLockInfo.endTime
     let now = Math.ceil((new Date()).getTime())
@@ -53,16 +53,20 @@ export const LockForm = () => {
     (async () => {
       if (selectedValidator && selectedValidator.validator) {
         try {
-          const valIds: number[] = [Number(selectedValidator.validator.valId)]
           const amountDec = ethers.utils.parseEther(stakeAmount.toString()).toString();
           const duration = stakeDuration * 24 * 60 * 60
           let total = 0;
-          if (valIds && amountDec) {
-            const { data: dataApr } = await QueryService.queryValidatorsApr(valIds, amountDec, duration)
-            for (let i = 0; i < valIds.length; ++i) {
-              total += Number(dataApr[`apr${valIds[i]}`])
+          const valsPayload = [{
+            validator: Number(selectedValidator.validator.valId),
+            amount: amountDec,
+            duration: duration
+          } as QueryAPRPayload]
+          if (valsPayload && amountDec) {
+            const { data: dataApr } = await QueryService.queryValidatorsApr(valsPayload)
+            for (let i = 0; i < valsPayload.length; ++i) {
+              total += Number(dataApr[`apr${valsPayload[i].validator}`])
             }
-            const _apr = total / valIds.length
+            const _apr = total / valsPayload.length
             setApr(_apr)
           } else {
             setApr(0)
