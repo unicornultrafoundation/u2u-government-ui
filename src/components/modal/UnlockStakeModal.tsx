@@ -42,10 +42,10 @@ export const UnlockStakeModal = ({
 
 
   const handleInput = useCallback(async (value: any) => {
-    const _pen = await calcPen(validatorId ? Number(validatorId) : 0, Number(value), lockedAmount)
+    const _pen = await calcPen(validatorId ? Number(validatorId) : 0, (value))
     setPennalty(bigFormatEther(_pen || 0))
      // eslint-disable-next-line
-  }, [lockedAmount, validatorId])
+  }, [validatorId])
 
 
 
@@ -115,6 +115,7 @@ export const UnlockStakeModal = ({
         }
         setAmount(bigFormatEther(amountCalculated));
         validateAmount(bigFormatEther(amountCalculated))
+        handleInput(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)
@@ -164,7 +165,7 @@ export const UnlockStakeModal = ({
         <div className="text-base text-text">{t("Penalty")}</div>
         <div className="flex gap-1">
           <div className="text-base font-semibold text-error">
-          <RenderNumberFormat amount={penalty} fractionDigits={6} />
+          <RenderNumberFormat amount={penalty} fractionDigits={8} />
           </div>
           <div className="text-base text-text">U2U</div>
         </div>
