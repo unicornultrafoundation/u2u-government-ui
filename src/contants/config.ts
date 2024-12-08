@@ -47,7 +47,7 @@ const appConfigs: {[k: string]: AppConfig} = {
     rpc: "https://rpc-mainnet.u2u.xyz/",
     explorer: "https://u2uscan.xyz/",
     sfcSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph-v3",
-    u2uNetworkSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-network",
+    u2uNetworkSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-network-v3",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 604800,
     stakingGraphql: "https://staking-graphql.uniultra.xyz/graphql",
