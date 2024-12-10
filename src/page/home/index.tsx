@@ -50,12 +50,12 @@ export const Home = () => {
                 {shortenDisplayNumber(bigFormatEther(totalStaked))}
               </div>
             </div>
-            <div className="">
+            {/* <div className="">
               <div className="text-xs text-neutral">{t('Circulating Supply (U2U)')}</div>
               <div className="text-lg text-neutral font-semibold">
                 {shortenDisplayNumber(totalSupply)}
               </div>
-            </div>
+            </div> */}
             <div className="">
               <div className="text-xs text-neutral">{t('Staking Ratio (%)')}</div>
               <div className="text-lg text-neutral font-semibold">
