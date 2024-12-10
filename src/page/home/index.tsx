@@ -136,12 +136,12 @@ export const Home = () => {
               {shortenDisplayNumber(bigFormatEther(totalStaked))}
             </div>
           </div>
-          <div className="">
+          {/* <div className="">
             <div className="text-base text-neutral font-semibold">{t('Circulating Supply (U2U)')}</div>
             <div className="text-2xl text-neutral font-bold">
               {shortenDisplayNumber(totalSupply)}
             </div>
-          </div>
+          </div> */}
           <div className="">
             <div className="text-base text-neutral font-semibold">{t('Staking Ratio (%)')}</div>
             <div className="text-2xl text-neutral font-bold">
