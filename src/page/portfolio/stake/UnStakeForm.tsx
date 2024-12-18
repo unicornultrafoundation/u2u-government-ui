@@ -9,11 +9,13 @@ import { useWeb3React } from "@web3-react/core"
 import { useDelegator, useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { BigNumber, ethers } from "ethers"
+import {useWeb3} from "../../../hooks/useWeb3";
 
 export const UnStakeForm = () => {
 
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  // const { account } = useWeb3React()
+  const { address } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
 
@@ -151,7 +153,7 @@ export const UnStakeForm = () => {
 
       <div className="flex justify-center mt-10">
         {
-          account ? (
+          address ? (
             <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("Unstake")}</Button>
           ) : (
             <ConnectWalletButton />

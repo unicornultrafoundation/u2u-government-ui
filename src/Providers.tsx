@@ -6,6 +6,9 @@ import type { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect
 
 import { metaMask, metaMaskHooks } from "./utils/connectors/metamaskConnector"
 import { walletConnectV2, walletConnectV2Hooks } from "./utils/connectors/walletConnectConnectorV2"
+import {WagmiProvider} from "wagmi";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {wagmiConfig} from "./contants/wagmi";
 
 const connectors: [MetaMask | WalletConnectV2, Web3ReactHooks][] = [
   [metaMask, metaMaskHooks],
@@ -17,12 +20,17 @@ interface ProvidersProps {
 }
 
 const Providers = ({ children }: ProvidersProps) => {
+    const queryClient = new QueryClient()
   return (
     <Web3ReactProvider connectors={connectors}>
+        <WagmiProvider config={wagmiConfig}>
+            <QueryClientProvider client={queryClient}>
         <RefreshContextProvider>
           {children}
         </RefreshContextProvider>
-    </Web3ReactProvider>
+            </QueryClientProvider>
+        </WagmiProvider>
+     </Web3ReactProvider>
   )
 }
 

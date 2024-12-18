@@ -12,6 +12,7 @@ import { APRCalculator } from "./APRCalculator"
 import { Images } from "../../images"
 import { BigNumber, ethers } from "ethers"
 import { bigFormatEther } from "../../utils"
+import {useWeb3} from "../../hooks/useWeb3";
 
 interface StakingCalculatorProps {
   validators: Validator[]
@@ -31,8 +32,9 @@ export const StakingCalculator = ({
   const [isLoading, setIsLoading] = useState(false)
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
-  const { account } = useWeb3React()
-  const { degegate } = useDelegate()
+  // const { account } = useWeb3React()
+  const { address } = useWeb3();
+  const { degegate, isSuccess, isError } = useDelegate()
   const adjustedFeeU2U = ethers.utils.parseEther("0.1") // 0.1 U2U
 
   useEffect(() => {
@@ -107,22 +109,36 @@ export const StakingCalculator = ({
       amount: amount
     }
     try {
-      const { status, transactionHash } = await degegate(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your amount has been delegated.`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Delegate failed', t('Error'))
-      }
-      console.log("Delegate tx: ", transactionHash)
+      await degegate(params)
+      // if (status === 1) {
+      //   const msg = `Congratulation! Your amount has been delegated.`
+      //   toastSuccess(msg, t('Success'))
+      // } else {
+      //   toastDanger('Sorry! Delegate failed', t('Error'))
+      // }
+      // console.log("Delegate tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Delegate failed', t('Error'))
+    } finally {
+        setAmount('')
+        setIsLoading(false)
     }
-    setAmount('')
-    setIsLoading(false)
     // eslint-disable-next-line
   }, [amount, selected])
+
+  useEffect(() => {
+    if(isSuccess) {
+      const msg = `Congratulation! Your amount has been delegated.`
+      toastSuccess(msg, t('Success'))
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if(isError) {
+      toastDanger('Sorry! Delegate failed', t('Error'))
+    }
+  }, [isError]);
 
   return (
     <div className="text-left w-full py-8 px-10 bg-neutral-surface shadow-1 border border-border-outline rounded-[24px]">
@@ -166,7 +182,7 @@ export const StakingCalculator = ({
       </div>
       <div className="flex justify-center">
         {
-          account ? (
+          address ? (
             <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
           ) : (
             <ConnectWalletButton />

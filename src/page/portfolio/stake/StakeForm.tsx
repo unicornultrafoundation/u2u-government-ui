@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import { APRCalculator, AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, SuggestionOptions, ValidatorStakeModal, buttonScale } from "../../../components"
 import { useBalance, useDelegate } from "../../../hooks"
 import { Input } from "../../../components/form"
-import { useCallback, useState } from "react"
+import {useCallback, useEffect, useState} from "react"
 import { useValidatorStore } from "../../../store"
 import { DelegateParams, Validator } from "../../../types"
 import { useWeb3React } from "@web3-react/core"
@@ -10,12 +10,14 @@ import { toastDanger, toastSuccess } from "../../../components/toast"
 import { ArrowDownIcon } from "../../../images"
 import { BigNumber, ethers } from "ethers"
 import { bigFormatEther } from "../../../utils"
+import {useWeb3} from "../../../hooks/useWeb3";
 
 export const StakeForm = () => {
 
   const { t } = useTranslation()
-  const { balance } = useBalance()
-  const { account } = useWeb3React()
+  // const { balance } = useBalance()
+  // const { account } = useWeb3React()
+  const { address, balance } = useWeb3();
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
@@ -26,11 +28,11 @@ export const StakeForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedValidator, setSelectedValidator] = useState<Validator>(allValidators.length > 0 ? allValidators[0] : {} as Validator)
   const [isShow, setIsShow] = useState(false)
-  const { degegate } = useDelegate()
+  const { degegate, isSuccess, isError } = useDelegate()
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      const _balance = ethers.utils.parseEther(balance);      
+      const _balance = ethers.utils.parseEther(String(balance));
       if (option === suggestOp || adjustedFeeU2U.gt(_balance)) {
         setSuggestOp(SuggestionOptions.NONE)
         setAmount('')
@@ -82,22 +84,36 @@ export const StakeForm = () => {
       amount: amount
     }
     try {
-      const { status, transactionHash } = await degegate(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your amount has been delegated.`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Delegate failed', t('Error'))
-      }
-      console.log("Delegate tx: ", transactionHash)
+      await degegate(params)
+      // if (status === 1) {
+      //   const msg = `Congratulation! Your amount has been delegated.`
+      //   toastSuccess(msg, t('Success'))
+      // } else {
+      //   toastDanger('Sorry! Delegate failed', t('Error'))
+      // }
+      // console.log("Delegate tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Delegate failed', t('Error'))
+    } finally {
+      setAmount('')
+      setIsLoading(false)
     }
-    setAmount('')
-    setIsLoading(false)
     // eslint-disable-next-line
   }, [amount, selectedValidator])
+
+  useEffect(() => {
+      if(isSuccess) {
+        const msg = `Congratulation! Your amount has been delegated.`
+        toastSuccess(msg, t('Success'))
+      }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if(isError) {
+      toastDanger('Sorry! Delegate failed', t('Error'))
+    }
+  }, [isError]);
 
   return (
     <div className="w-full">
@@ -143,7 +159,7 @@ export const StakeForm = () => {
       </div>
       <div className="flex justify-center">
         {
-          account ? (
+          address ? (
             <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Stake")}</Button>
           ) : (
             <ConnectWalletButton />

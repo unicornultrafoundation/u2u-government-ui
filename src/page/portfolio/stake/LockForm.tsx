@@ -11,11 +11,13 @@ import { BigNumber, ethers } from "ethers"
 import { QueryService } from "../../../thegraph"
 import { Input } from "../../../components/form"
 import { appConfig } from "../../../contants"
+import {useWeb3} from "../../../hooks/useWeb3";
 
 export const LockForm = () => {
 
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  // const { account } = useWeb3React()
+  const { address } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
   const [selectedValidator, setSelectedValidator] = useState<Validation>(validations && validations.length > 0 ? validations[0] : {} as Validation)
@@ -29,7 +31,7 @@ export const LockForm = () => {
 
   let maxDuration = useMemo(() => {
     if (!selectedValidator || !selectedValidator.validator) return 0
-    if (selectedValidator.validator.auth && account && selectedValidator.validator.auth.toLowerCase() === account?.toLowerCase()) return 365
+    if (selectedValidator.validator.auth && address && selectedValidator.validator.auth.toLowerCase() === address?.toLowerCase()) return 365
     if (!selectedValidator.validator.authLockInfo) return 0
     const endTime = selectedValidator.validator.authLockInfo.endTime
     let now = Math.ceil((new Date()).getTime())
@@ -37,7 +39,7 @@ export const LockForm = () => {
     let duration = Math.ceil((endTime - now) / 86400000) - 1
     if (duration < appConfig.minLockupDuration) return 0
     return duration
-  }, [selectedValidator, account])
+  }, [selectedValidator, address])
 
   const [durationSlideValue, setDurationSlideValue] = useState(0)
 
@@ -228,7 +230,7 @@ export const LockForm = () => {
       </div>
       <div className="flex justify-center mt-10">
         {
-          account ? (
+          address ? (
             <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onLockStake}>{t("Lock")}</Button>
           ) : (
             <ConnectWalletButton />
