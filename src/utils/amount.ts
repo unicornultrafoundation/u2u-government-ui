@@ -1,3 +1,6 @@
+import {trimEnd} from "lodash";
+import numeral from "numeral";
+
 export const shortenDisplayNumber = (value: string | number, prefix: string = '', fractionDigits: number = 2) => {
   if (Number(value) < 0.001) {
     return `${prefix} < 0.001`

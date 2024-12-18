@@ -1,3 +1,5 @@
+import {Address} from "viem";
+import {U2U_STAKING_ABI} from "./abi";
 
 export interface AppConfig {
   chainID: number,
@@ -56,3 +58,15 @@ const appConfigs: {[k: string]: AppConfig} = {
 }
 const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID as string || "39";
 export const appConfig: AppConfig = appConfigs[U2U_CHAINID]
+
+export const contracts: {
+  [key: string]: {
+    address: Address;
+    abi: any;
+  };
+} = {
+  staking: {
+    address: appConfig.stakingContract as Address,
+    abi: U2U_STAKING_ABI,
+  },
+};

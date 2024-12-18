@@ -15,11 +15,12 @@ import { toastSuccess } from "../toast"
 import { MenuMobile } from "./MenuMobile"
 import { Languages } from "./Languages"
 import Jazzicon from "react-jazzicon"
+import {useWeb3} from "../../hooks/useWeb3";
 
 export const Header = () => {
   const { t } = useTranslation()
-  const { account, isActive } = useWeb3React()
-  const { balance } = useBalance()
+  // const { account, isActive } = useWeb3React()
+  // const { balance } = useBalance()
   const navigate = useNavigate()
   const [isShowMobileMenu, setIsShowMobileMenu] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -31,6 +32,8 @@ export const Header = () => {
 
   const accountDetailsRef = useRef(null)
   const settingDetailsRef = useRef(null)
+
+  const { address, correctedChain, balance } = useWeb3();
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -93,14 +96,14 @@ export const Header = () => {
             {t('Register')}
           </Button>
           {
-            isActive ? (
+            address ? (
               <div className="flex justify-end">
                 <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline">
                   <div className="flex items-center gap-2">
                     <Jazzicon diameter={36} seed={1} />
                     <div>
                       <div className="text-base text-text font-semibold">
-                        {truncate({ str: account || "", headCount: 5 })}
+                        {truncate({ str: address || "", headCount: 5 })}
                       </div>
                       <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
                     </div>
@@ -115,12 +118,12 @@ export const Header = () => {
                           <Jazzicon diameter={36} seed={1} />
                           <div>
                             <div className="text-base text-text font-semibold">
-                              {truncate({ str: account || "", headCount: 5 })}
+                              {truncate({ str: address || "", headCount: 5 })}
                             </div>
                             <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
                           </div>
                         </div>
-                        <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(account || "")} />
+                        <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(address || "")} />
                       </div>
                       <div className="py-3 px-6 border-b border-border-outline">
                         <div className="text-sm text-text-secondary">{t("Balance")}</div>
@@ -130,7 +133,7 @@ export const Header = () => {
                       </div>
                       <div className="py-3 px-6 border-b border-border-outline flex gap-4">
                         <GlobeIcon />
-                        <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
+                        <a href={`${appConfig.explorer}address/${address}`} target="_blank" rel="noopener noreferrer">
                           <div className="text-base font-semibold text-text">{t("Explorer")}</div>
                         </a>
                       </div>
@@ -178,14 +181,14 @@ export const Header = () => {
         {t('Validator Register')}
       </Button>
       {
-        isActive ? (
+        address ? (
           <div className="flex justify-end">
             <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
               <div className="flex items-center gap-2">
                 <Jazzicon diameter={36} seed={1} />
                 <div>
                   <div className="text-base text-text font-semibold">
-                    {truncate({ str: account || "", headCount: 5 })}
+                    {truncate({ str: address || "", headCount: 5 })}
                   </div>
                   <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
                 </div>
@@ -201,12 +204,12 @@ export const Header = () => {
                       <Jazzicon diameter={36} seed={1} />
                       <div>
                         <div className="text-base text-text font-semibold">
-                          {truncate({ str: account || "", headCount: 5 })}
+                          {truncate({ str: address || "", headCount: 5 })}
                         </div>
                         <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
                       </div>
                     </div>
-                    <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(account || "")} />
+                    <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(address || "")} />
                   </div>
                   <div className="py-3 px-6 border-b border-border-outline">
                     <div className="text-sm text-text-secondary">{t("Balance")}</div>
@@ -216,7 +219,7 @@ export const Header = () => {
                   </div>
                   <div className="py-3 px-6 border-b border-border-outline flex gap-4">
                     <GlobeIcon />
-                    <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
+                    <a href={`${appConfig.explorer}address/${address}`} target="_blank" rel="noopener noreferrer">
                       <div className="text-base font-semibold text-text">{t("Explorer")}</div>
                     </a>
                   </div>

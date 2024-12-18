@@ -7,10 +7,12 @@ import { CreateValidatorParams } from "../../types"
 import { useCreateValidator } from "../../hooks"
 import { isMobile } from 'mobile-device-detect';
 import { classNames } from "../../utils"
+import {useWeb3} from "../../hooks/useWeb3";
 
 export const ValidatorRegistrationComponent = () => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  // const { account } = useWeb3React()
+  const { address } = useWeb3();
   const [pubKey, setPubKey] = useState("")
   const [amount, setAmount] = useState("")
 
@@ -65,7 +67,7 @@ export const ValidatorRegistrationComponent = () => {
       </div>
       <div className="flex justify-center mt-10">
         {
-          account ? (
+          address ? (
             <Button className="w-full" scale={buttonScale.lg} onClick={onRegister}>{t('Register')}</Button>
           ) : (
             <ConnectWalletButton />

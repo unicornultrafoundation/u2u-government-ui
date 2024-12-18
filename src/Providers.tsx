@@ -22,7 +22,7 @@ interface ProvidersProps {
 const Providers = ({ children }: ProvidersProps) => {
     const queryClient = new QueryClient()
   return (
-    // <Web3ReactProvider connectors={connectors}>
+    <Web3ReactProvider connectors={connectors}>
         <WagmiProvider config={wagmiConfig}>
             <QueryClientProvider client={queryClient}>
         <RefreshContextProvider>
@@ -30,7 +30,7 @@ const Providers = ({ children }: ProvidersProps) => {
         </RefreshContextProvider>
             </QueryClientProvider>
         </WagmiProvider>
-    // </Web3ReactProvider>
+     </Web3ReactProvider>
   )
 }
 

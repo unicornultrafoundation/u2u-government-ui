@@ -1,49 +1,39 @@
 import { http, createConfig } from 'wagmi'
+import { u2uNebulasTestnet } from './chain'
 import { mainnet, sepolia } from 'wagmi/chains'
-import { createClient } from 'viem'
 import { metaMask } from '@wagmi/connectors';
 import {
     bitgetWallet,
-      injectedWallet,
-      walletConnectWallet,
+    injectedWallet,
+    walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
-import {appConfig} from "./config";
-import {u2uNebulasTestnet} from "./chain";
-import {CreateConfigParameters} from "@wagmi/core/src/createConfig";
 
 const connectors = connectorsForWallets(
-  [
-      {
-          groupName: "Main",
-          wallets: [bitgetWallet, walletConnectWallet, injectedWallet],
-      },
-  ],
-  {
-      projectId: "815145290a10a9393358a85a318d47ad",
-      appName: 'Staking1',
-  }
+    [
+        {
+            groupName: "Main",
+            wallets: [bitgetWallet, walletConnectWallet, injectedWallet],
+        },
+    ],
+    {
+        projectId: "815145290a10a9393358a85a318d47ad",
+        appName: 'Staking',
+    }
 );
 
-const config: CreateConfigParameters = {
+
+export const wagmiConfig = createConfig({
     connectors: [metaMask(), ...connectors],
-    chains: [mainnet, sepolia],
-    client({ chain }) {
-        return createClient({ chain, transport: http() });
-    }
-}
-
-
-// export const wagmiConfig = createConfig({...config});
-//
-
-export const wagmiConfig: any = createConfig({
-    connectors: [metaMask(), ...connectors],
-    chains: [mainnet, sepolia, u2uNebulasTestnet],
-    client({ chain }) {
-        return createClient({ chain, transport: http() });
+    chains: [u2uNebulasTestnet],
+    ccipRead: false,
+    transports: {
+        [u2uNebulasTestnet.id]: http(),
+        [mainnet.id]: http(),
+        [sepolia.id]: http(),
     },
+    multiInjectedProviderDiscovery: false,
     ssr: true,
 });
