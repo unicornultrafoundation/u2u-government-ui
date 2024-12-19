@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import {Connector, useConnect, useDisconnect, useSwitchChain} from 'wagmi'
 import { ConnectorNotFoundError, SwitchChainNotSupportedError } from '@wagmi/core'
-import {ACTIVE_CHAINID} from "../contants/chain";
+import { U2U_CHAINID } from "../contants"
 
 export const useAuth = () => {
   const { connectAsync } = useConnect()
@@ -37,7 +37,7 @@ export const useAuth = () => {
 
   const switchToNetwork = useCallback(async () => {
     try {
-      switchChain && switchChain({chainId: ACTIVE_CHAINID})
+      switchChain && switchChain({chainId: Number(U2U_CHAINID)})
     } catch (error) {
       console.error(error)
     } finally {}

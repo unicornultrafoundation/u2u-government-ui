@@ -1,7 +1,6 @@
 import {useCallback} from "react"
 import { Modal } from "."
 import { useAuth } from "../../hooks"
-import { ConnectorNames } from "../../utils"
 import { useTranslation } from "react-i18next"
 import { Images } from "../../images"
 import {Connector, useAccount, useConnect, useDisconnect} from "wagmi";

@@ -3,7 +3,6 @@ import { useRefresh } from "../useRefresh"
 import { QueryService } from "../../thegraph"
 import { DataProcessor } from "./dataProccesser"
 import { useDelegatorStore } from "../../store"
-import { useWeb3React } from "@web3-react/core"
 import {useWeb3} from "../useWeb3";
 
 export const useFetchWithdrawRequest = () => {

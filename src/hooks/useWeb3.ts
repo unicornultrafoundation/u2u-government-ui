@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useAccount, useBalance, useBlockNumber } from "wagmi";
-import {ACTIVE_CHAINID} from "../contants/chain";
 import {useQueryClient} from "@tanstack/react-query";
+import { U2U_CHAINID } from '../contants';
 
 
 export const useWeb3 = () => {
@@ -14,7 +14,7 @@ export const useWeb3 = () => {
 
 
     const correctedChain = useMemo(() => {
-    return account && account.chain && account.chain.id === ACTIVE_CHAINID
+    return account && account.chain && account.chain.id === Number(U2U_CHAINID)
   }, [account]);
 
     const balance = useMemo(() => {

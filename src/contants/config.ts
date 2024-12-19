@@ -56,7 +56,7 @@ const appConfigs: {[k: string]: AppConfig} = {
     minLockupDuration: 14
   }
 }
-const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID as string || "39";
+export const U2U_CHAINID = process.env.REACT_APP_U2U_CHAINID as string || "39";
 export const appConfig: AppConfig = appConfigs[U2U_CHAINID]
 
 export const contracts: {

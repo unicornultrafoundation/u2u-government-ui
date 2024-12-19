@@ -1,4 +1,3 @@
-import { useWeb3React } from "@web3-react/core"
 import { useEffect, useState } from "react"
 import { useRefresh } from "./useRefresh"
 import { simpleRpcProvider } from "../utils"
