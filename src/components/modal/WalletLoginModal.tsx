@@ -71,7 +71,7 @@ export const WalletLoginModal = ({
                 <div
                     className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
                     onClick={() => onLogin(connector)}>
-                  <img src={Images.BitgetIcon} alt="u2u" className="w-[32px] h-[32px]"/>
+                  <img src={Images.OkxIcon} alt="u2u" className="w-[32px] h-[32px]"/>
                   <div className={`text-base font-semibold text-text-disabled`}>{connector.name}</div>
                 </div>
             );
