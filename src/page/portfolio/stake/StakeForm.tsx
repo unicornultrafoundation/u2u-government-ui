@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next"
 import { APRCalculator, AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, SuggestionOptions, ValidatorStakeModal, buttonScale } from "../../../components"
-import { useBalance, useDelegate } from "../../../hooks"
+import { useDelegate } from "../../../hooks"
 import { Input } from "../../../components/form"
 import {useCallback, useEffect, useState} from "react"
 import { useValidatorStore } from "../../../store"
 import { DelegateParams, Validator } from "../../../types"
-import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { ArrowDownIcon } from "../../../images"
 import { BigNumber, ethers } from "ethers"
@@ -15,8 +14,6 @@ import {useWeb3} from "../../../hooks/useWeb3";
 export const StakeForm = () => {
 
   const { t } = useTranslation()
-  // const { balance } = useBalance()
-  // const { account } = useWeb3React()
   const { address, balance } = useWeb3();
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
@@ -107,13 +104,11 @@ export const StakeForm = () => {
         const msg = `Congratulation! Your amount has been delegated.`
         toastSuccess(msg, t('Success'))
       }
-  }, [isSuccess]);
-
-  useEffect(() => {
     if(isError) {
       toastDanger('Sorry! Delegate failed', t('Error'))
     }
-  }, [isError]);
+  }, [isSuccess, isError, t]);
+
 
   return (
     <div className="w-full">

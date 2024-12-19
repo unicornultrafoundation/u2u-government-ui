@@ -1,16 +1,20 @@
-import { useCallback } from "react";
-import { useStakingContract } from "./useContract";
-import { RestakeRewardsParams } from "../types";
-import { GAS_LIMIT_HARD } from "../contants";
+import {RestakeRewardsParams} from "../types";
+import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {useWriteContract} from "wagmi";
+import {useWaitForTransaction} from "./useWaitForTransaction";
 
 export const useRestakeRewards = () => {
-  const stakingContract = useStakingContract()
-  const restake = useCallback(async (params: RestakeRewardsParams) => {
-    const tx = await stakingContract.restakeRewards(params.toValidatorID, { gasLimit: GAS_LIMIT_HARD });
-    const receipt = await tx.wait();
-    return receipt
-  }, [stakingContract])
-  return {
-    restake
-  }
+  const method = useWriteContract();
+  const { waitForTransaction } = useWaitForTransaction();
+
+  const restake = async (params: RestakeRewardsParams) => {
+    const txhash = await method.writeContractAsync({
+      ...contracts.staking,
+      functionName: 'restakeRewards',
+      args: [params.toValidatorID],
+      gas: BigInt(GAS_LIMIT_HARD),
+    });
+    return waitForTransaction(txhash);
+  };
+  return { ...method, restake };
 }

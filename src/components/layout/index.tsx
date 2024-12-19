@@ -1,9 +1,7 @@
-import { ReactNode, useEffect } from "react"
+import { ReactNode } from "react"
 import { LeftBar } from "../left-bar"
 import { Header } from "../header"
-import { useAuth } from "../../hooks";
-import { connectorLocalStorageKey } from "../../contants";
-import { ConnectorNames, classNames } from "../../utils";
+import { classNames } from "../../utils";
 import { isMobile } from 'mobile-device-detect';
 
 interface Props {

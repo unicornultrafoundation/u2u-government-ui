@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { useFetchStakingTxs } from "../../hooks"
 import { useEffect, useState } from "react"
-import { useWeb3React } from "@web3-react/core"
 import { ChangePageParams, Pagination } from "../../components/pagination"
 import { TableLimit } from "../../contants"
 import { StakingTransaction, Validator } from "../../types"

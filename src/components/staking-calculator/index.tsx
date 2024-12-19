@@ -4,7 +4,6 @@ import { Button, ConnectWalletButton, buttonScale } from "../button"
 import { Input, SelectOption } from "../form"
 import { RenderNumberFormat } from "../text"
 import { DelegateParams, Validator } from "../../types"
-import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../toast"
 import { useTranslation } from "react-i18next"
 import { AmountSelection, SuggestionOptions } from "./AmountSelection"
@@ -132,13 +131,13 @@ export const StakingCalculator = ({
       const msg = `Congratulation! Your amount has been delegated.`
       toastSuccess(msg, t('Success'))
     }
-  }, [isSuccess]);
+  }, [isSuccess, t]);
 
   useEffect(() => {
     if(isError) {
       toastDanger('Sorry! Delegate failed', t('Error'))
     }
-  }, [isError]);
+  }, [isError, t]);
 
   return (
     <div className="text-left w-full py-8 px-10 bg-neutral-surface shadow-1 border border-border-outline rounded-[24px]">

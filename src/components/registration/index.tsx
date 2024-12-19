@@ -1,7 +1,6 @@
-import { useCallback, useState } from "react"
+import {useCallback, useEffect, useState} from "react"
 import { Input } from "../form"
 import { Button, ConnectWalletButton, buttonScale } from "../index"
-import { useWeb3React } from "@web3-react/core"
 import { useTranslation } from "react-i18next"
 import { CreateValidatorParams } from "../../types"
 import { useCreateValidator } from "../../hooks"
@@ -16,7 +15,7 @@ export const ValidatorRegistrationComponent = () => {
   const [pubKey, setPubKey] = useState("")
   const [amount, setAmount] = useState("")
 
-  const { create } = useCreateValidator()
+  const { create, isSuccess, isError } = useCreateValidator()
 
   const onRegister = useCallback(async () => {
     if (!pubKey || !amount) return
@@ -25,13 +24,24 @@ export const ValidatorRegistrationComponent = () => {
       amount: Number(amount)
     }
     try {
-      const tx = await create(params)
-      console.log("tx: ", tx);
+      await create(params)
+      // console.log("tx: ", tx);
     } catch (error) {
       console.log("error: ", error);
     }
     // eslint-disable-next-line
   }, [amount, pubKey])
+
+  useEffect(() => {
+    if (isSuccess) {
+      const msg = `Congratulation! Validator registration success`
+      console.log(msg)
+    }
+    if (isError) {
+      console.log("Validator registration fail: ", isError);
+    }
+    // eslint-disable-next-line
+  }, [isSuccess, isError]);
 
 
   return (
