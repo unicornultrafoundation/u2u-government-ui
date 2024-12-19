@@ -10,11 +10,12 @@ import { ArrowDownIcon } from "../../../images"
 import { BigNumber, ethers } from "ethers"
 import { bigFormatEther } from "../../../utils"
 import {useWeb3} from "../../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../../../components/switchNetwork";
 
 export const StakeForm = () => {
 
   const { t } = useTranslation()
-  const { address, balance } = useWeb3();
+  const { address, balance, correctedChain } = useWeb3();
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
@@ -155,7 +156,13 @@ export const StakeForm = () => {
       <div className="flex justify-center">
         {
           address ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Stake")}</Button>
+            <>
+              {!correctedChain ? (
+                  <SwitchNetworkButton />
+              ) : (
+                  <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Stake")}</Button>
+              )}
+            </>
           ) : (
             <ConnectWalletButton />
           )

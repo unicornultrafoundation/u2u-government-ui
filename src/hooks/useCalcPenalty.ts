@@ -8,6 +8,7 @@ export const useCalcPenalty = () => {
   const calcPen = async (validator: number, unLockAmount: string) => {
     try {
       const delAmountDec = ethers.utils.parseEther(unLockAmount);
+      console.log(delAmountDec.toString())
       const result = await simulateContract(wagmiConfig,{
         ...contracts.staking,
         functionName: 'unlockStake',

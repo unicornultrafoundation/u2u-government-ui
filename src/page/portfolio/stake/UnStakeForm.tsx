@@ -9,11 +9,12 @@ import { useDelegator, useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { BigNumber, ethers } from "ethers"
 import {useWeb3} from "../../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../../../components/switchNetwork";
 
 export const UnStakeForm = () => {
 
   const { t } = useTranslation()
-  const { address } = useWeb3();
+  const { address, correctedChain } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
 
@@ -155,7 +156,15 @@ export const UnStakeForm = () => {
       <div className="flex justify-center mt-10">
         {
           address ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("Unstake")}</Button>
+              <>
+                {
+                  !correctedChain ? (
+                      <SwitchNetworkButton />
+                      ) : (
+                      <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("Unstake")}</Button>
+                  )
+                }
+              </>
           ) : (
             <ConnectWalletButton />
           )

@@ -13,6 +13,7 @@ import { AmountSelection, SuggestionOptions } from "../staking-calculator/Amount
 import { useNavigate } from "react-router-dom"
 import { useValidatorStore } from "../../store"
 import { BigNumber, ethers } from "ethers"
+import {formatUnits} from "viem";
 
 interface UnlockStakeModalProps {
   isOpenModal: boolean
@@ -43,7 +44,7 @@ export const UnlockStakeModal = ({
 
   const handleInput = useCallback(async (value: any) => {
     const _pen = await calcPen(validatorId ? Number(validatorId) : 0, (value))
-    setPennalty(bigFormatEther(Number(_pen) || 0))
+    setPennalty(formatUnits(BigInt(_pen?.toString() || 0),18))
      // eslint-disable-next-line
   }, [validatorId])
 

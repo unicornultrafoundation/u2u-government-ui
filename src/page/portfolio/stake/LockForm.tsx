@@ -11,11 +11,12 @@ import { QueryService } from "../../../thegraph"
 import { Input } from "../../../components/form"
 import { appConfig } from "../../../contants"
 import {useWeb3} from "../../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../../../components/switchNetwork";
 
 export const LockForm = () => {
 
   const { t } = useTranslation()
-  const { address } = useWeb3();
+  const { address, correctedChain } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
   const [selectedValidator, setSelectedValidator] = useState<Validation>(validations && validations.length > 0 ? validations[0] : {} as Validation)
@@ -241,7 +242,15 @@ export const LockForm = () => {
       <div className="flex justify-center mt-10">
         {
           address ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onLockStake}>{t("Lock")}</Button>
+              <>
+                {
+                  !correctedChain ? (
+                      <SwitchNetworkButton />
+                      ) : (
+                      <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onLockStake}>{t("Lock")}</Button>
+                  )
+                }
+              </>
           ) : (
             <ConnectWalletButton />
           )

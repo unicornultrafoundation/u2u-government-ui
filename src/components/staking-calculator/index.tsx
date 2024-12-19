@@ -12,6 +12,7 @@ import { Images } from "../../images"
 import { BigNumber, ethers } from "ethers"
 import { bigFormatEther } from "../../utils"
 import {useWeb3} from "../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../switchNetwork";
 
 interface StakingCalculatorProps {
   validators: Validator[]
@@ -32,7 +33,7 @@ export const StakingCalculator = ({
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
   // const { account } = useWeb3React()
-  const { address } = useWeb3();
+  const { address, correctedChain } = useWeb3();
   const { degegate, isSuccess, isError } = useDelegate()
   const adjustedFeeU2U = ethers.utils.parseEther("0.1") // 0.1 U2U
 
@@ -182,7 +183,15 @@ export const StakingCalculator = ({
       <div className="flex justify-center">
         {
           address ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
+              <>
+                {
+                  !correctedChain ? (
+                      <SwitchNetworkButton />
+                      ) : (
+                      <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
+                  )
+                }
+              </>
           ) : (
             <ConnectWalletButton />
           )
