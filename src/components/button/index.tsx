@@ -1,6 +1,5 @@
 import { ButtonHTMLAttributes, useMemo, useState } from "react";
 import { classNames } from "../../utils/string";
-import { useWeb3React } from "@web3-react/core";
 import { WalletLoginModal } from "../modal/WalletLoginModal";
 import {useWeb3} from "../../hooks/useWeb3";
 

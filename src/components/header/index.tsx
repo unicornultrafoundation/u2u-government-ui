@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next"
-import { useWeb3React } from "@web3-react/core"
 import { Button, buttonScale, buttonType } from "../button"
-import { useAuth, useBalance } from "../../hooks"
+import { useAuth } from "../../hooks"
 import { truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
 import { useNavigate } from "react-router-dom"
@@ -19,8 +18,6 @@ import {useWeb3} from "../../hooks/useWeb3";
 
 export const Header = () => {
   const { t } = useTranslation()
-  // const { account, isActive } = useWeb3React()
-  // const { balance } = useBalance()
   const navigate = useNavigate()
   const [isShowMobileMenu, setIsShowMobileMenu] = useState(false)
   const [isOpen, setIsOpen] = useState(false)

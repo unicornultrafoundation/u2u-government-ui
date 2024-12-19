@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next"
 import { ArrowDownIcon, Images } from "../../../images"
 import { Delegator, UnDelegateParams, Validation } from "../../../types"
-import { useCallback, useMemo, useState } from "react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import { AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, StakedValidatorModal, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
 import { Input } from "../../../components/form"
-import { useWeb3React } from "@web3-react/core"
 import { useDelegator, useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { BigNumber, ethers } from "ethers"
@@ -14,7 +13,6 @@ import {useWeb3} from "../../../hooks/useWeb3";
 export const UnStakeForm = () => {
 
   const { t } = useTranslation()
-  // const { account } = useWeb3React()
   const { address } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
@@ -28,7 +26,7 @@ export const UnStakeForm = () => {
   const [selectedValidator, setSelectedValidator] = useState<Validation>(validationsFilter && validationsFilter.length > 0 ? validationsFilter[0] : {} as Validation)
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
   const [isLoading, setIsLoading] = useState(false)
-  const { undegegate } = useUndelegate()
+  const { undegegate, isError, isSuccess } = useUndelegate()
 
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
@@ -91,23 +89,26 @@ export const UnStakeForm = () => {
       amount: amount
     }
     try {
-      const { status, transactionHash } = await undegegate(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your staked amount has been undelegated.`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Undelegate failed', t('Error'))
-      }
-      console.log("UnDelegate tx: ", transactionHash)
+      await undegegate(params)
     } catch (error) {
       toastDanger('Sorry! Undelegate failed', t('Error'))
       console.log("error: ", error);
+    } finally {
+      setIsLoading(false)
+      setAmount('')
+      setSuggestOp(SuggestionOptions.NONE)
     }
-    setIsLoading(false)
-    setAmount('')
-    setSuggestOp(SuggestionOptions.NONE)
     // eslint-disable-next-line
   }, [amount, selectedValidator])
+
+  useEffect(() => {
+    if (isError) {
+      toastDanger('Sorry! Undelegate failed', t('Error'))
+    }
+    if (isSuccess) {
+      toastSuccess('Congratulation! Your staked amount has been undelegated.', t('Success'))
+    }
+  }, [isError, isSuccess, t]);
 
   return (
     <div className="w-full">

@@ -37,13 +37,13 @@ export const UnlockStakeModal = ({
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
 
-  const { unlockStake } = useUnlockStake()
+  const { unlockStake, isSuccess, isError } = useUnlockStake()
   const { calcPen } = useCalcPenalty()
 
 
   const handleInput = useCallback(async (value: any) => {
     const _pen = await calcPen(validatorId ? Number(validatorId) : 0, (value))
-    setPennalty(bigFormatEther(_pen || 0))
+    setPennalty(bigFormatEther(Number(_pen) || 0))
      // eslint-disable-next-line
   }, [validatorId])
 
@@ -71,23 +71,36 @@ export const UnlockStakeModal = ({
       amount: amount
     }
     try {
-      const { status, transactionHash } = await unlockStake(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your locked amount has been unlocked.`
-        toastSuccess(msg, t('Success'))
-        setIsOpenModal(false)
-      } else {
-        toastDanger('Sorry! Unlock stake failed', t('Error'))
-      }
-      console.log("Lock tx: ", transactionHash)
+      await unlockStake(params)
+      // if (status === 1) {
+      //   const msg = `Congratulation! Your locked amount has been unlocked.`
+      //   toastSuccess(msg, t('Success'))
+      //   setIsOpenModal(false)
+      // } else {
+      //   toastDanger('Sorry! Unlock stake failed', t('Error'))
+      // }
+      // console.log("Lock tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Unlock stake failed', t('Error'))
+    } finally {
+      setLoading(false)
+      setAmount('')
     }
-    setLoading(false)
-    setAmount('')
     // eslint-disable-next-line
   }, [amount, validatorId])
+
+  useEffect(() => {
+    if (isSuccess) {
+      const msg = `Congratulation! Your locked amount has been unlocked.`
+      toastSuccess(msg, t('Success'))
+      setIsOpenModal(false)
+    }
+    if (isError) {
+      toastDanger('Sorry! Unlock stake failed', t('Error'))
+    }
+    // eslint-disable-next-line
+  }, [isSuccess, isError]);
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {

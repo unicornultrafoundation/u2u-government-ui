@@ -1,53 +1,17 @@
 import { useCallback } from "react"
-// import { ConnectorNames, connectorsByName, setupNetwork } from "../utils"
-// import { appConfig, connectorLocalStorageKey } from "../contants"
 import {Connector, useConnect, useDisconnect, useSwitchChain} from 'wagmi'
-import { connect, ConnectorNotFoundError, SwitchChainNotSupportedError } from '@wagmi/core'
+import { ConnectorNotFoundError, SwitchChainNotSupportedError } from '@wagmi/core'
 import {ACTIVE_CHAINID} from "../contants/chain";
-import {wagmiConfig} from "../contants/wagmi";
 
 export const useAuth = () => {
-  // const login = useCallback(async (connectorID: ConnectorNames) => {
-  //   const connectors = connectorsByName[connectorID]
-  //   const [connector,] = connectors
-  //   try {
-  //     if (connector) {
-  //       window.localStorage.setItem(connectorLocalStorageKey, connectorID);
-  //       connector.activate(appConfig.chainID).catch(async (error: any) => {
-  //         if (error.code === 4902) {
-  //           await setupNetwork()
-  //         }
-  //       })
-  //     }
-  //   } catch (error) { }
-  // }, [])
-
-  // const logout = useCallback(() => {
-  //   const connectorID = window.localStorage.getItem(connectorLocalStorageKey);
-  //   if (connectorID) {
-  //     try {
-  //       const connectors = connectorsByName[connectorID as ConnectorNames]
-  //       const [connector,] = connectors
-  //       if (connector?.deactivate) {
-  //         void connector.deactivate()
-  //       } else {
-  //         void connector.resetState()
-  //       }
-  //     } catch (error) {
-  //
-  //     }
-  //   }
-  //   window.localStorage.removeItem(connectorLocalStorageKey)
-  // }, [])
-
-  const { connectAsync, connectors } = useConnect()
+  const { connectAsync } = useConnect()
   const { disconnectAsync, disconnect } = useDisconnect()
   const { switchChain } = useSwitchChain()
 
   const login = useCallback(
       async (connector: Connector) => {
         try {
-          return connect(wagmiConfig, { connector });
+          return connectAsync({ connector });
         } catch (error) {
           if (error instanceof ConnectorNotFoundError) {
             console.log(error);
@@ -58,7 +22,7 @@ export const useAuth = () => {
         }
         return undefined
       },
-      [connectors, connectAsync],
+      [connectAsync],
   )
 
   const logout = useCallback(async () => {
@@ -81,5 +45,4 @@ export const useAuth = () => {
 
   return { login, logout, switchToNetwork }
 
-  return { login, logout }
 }

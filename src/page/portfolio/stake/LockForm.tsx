@@ -5,7 +5,6 @@ import { Delegator, QueryAPRPayload, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
 import { AmountSelection, Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
-import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
 import { BigNumber, ethers } from "ethers"
 import { QueryService } from "../../../thegraph"
@@ -16,7 +15,6 @@ import {useWeb3} from "../../../hooks/useWeb3";
 export const LockForm = () => {
 
   const { t } = useTranslation()
-  // const { account } = useWeb3React()
   const { address } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
@@ -25,8 +23,8 @@ export const LockForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [amountErr, setAmountErr] = useState('')
   const [durationErr, setDurationErr] = useState("")
-  const { relockStake } = useRelockStake()
-  const { lockStake } = useLockStake()
+  const { relockStake, isSuccess: isSuccessRelock, isError: isErrorRelock } = useRelockStake()
+  const { lockStake, isSuccess: isSuccessLock, isError: isErrorLock } = useLockStake()
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
   let maxDuration = useMemo(() => {
@@ -107,24 +105,36 @@ export const LockForm = () => {
     }
     try {
       const _isLocked = selectedValidator.validator && selectedValidator.validator.authLockInfo && selectedValidator.validator.authLockInfo.isLockedUp
-      const { status, transactionHash } = _isLocked ? await relockStake(params) : await lockStake(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your staked amount has been locked.`
-        toastSuccess(msg, t('Success'))
-        setIsOpenModal(false)
-      } else {
-        toastDanger('Sorry! Lock stake failed', t('Error'))
-      }
-      console.log("Lock tx: ", transactionHash)
+      _isLocked ? await relockStake(params) : await lockStake(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Lock stake failed', t('Error'))
+    } finally {
+      setIsLoading(false)
+      setstakeAmount('')
+      setDurationSlideValue(0)
     }
-    setIsLoading(false)
-    setstakeAmount('')
-    setDurationSlideValue(0)
     // eslint-disable-next-line
   }, [stakeAmount, selectedValidator, stakeDuration])
+
+  useEffect(() => {
+    if (isSuccessRelock) {
+      const msg = `Congratulation! Your staked amount has been relocked.`
+      toastSuccess(msg, t('Success'))
+      setIsShow(false)
+    }
+    if (isErrorRelock) {
+      toastDanger('Sorry! Relock stake failed', t('Error'))
+    }
+    if (isSuccessLock) {
+      const msg = `Congratulation! Your staked amount has been locked.`
+      toastSuccess(msg, t('Success'))
+    }
+    if (isErrorLock) {
+      toastDanger('Sorry! Lock stake failed', t('Error'))
+    }
+    // eslint-disable-next-line
+  }, [isErrorLock, isSuccessLock, isSuccessRelock, isErrorRelock]);
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
@@ -247,6 +257,6 @@ export const LockForm = () => {
   )
 }
 
-function setIsOpenModal(arg0: boolean) {
-  throw new Error("Function not implemented.")
-}
+// function setIsOpenModal(arg0: boolean) {
+//   throw new Error("Function not implemented.")
+// }
