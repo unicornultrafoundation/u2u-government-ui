@@ -25,11 +25,12 @@ export const WalletLoginModal = ({
 
   const onLogin = useCallback(async (connector: Connector, connect?: () => Promise<void>) => {
     try {
+      console.log(connect)
       if (!isConnected) {
         await disconnectAsync();
         disconnect();
         if (connect) {
-          await connect();
+          return  await connect();
         } else {
           await login(connector);
         }
@@ -57,7 +58,7 @@ export const WalletLoginModal = ({
             return (
             <div
                  className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
-                 onClick={() => onLogin(connector)}>
+                 onClick={() => onLogin(connector, connect)}>
               <img src={Images.BitgetIcon} alt="u2u" className="w-[32px] h-[32px]"/>
               <div className={`text-base font-semibold text-text-disabled`}>{connector.name}</div>
             </div>
@@ -70,7 +71,7 @@ export const WalletLoginModal = ({
             return (
                 <div
                     className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
-                    onClick={() => onLogin(connector)}>
+                    onClick={() => onLogin(connector, connect)}>
                   <img src={Images.OkxIcon} alt="u2u" className="w-[32px] h-[32px]"/>
                   <div className={`text-base font-semibold text-text-disabled`}>{connector.name}</div>
                 </div>
