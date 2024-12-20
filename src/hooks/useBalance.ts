@@ -5,7 +5,6 @@ import { ethers } from "ethers"
 import {useWeb3} from "./useWeb3";
 
 export const useBalance = () => {
-  // const { account } = useWeb3React()
     const { address } = useWeb3();
   const [balance, setBalance] = useState("")
   const {mediumRefresh} = useRefresh()

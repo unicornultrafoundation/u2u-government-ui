@@ -10,7 +10,6 @@ export const useFetchWithdrawRequest = () => {
     state.updateWr
   ])
   const { fastRefresh } = useRefresh()
-  // const { account } = useWeb3React()
   const { address } = useWeb3();
   useEffect(() => {
     if (!address) return

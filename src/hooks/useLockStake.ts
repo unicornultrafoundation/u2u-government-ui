@@ -16,7 +16,6 @@ export const useLockStake = () => {
       functionName: 'lockStake',
       args: [params.toValidatorID, params.lockupDuration, amountDec.toString()],
       gas: BigInt(GAS_LIMIT_HARD),
-      // value: delAmountDec.toBigInt(),
     });
     return waitForTransaction(txhash);
   };

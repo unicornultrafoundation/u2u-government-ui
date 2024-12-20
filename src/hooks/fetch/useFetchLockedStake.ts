@@ -7,7 +7,6 @@ import {useWeb3} from "../useWeb3";
 
 export const useFetchLockedStake = () => {
   const { fastRefresh } = useRefresh()
-  // const { account } = useWeb3React()
   const { address } = useWeb3();
   const [updateLockedStake] = useLockedStakeStore(state => [
     state.updateLockedStake

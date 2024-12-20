@@ -13,7 +13,6 @@ import {useWeb3} from "../../hooks/useWeb3";
 
 export const TxHistory = () => {
 
-  // const { account } = useWeb3React()
   const { address } = useWeb3();
   const { t } = useTranslation()
   const [skip, setSkip] = useState(0)

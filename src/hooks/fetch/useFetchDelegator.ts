@@ -8,7 +8,6 @@ import {useWeb3} from "../useWeb3";
 
 export const useFetchDelegator = () => {
   const { fastRefresh } = useRefresh()
-  // const { account } = useWeb3React()
   const { address } = useWeb3();
   const [updateDelegator] = useDelegatorStore(state => [
     state.updateDelegator

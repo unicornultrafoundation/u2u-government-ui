@@ -83,13 +83,6 @@ export const StakeForm = () => {
     }
     try {
       await degegate(params)
-      // if (status === 1) {
-      //   const msg = `Congratulation! Your amount has been delegated.`
-      //   toastSuccess(msg, t('Success'))
-      // } else {
-      //   toastDanger('Sorry! Delegate failed', t('Error'))
-      // }
-      // console.log("Delegate tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Delegate failed', t('Error'))
