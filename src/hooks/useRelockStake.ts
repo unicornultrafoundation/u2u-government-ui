@@ -1,19 +1,22 @@
-import { useCallback } from "react";
-import { useStakingContract } from "./useContract"
-import { RelockStakeParams } from "../types";
+import {RelockStakeParams} from "../types";
 import { ethers } from "ethers";
-import { GAS_LIMIT_HARD } from "../contants";
+import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {useWriteContract} from "wagmi";
+import {useWaitForTransaction} from "./useWaitForTransaction";
 
 export const useRelockStake = () => {
-  const stakingContract = useStakingContract()
-  const relockStake = useCallback(async (params: RelockStakeParams) => {
-    const amountDec = ethers.utils.parseEther(params.amount).toString();
-    console.log("RelockStake params: ", params)
-    const tx = await stakingContract.relockStake(params.toValidatorID, params.lockupDuration, amountDec, { gasLimit: GAS_LIMIT_HARD });
-    const receipt = await tx.wait();
-    return receipt
-  }, [stakingContract])
-  return {
-    relockStake
-  }
+  const method = useWriteContract();
+  const { waitForTransaction } = useWaitForTransaction();
+
+  const relockStake = async (params: RelockStakeParams) => {
+    const amountDec = ethers.utils.parseEther(params.amount);
+    const txhash = await method.writeContractAsync({
+      ...contracts.staking,
+      functionName: 'relockStake',
+      args: [params.toValidatorID, params.lockupDuration, amountDec.toString()],
+      gas: BigInt(GAS_LIMIT_HARD),
+    });
+    return waitForTransaction(txhash);
+  };
+  return { ...method, relockStake };
 }

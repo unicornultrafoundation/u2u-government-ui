@@ -1,24 +1,24 @@
-import { useCallback } from "react";
-import { useStakingContract } from "./useContract";
-import { useWeb3React } from "@web3-react/core";
+
 import { ethers } from "ethers";
+import {contracts, GAS_LIMIT_HARD} from "../contants";
+import { simulateContract } from '@wagmi/core'
+import {wagmiConfig} from "../contants/wagmi";
 
 export const useCalcPenalty = () => {
-
-  const stakingContract = useStakingContract()
-  const {account} = useWeb3React()
-  const calcPen = useCallback(async (validator: number, unLockAmount: string) => {
+  const calcPen = async (validator: number, unLockAmount: string) => {
     try {
-      if (validator && account) {
-        const amountDec = ethers.utils.parseEther(unLockAmount).toString();
-        return await stakingContract.callStatic.unlockStake(validator, amountDec)
-      }
-    } catch (error) { 
+      const delAmountDec = ethers.utils.parseEther(unLockAmount);
+      console.log(delAmountDec.toString())
+      const result = await simulateContract(wagmiConfig,{
+        ...contracts.staking,
+        functionName: 'unlockStake',
+        args: [validator, delAmountDec.toString()],
+        gas: BigInt(GAS_LIMIT_HARD),
+      });
+      return result?.result;
+    } catch (error) {
       return "0"
     }
-  }, [stakingContract, account])
-
-  return {
-    calcPen
-  }
+  };
+  return { calcPen };
 }

@@ -1,21 +1,24 @@
-import { useCallback } from "react";
-import { useStakingContract } from "./useContract"
-import { UnDelegateParams } from "../types";
+import {UnDelegateParams} from "../types";
 import { ethers } from "ethers";
-import { GAS_LIMIT_HARD } from "../contants";
+import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {useWriteContract} from "wagmi";
+import {useWaitForTransaction} from "./useWaitForTransaction";
+
 
 export const useUndelegate = () => {
-  const stakingContract = useStakingContract()
-  const undegegate = useCallback(async (params: UnDelegateParams) => {
-    const amountDec = ethers.utils.parseEther(params.amount).toString();
-    // Random wrID
+  const method = useWriteContract();
+  const { waitForTransaction } = useWaitForTransaction();
+
+  const undelegate = async (params: UnDelegateParams) => {
+    const delAmountDec = ethers.utils.parseEther(params.amount);
     const _wrID = Math.floor(Math.random() * 100000)
-    console.log("Undelegate params: ", params, _wrID)
-    const tx = await stakingContract.undelegate(params.toValidatorID, _wrID, amountDec, { gasLimit: GAS_LIMIT_HARD });
-    const receipt = await tx.wait();
-    return receipt
-  }, [stakingContract])
-  return {
-    undegegate
-  }
+    const txhash = await method.writeContractAsync({
+      ...contracts.staking,
+      functionName: 'undelegate',
+      args: [params.toValidatorID, _wrID, delAmountDec.toString()],
+      gas: BigInt(GAS_LIMIT_HARD),
+    });
+    return waitForTransaction(txhash);
+  };
+  return { ...method, undelegate };
 }

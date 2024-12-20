@@ -1,19 +1,23 @@
-import { useCallback } from "react";
-import { useStakingContract } from "./useContract"
-import { LockStakeParams } from "../types";
+import {LockStakeParams} from "../types";
 import { ethers } from "ethers";
-import { GAS_LIMIT_HARD } from "../contants";
+import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {useWriteContract} from "wagmi";
+import {useWaitForTransaction} from "./useWaitForTransaction";
+
 
 export const useLockStake = () => {
-  const stakingContract = useStakingContract()
-  const lockStake = useCallback(async (params: LockStakeParams) => {
-    const amountDec = ethers.utils.parseEther(params.amount).toString();
-    console.log("LockStake params: ", params)
-    const tx = await stakingContract.lockStake(params.toValidatorID, params.lockupDuration, amountDec, { gasLimit: GAS_LIMIT_HARD });
-    const receipt = await tx.wait();
-    return receipt
-  }, [stakingContract])
-  return {
-    lockStake
-  }
+  const method = useWriteContract();
+  const { waitForTransaction } = useWaitForTransaction();
+
+  const lockStake = async (params: LockStakeParams) => {
+    const amountDec = ethers.utils.parseEther(params.amount);
+    const txhash = await method.writeContractAsync({
+      ...contracts.staking,
+      functionName: 'lockStake',
+      args: [params.toValidatorID, params.lockupDuration, amountDec.toString()],
+      gas: BigInt(GAS_LIMIT_HARD),
+    });
+    return waitForTransaction(txhash);
+  };
+  return { ...method, lockStake };
 }

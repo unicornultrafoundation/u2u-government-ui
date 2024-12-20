@@ -1,14 +1,14 @@
-import { ButtonHTMLAttributes, useMemo, useState } from "react";
+import { ButtonHTMLAttributes, useMemo } from "react";
 import { classNames } from "../../utils/string";
-import { WalletLoginModal } from "../modal/WalletLoginModal";
-import {useWeb3} from "../../hooks/useWeb3";
+import {useAuth} from "../../hooks";
 
 export const buttonType = {
   primary: "primary",
   secondary: "secondary",
   tertiary: "tertiary",
   ghostPrimary: "ghostPrimary",
-  ghostSecondary: "ghostSecondary"
+  ghostSecondary: "ghostSecondary",
+  danger: "danger"
 }
 
 export type ButtonVariant = typeof buttonType[keyof typeof buttonType];
@@ -34,7 +34,7 @@ export interface ButtonProps {
 
 export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps> = ({
   children,
-  variant = buttonType.primary,
+  variant = buttonType.danger,
   scale = buttonScale.md,
   disabled,
   className,
@@ -49,6 +49,8 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
           return "bg-primary hover:bg-primary-dark"
         case buttonType.secondary:
           return "bg-white hover:bg-primary-light"
+        case buttonType.danger:
+          return "bg-white hover:bg-error-light"
         case buttonType.tertiary:
         case buttonType.ghostPrimary:
         case buttonType.ghostSecondary:
@@ -67,6 +69,8 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
           return "border-[1.5px] border-primary hover:border-primary-dark"
         case buttonType.tertiary:
           return "border-[1.5px] border-border-outline"
+        case buttonType.danger:
+          return "border-[1.5px] border-error hover:border-error-dark"
         default:
           return ``
       }
@@ -95,6 +99,8 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
           return "text-primary hover:text-primary-dark hover:fill-primary-dark hover:stroke-primary-dark fill-primary stroke-primary";
         case buttonType.ghostSecondary:
           return "text-border-outline hover:text-neutral-surface-active hover:fill-neutral-surface-active hover:stroke-neutral-surface-active fill-neutral stroke-neutral"
+        case buttonType.danger:
+          return "text-error hover:text-error-dark hover:fill-error-dark hover:stroke-error-dark fill-error stroke-error";
         default:
           return ``
       }
@@ -139,22 +145,16 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
   )
 }
 
-export const ConnectWalletButton = ({ className, scale = buttonScale.lg }: {
+export const SwitchNetworkButton = ({ className, scale = buttonScale.lg }: {
   className?: string
   scale?: ButtonScale
 }) => {
   // const { account } = useWeb3React()
-  const { address } = useWeb3();
+  const { switchToNetwork } = useAuth();
 
-  const [isShow, setIsShow] = useState(false)
-  const connect = () => {
-    setIsShow(true)
-  }
-  if (address) return <></>
   return (
     <>
-      <Button className={classNames("w-full rounded-[100px]", className)} scale={scale} onClick={connect}>Connect Wallet</Button>
-      <WalletLoginModal isOpenModal={isShow} setIsOpenModal={setIsShow} />
+      <Button className={classNames("w-full rounded-[100px]", className)} scale={scale} onClick={switchToNetwork}>Switch Network</Button>
     </>
   )
 }
