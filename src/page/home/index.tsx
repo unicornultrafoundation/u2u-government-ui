@@ -3,7 +3,7 @@ import { Button, RenderNumberFormat } from "../../components";
 import { useMemo } from "react";
 import { bigFormatEther, shortenDisplayNumber } from "../../utils";
 import { useNavigate } from "react-router-dom";
-import { useEpochStore, useStakingStore } from "../../store";
+import { useEpochStore, useStakingStore, useValidatorStore } from "../../store";
 import { Images } from "../../images";
 import { EstimateRewards } from "./EstimateRewards";
 import { isMobile } from 'mobile-device-detect';
@@ -20,6 +20,10 @@ export const Home = () => {
   ])
   const { epochRewards } = useMemo(() => lastEpoch, [lastEpoch])
   const { totalStaked } = useMemo(() => stakingStats, [stakingStats])
+
+  const [allValidators] = useValidatorStore(state => [
+    state.allValidators
+  ])
 
   const stakingRatio = useMemo(() => {
     try {
@@ -60,6 +64,12 @@ export const Home = () => {
               <div className="text-xs text-neutral">{t('Staking Ratio (%)')}</div>
               <div className="text-lg text-neutral font-semibold">
                 <RenderNumberFormat amount={stakingRatio} className="mr-2" fractionDigits={2} />
+              </div>
+            </div>
+            <div className="">
+              <div className="text-xs text-neutral">{t('Staking APR (%)')}</div>
+              <div className="text-lg text-neutral font-semibold">
+                <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].maxApr : 0} fractionDigits={2} />
               </div>
             </div>
             <div className="">
@@ -146,6 +156,12 @@ export const Home = () => {
             <div className="text-base text-neutral font-semibold">{t('Staking Ratio (%)')}</div>
             <div className="text-2xl text-neutral font-bold">
               <RenderNumberFormat amount={stakingRatio} className="mr-2" fractionDigits={2} />
+            </div>
+          </div>
+          <div className="">
+            <div className="text-base text-neutral font-semibold">{t('Staking APR (%)')}</div>
+            <div className="text-2xl text-neutral font-bold">
+            <RenderNumberFormat amount={allValidators && allValidators[0] ? allValidators[0].maxApr : 0} fractionDigits={2} />
             </div>
           </div>
           <div className="">
