@@ -1,4 +1,4 @@
-import {http, createConfig, createStorage, cookieStorage} from 'wagmi'
+import {http, createConfig, createStorage, cookieStorage, injected} from 'wagmi'
 import { u2uNebulasTestnet } from './chain'
 import { metaMask } from '@wagmi/connectors';
 import {
@@ -31,7 +31,7 @@ const connectors = connectorsForWallets(
 );
 
 export const wagmiConfig = createConfig({
-    connectors: [metaMask(), ...connectors],
+    connectors: [metaMask(), injected(), ...connectors],
     chains: [u2uNebulasTestnet],
     ccipRead: false,
     transports: {

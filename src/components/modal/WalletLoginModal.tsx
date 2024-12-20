@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { Images } from "../../images"
 import {Connector, useAccount, useConnect, useDisconnect} from "wagmi";
 import { WalletButton } from "@rainbow-me/rainbowkit"
+import InjectedIcon from "../../images/icon-injected.svg";
 
 interface WalletLoginModalProps {
   isOpenModal: boolean
@@ -48,26 +49,26 @@ export const WalletLoginModal = ({
       <div className="text-base text-text-secondary mb-3">{t("Choose how you want to connect. If you don't have a wallet, you can select a provider and create one.")}</div>
       <div className="mb-8">
         <div
-             className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
-             onClick={() => onLogin(connectors[0])}>
+            className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
+            onClick={() => onLogin(connectors[0])}>
           <img src={Images.MetamaskIcon} alt="u2u" className="w-[32px] h-[32px]"/>
           <div className={`text-base font-semibold text-text-disabled`}>{connectors[0].name}</div>
         </div>
         <WalletButton.Custom wallet="bitget">
-          {({ ready, connect, connector }) => {
+          {({ready, connect, connector}) => {
             return (
-            <div
-                 className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
-                 onClick={() => onLogin(connector, connect)}>
-              <img src={Images.BitgetIcon} alt="u2u" className="w-[32px] h-[32px]"/>
-              <div className={`text-base font-semibold text-text-disabled`}>{connector.name}</div>
-            </div>
-          );
+                <div
+                    className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
+                    onClick={() => onLogin(connector, connect)}>
+                  <img src={Images.BitgetIcon} alt="u2u" className="w-[32px] h-[32px]"/>
+                  <div className={`text-base font-semibold text-text-disabled`}>{connector.name}</div>
+                </div>
+            );
           }}
         </WalletButton.Custom>
 
         <WalletButton.Custom wallet="okx">
-          {({ ready, connect, connector }) => {
+          {({ready, connect, connector}) => {
             return (
                 <div
                     className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
@@ -80,17 +81,24 @@ export const WalletLoginModal = ({
         </WalletButton.Custom>
 
         <WalletButton.Custom wallet="walletconnect">
-          {({ ready, connect, connector }) => {
+          {({ready, connect, connector}) => {
             return (
                 <div
                     className={`flex items-center gap-x-4 p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
-                        onClick={connect}>
+                    onClick={() => onLogin(connector, connect)}>
                   <img src={Images.WalletConnectLogo} alt="u2u" className="w-[32px] h-[32px]"/>
                   <div className={`text-base font-semibold text-text-disabled`}>{connector.name}</div>
                 </div>
             );
           }}
         </WalletButton.Custom>
+
+        <div
+            className={`flex gap-x-4 items-center p-6 rounded-xl border border-border-outline mb-3 cursor-pointer`}
+            onClick={() => onLogin(connectors[1])}>
+          <img src={Images.InjectedIcon} alt="u2u" className="w-[32px] h-[32px]"/>
+          <div className={`text-base font-semibold text-text-disabled`}>Injected Wallet</div>
+        </div>
       </div>
       <div className="text-xs text-text-secondary text-center">{t("By connecting a wallet, you agree to ")}
         <a className="text-primary" href="/" target="_blank">{t("Unicorn Ultra’s Terms of Service")}</a>
