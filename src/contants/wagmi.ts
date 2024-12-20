@@ -9,33 +9,7 @@ import {
 
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
-
-// const connectors = connectorsForWallets(
-//     [
-//         {
-//             groupName: "Main",
-//             wallets: [okxWallet,bitgetWallet, walletConnectWallet, injectedWallet],
-//         },
-//     ],
-//     {
-//         projectId: "815145290a10a9393358a85a318d47ad",
-//         appName: 'BlockFun',
-//     }
-// );
-
-
-
-// export const wagmiConfig = createConfig({
-//     connectors: [metaMask(), ...connectors],
-//     chains: [mainnet, sepolia, u2uNebulasTestnet],
-//     client({ chain }) {
-//         return createClient({ chain, transport: http() });
-//     },
-//     ssr: true,
-// });
-
 export const projectId = '815145290a10a9393358a85a318d47ad';
-// export const projectId = '6ac7cd8fa48a32f0d050a0b24b3750b3';
 
 if (!projectId) {
     throw new Error('Project ID is not defined');

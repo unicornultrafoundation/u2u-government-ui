@@ -34,7 +34,7 @@ export const StakingCalculator = ({
 
   // const { account } = useWeb3React()
   const { address, correctedChain } = useWeb3();
-  const { degegate, isSuccess, isError } = useDelegate()
+  const { delegate, isSuccess, isError } = useDelegate()
   const adjustedFeeU2U = ethers.utils.parseEther("0.1") // 0.1 U2U
 
   useEffect(() => {
@@ -109,14 +109,7 @@ export const StakingCalculator = ({
       amount: amount
     }
     try {
-      await degegate(params)
-      // if (status === 1) {
-      //   const msg = `Congratulation! Your amount has been delegated.`
-      //   toastSuccess(msg, t('Success'))
-      // } else {
-      //   toastDanger('Sorry! Delegate failed', t('Error'))
-      // }
-      // console.log("Delegate tx: ", transactionHash)
+      await delegate(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Delegate failed', t('Error'))

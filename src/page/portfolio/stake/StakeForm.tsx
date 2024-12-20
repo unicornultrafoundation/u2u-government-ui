@@ -26,7 +26,7 @@ export const StakeForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedValidator, setSelectedValidator] = useState<Validator>(allValidators.length > 0 ? allValidators[0] : {} as Validator)
   const [isShow, setIsShow] = useState(false)
-  const { degegate, isSuccess, isError } = useDelegate()
+  const { delegate, isSuccess, isError } = useDelegate()
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
@@ -82,7 +82,7 @@ export const StakeForm = () => {
       amount: amount
     }
     try {
-      await degegate(params)
+      await delegate(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Delegate failed', t('Error'))

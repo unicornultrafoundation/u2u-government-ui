@@ -20,6 +20,3 @@ export const useWaitForTransaction = () => {
 
   return { waitForTransaction, isLoading };
 };
-
-// export const useWaitForTransaction = () => (hash: `0x${string}`) =>
-//   waitForTransactionReceipt(config, { hash });

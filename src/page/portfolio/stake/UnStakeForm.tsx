@@ -27,7 +27,7 @@ export const UnStakeForm = () => {
   const [selectedValidator, setSelectedValidator] = useState<Validation>(validationsFilter && validationsFilter.length > 0 ? validationsFilter[0] : {} as Validation)
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
   const [isLoading, setIsLoading] = useState(false)
-  const { undegegate, isError, isSuccess } = useUndelegate()
+  const { undelegate, isError, isSuccess } = useUndelegate()
 
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
@@ -90,7 +90,7 @@ export const UnStakeForm = () => {
       amount: amount
     }
     try {
-      await undegegate(params)
+      await undelegate(params)
     } catch (error) {
       toastDanger('Sorry! Undelegate failed', t('Error'))
       console.log("error: ", error);

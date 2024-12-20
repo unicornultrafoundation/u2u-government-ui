@@ -9,7 +9,7 @@ export const useUndelegate = () => {
   const method = useWriteContract();
   const { waitForTransaction } = useWaitForTransaction();
 
-  const undegegate = async (params: UnDelegateParams) => {
+  const undelegate = async (params: UnDelegateParams) => {
     const delAmountDec = ethers.utils.parseEther(params.amount);
     const _wrID = Math.floor(Math.random() * 100000)
     const txhash = await method.writeContractAsync({
@@ -20,5 +20,5 @@ export const useUndelegate = () => {
     });
     return waitForTransaction(txhash);
   };
-  return { ...method, undegegate };
+  return { ...method, undelegate };
 }
