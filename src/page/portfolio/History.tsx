@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { useFetchStakingTxs } from "../../hooks"
 import { useEffect, useState } from "react"
-import { useWeb3React } from "@web3-react/core"
 import { ChangePageParams, Pagination } from "../../components/pagination"
 import { TableLimit } from "../../contants"
 import { StakingTransaction, Validator } from "../../types"
@@ -10,13 +9,14 @@ import { exploreTransaction, millisecondToHMS, truncate } from "../../utils"
 import { useValidatorStore } from "../../store"
 import { useNavigate } from "react-router-dom"
 import { EmptyComponent } from "../../components"
+import {useWeb3} from "../../hooks/useWeb3";
 
 export const TxHistory = () => {
 
-  const { account } = useWeb3React()
+  const { address } = useWeb3();
   const { t } = useTranslation()
   const [skip, setSkip] = useState(0)
-  const { txs, total } = useFetchStakingTxs(account || "", skip)
+  const { txs, total } = useFetchStakingTxs(address || "", skip)
 
   const onChangePage = async (params: ChangePageParams) => {
     let _skip = params.page ? params.page - 1 : 0

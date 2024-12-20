@@ -1,5 +1,7 @@
 import MenuIcon from "./icons/menu-icon.svg"
 import MetamaskIcon from "./metamask-wallet.png"
+import BitgetIcon from "./bitget-wallet.png"
+import OkxIcon from "./okx-wallet.png"
 import WalletConnectLogo from "./icons/walletconnect.png"
 import AvatarImage from "./avatar.png"
 import Staking1PNG from "./staking-1.png"
@@ -77,5 +79,7 @@ export const Images = {
   Staking7PNG,
   vnPNG,
   EmptyPNG,
-  StakingLogoPNG
+  StakingLogoPNG,
+  BitgetIcon,
+  OkxIcon
 }

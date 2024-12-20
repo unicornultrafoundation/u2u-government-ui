@@ -6,7 +6,7 @@ import { useValidatorApr } from "../../hooks"
 import { useTranslation } from "react-i18next"
 
 interface APRCalculatorProp {
-  amount: number
+  amount: any
   validator: Validator
 }
 
@@ -18,7 +18,7 @@ export interface AprResult {
   _apr: number;
 }
 
-export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {
+export const APRCalculator = ({ amount, validator }: APRCalculatorProp) => {  
   const { t } = useTranslation()
   const { apr } = useValidatorApr(Number(validator ? validator.valId : 0), amount)
   const [aprResult, serAprResult] = useState<AprResult>({} as AprResult)

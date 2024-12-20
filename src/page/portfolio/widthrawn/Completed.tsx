@@ -16,7 +16,7 @@ interface WithdrawCompletedProps {
 
 export const WithdrawCompleted = ({ wr }: WithdrawCompletedProps) => {
   const { t } = useTranslation()
-  const { withdraw } = useWidthdraw()
+  const { withdraw, isError, isSuccess } = useWidthdraw()
 
   const [skip, setSkip] = useState(0)
   const total = useMemo(() => { return wr.length || 0 }, [wr])
@@ -45,20 +45,24 @@ export const WithdrawCompleted = ({ wr }: WithdrawCompletedProps) => {
       wrID: wrId
     }
     try {
-      const { status, transactionHash } = await withdraw(params)
-      if (status === 1) {
-        const msg = `Congratulation! Withdraw success`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Withdraw failed', t('Error'))
-      }
-      console.log("Withdraw tx: ", transactionHash)
+      await withdraw(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Withdraw failed', t('Error'))
     }
     // eslint-disable-next-line 
   }, [t])
+
+  useEffect(() => {
+    if (isSuccess) {
+      const msg = `Congratulation! Withdraw success`
+      toastSuccess(msg, t('Success'))
+    }
+    if (isError) {
+      toastDanger('Sorry! Withdraw failed', t('Error'))
+    }
+    // eslint-disable-next-line
+  }, [isError, isSuccess]);
 
   if (!clientRecords || clientRecords.length === 0) return <EmptyComponent />
   return (

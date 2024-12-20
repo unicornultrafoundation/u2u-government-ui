@@ -28,7 +28,7 @@ export const millisecondToDay = (time: number) => {
   const hours = Math.floor((timeInSeconds % 86400) / 3600)
   const minutes = Math.floor((timeInSeconds % 3600) / 60)
   // const seconds = timeInSeconds - days*86400 - hours * 3600 - minutes * 60;
-	const dayString = days ? `${days} ${days > 1 ? "days" : "day"}` : '0H';
+	const dayString = days ? `${days} ${days > 1 ? "days" : "day"}` : '0D';
   const hourString = hours ? `${hours}h` : '0h';
   const minuteString = minutes ? `${minutes}m` : '0m';
   // const secondString = seconds ? `${seconds}s` : '0s';

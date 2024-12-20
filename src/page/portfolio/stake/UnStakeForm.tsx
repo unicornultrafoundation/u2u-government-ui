@@ -1,38 +1,44 @@
 import { useTranslation } from "react-i18next"
 import { ArrowDownIcon, Images } from "../../../images"
 import { Delegator, UnDelegateParams, Validation } from "../../../types"
-import { useCallback, useMemo, useState } from "react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import { AmountSelection, Button, ConnectWalletButton, RenderNumberFormat, StakedValidatorModal, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
 import { Input } from "../../../components/form"
-import { ethers } from "ethers"
-import { useWeb3React } from "@web3-react/core"
 import { useDelegator, useUndelegate } from "../../../hooks"
 import { toastDanger, toastSuccess } from "../../../components/toast"
+import { BigNumber, ethers } from "ethers"
+import {useWeb3} from "../../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../../../components/switchNetwork";
 
 export const UnStakeForm = () => {
 
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { address, correctedChain } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
+
+  const validationsFilter = useMemo(() => {
+    if (!validations || validations.length === 0) return [] 
+    return validations.filter(i => (BigNumber.from(0)).lt(i.stakedAmount))
+  }, [validations])
+
   const [isShow, setIsShow] = useState(false)
-  const [selectedValidator, setSelectedValidator] = useState<Validation>(validations && validations.length > 0 ? validations[0] : {} as Validation)
+  const [selectedValidator, setSelectedValidator] = useState<Validation>(validationsFilter && validationsFilter.length > 0 ? validationsFilter[0] : {} as Validation)
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
   const [isLoading, setIsLoading] = useState(false)
-  const { undegegate } = useUndelegate()
-
+  const { undelegate, isError, isSuccess } = useUndelegate()
 
   const [amount, setAmount] = useState("")
   const [amountErr, setAmountErr] = useState("")
-  const adjustedFeeU2U = 0.0000001 // 0.1 U2U
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
       setAmountErr(t('This field is required'));
       return false;
     }
-    if (Number(value) > Number(ethers.utils.formatEther(selectedValidator.actualStakedAmount))) {
+    const parseValue =  ethers.utils.parseEther(value)
+    if (parseValue.gt(selectedValidator.actualStakedAmount)) {
       setAmountErr(t('Insufficient balance'));
       return false;
     }
@@ -42,30 +48,30 @@ export const UnStakeForm = () => {
 
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      if (option === suggestOp || !selectedValidator.actualStakedAmount) {
+      const balance = selectedValidator.actualStakedAmount
+      if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setAmount('')
         validateAmount('')
       } else {
         setSuggestOp(option)
-        let amountCalculated = 0;
-        const balance = Number(ethers.utils.formatEther(selectedValidator.actualStakedAmount))
+        let amountCalculated: any = 0;
         switch (option) {
           case SuggestionOptions.TWENTY_FIVE:
-            amountCalculated = Number(balance) / 4;
+            amountCalculated = balance.div(BigNumber.from(4));
             break
           case SuggestionOptions.FIFTY:
-            amountCalculated = Number(balance) / 2;
+            amountCalculated = balance.div(BigNumber.from(2));
             break
           case SuggestionOptions.SEVENTY_FIVE:
-            amountCalculated = Number(balance) / 4 * 3;
+            amountCalculated = balance.mul(BigNumber.from(3)).div(BigNumber.from(4));
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance) - adjustedFeeU2U
+            amountCalculated = balance
             break
         }
-        setAmount(amountCalculated.toString());
-        validateAmount(amountCalculated)
+        setAmount(bigFormatEther(amountCalculated));
+        validateAmount(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)
@@ -81,26 +87,29 @@ export const UnStakeForm = () => {
     setIsLoading(true)
     const params: UnDelegateParams = {
       toValidatorID: Number(selectedValidator.validator.valId),
-      amount: Number(amount)
+      amount: amount
     }
     try {
-      const { status, transactionHash } = await undegegate(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your staked amount has been undelegated.`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Undelegate failed', t('Error'))
-      }
-      console.log("UnDelegate tx: ", transactionHash)
+      await undelegate(params)
     } catch (error) {
       toastDanger('Sorry! Undelegate failed', t('Error'))
       console.log("error: ", error);
+    } finally {
+      setIsLoading(false)
+      setAmount('')
+      setSuggestOp(SuggestionOptions.NONE)
     }
-    setIsLoading(false)
-    setAmount('')
-    setSuggestOp(SuggestionOptions.NONE)
     // eslint-disable-next-line
   }, [amount, selectedValidator])
+
+  useEffect(() => {
+    if (isError) {
+      toastDanger('Sorry! Undelegate failed', t('Error'))
+    }
+    if (isSuccess) {
+      toastSuccess('Congratulation! Your staked amount has been undelegated.', t('Success'))
+    }
+  }, [isError, isSuccess, t]);
 
   return (
     <div className="w-full">
@@ -146,8 +155,16 @@ export const UnStakeForm = () => {
 
       <div className="flex justify-center mt-10">
         {
-          account ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("Unstake")}</Button>
+          address ? (
+              <>
+                {
+                  !correctedChain ? (
+                      <SwitchNetworkButton />
+                      ) : (
+                      <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onUnDelegate}>{t("Unstake")}</Button>
+                  )
+                }
+              </>
           ) : (
             <ConnectWalletButton />
           )
@@ -156,7 +173,7 @@ export const UnStakeForm = () => {
       <StakedValidatorModal
         isOpenModal={isShow}
         setIsOpenModal={setIsShow}
-        validations={validations || []}
+        validations={validationsFilter || []}
         selected={selectedValidator}
         setSelected={setSelectedValidator} />
     </div>

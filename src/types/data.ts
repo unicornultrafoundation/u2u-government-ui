@@ -33,6 +33,9 @@ export interface Validator {
   website?: string
   description?: string
   image?: string
+  maxDuration?: number
+  maxApr: number
+  minApr: number
 }
 
 export interface Validation {
@@ -119,4 +122,10 @@ export interface StakingTransaction {
   type: number
   createdAt: number
   age: number
+}
+
+export interface QueryAPRPayload {
+  validator: any
+  amount: string
+  duration: any
 }

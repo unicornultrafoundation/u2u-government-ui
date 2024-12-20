@@ -1,21 +1,22 @@
 import { useTranslation } from "react-i18next"
 import { ArrowDownIcon, Images } from "../../../images"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Delegator, Validation } from "../../../types"
+import { Delegator, QueryAPRPayload, Validation } from "../../../types"
 import { useDelegator, useLockStake, useRelockStake } from "../../../hooks"
 import { AmountSelection, Button, ConnectWalletButton, LockValidatorModal, RenderNumberFormat, SliderComponent, SuggestionOptions, buttonScale } from "../../../components"
 import { bigFormatEther } from "../../../utils"
-import { MIN_LOCKUP_DURATION } from "../../../contants"
-import { useWeb3React } from "@web3-react/core"
 import { toastDanger, toastSuccess } from "../../../components/toast"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import { QueryService } from "../../../thegraph"
 import { Input } from "../../../components/form"
+import { appConfig } from "../../../contants"
+import {useWeb3} from "../../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../../../components/switchNetwork";
 
 export const LockForm = () => {
 
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { address, correctedChain } = useWeb3();
   const { delegatorState } = useDelegator()
   const { validations } = useMemo(() => delegatorState ? delegatorState : {} as Delegator, [delegatorState])
   const [selectedValidator, setSelectedValidator] = useState<Validation>(validations && validations.length > 0 ? validations[0] : {} as Validation)
@@ -23,21 +24,21 @@ export const LockForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [amountErr, setAmountErr] = useState('')
   const [durationErr, setDurationErr] = useState("")
-  const { relockStake } = useRelockStake()
-  const { lockStake } = useLockStake()
+  const { relockStake, isSuccess: isSuccessRelock, isError: isErrorRelock } = useRelockStake()
+  const { lockStake, isSuccess: isSuccessLock, isError: isErrorLock } = useLockStake()
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
-  const adjustedFeeU2U = 0.0000001
-
 
   let maxDuration = useMemo(() => {
-    if (!selectedValidator || !selectedValidator.validator || !selectedValidator.validator.authLockInfo) return 0
+    if (!selectedValidator || !selectedValidator.validator) return 0
+    if (selectedValidator.validator.auth && address && selectedValidator.validator.auth.toLowerCase() === address?.toLowerCase()) return 365
+    if (!selectedValidator.validator.authLockInfo) return 0
     const endTime = selectedValidator.validator.authLockInfo.endTime
     let now = Math.ceil((new Date()).getTime())
     if (endTime < now) return 0
     let duration = Math.ceil((endTime - now) / 86400000) - 1
-    if (duration < MIN_LOCKUP_DURATION) return 0
+    if (duration < appConfig.minLockupDuration) return 0
     return duration
-  }, [selectedValidator])
+  }, [selectedValidator, address])
 
   const [durationSlideValue, setDurationSlideValue] = useState(0)
 
@@ -53,16 +54,20 @@ export const LockForm = () => {
     (async () => {
       if (selectedValidator && selectedValidator.validator) {
         try {
-          const valIds: number[] = [Number(selectedValidator.validator.valId)]
           const amountDec = ethers.utils.parseEther(stakeAmount.toString()).toString();
           const duration = stakeDuration * 24 * 60 * 60
           let total = 0;
-          if (valIds && amountDec) {
-            const { data: dataApr } = await QueryService.queryValidatorsApr(valIds, amountDec, duration)
-            for (let i = 0; i < valIds.length; ++i) {
-              total += Number(dataApr[`apr${valIds[i]}`])
+          const valsPayload = [{
+            validator: Number(selectedValidator.validator.valId),
+            amount: amountDec,
+            duration: duration
+          } as QueryAPRPayload]
+          if (valsPayload && amountDec) {
+            const { data: dataApr } = await QueryService.queryValidatorsApr(valsPayload)
+            for (let i = 0; i < valsPayload.length; ++i) {
+              total += Number(dataApr[`apr${valsPayload[i].validator}`])
             }
-            const _apr = total / valIds.length
+            const _apr = total / valsPayload.length
             setApr(_apr)
           } else {
             setApr(0)
@@ -73,13 +78,13 @@ export const LockForm = () => {
   }, [selectedValidator, stakeAmount, stakeDuration])
 
   const validateDuration = useCallback((value: any) => {
-    if (Number(value) < MIN_LOCKUP_DURATION) {
-      setDurationErr(t('Minimum lockup is 14 days'));
+    if (Number(value) < appConfig.minLockupDuration) {
+      setDurationErr(`Minimum lockup is ${appConfig.minLockupDuration} days`);
       return false;
     }
     setDurationErr("")
     return true
-  }, [t])
+  }, [])
 
   const validateAmount = useCallback((value: any) => {
     if (!value) {
@@ -97,55 +102,67 @@ export const LockForm = () => {
     const params: any = {
       toValidatorID: Number(selectedValidator.validator.valId),
       lockupDuration: stakeDuration * 86400,
-      amount: Number(stakeAmount)
+      amount: stakeAmount
     }
     try {
       const _isLocked = selectedValidator.validator && selectedValidator.validator.authLockInfo && selectedValidator.validator.authLockInfo.isLockedUp
-      const { status, transactionHash } = _isLocked ? await relockStake(params) : await lockStake(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your staked amount has been locked.`
-        toastSuccess(msg, t('Success'))
-        setIsOpenModal(false)
-      } else {
-        toastDanger('Sorry! Lock stake failed', t('Error'))
-      }
-      console.log("Lock tx: ", transactionHash)
+      _isLocked ? await relockStake(params) : await lockStake(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Lock stake failed', t('Error'))
+    } finally {
+      setIsLoading(false)
+      setstakeAmount('')
+      setDurationSlideValue(0)
     }
-    setIsLoading(false)
-    setstakeAmount('')
-    setDurationSlideValue(0)
     // eslint-disable-next-line
   }, [stakeAmount, selectedValidator, stakeDuration])
 
+  useEffect(() => {
+    if (isSuccessRelock) {
+      const msg = `Congratulation! Your staked amount has been relocked.`
+      toastSuccess(msg, t('Success'))
+      setIsShow(false)
+    }
+    if (isErrorRelock) {
+      toastDanger('Sorry! Relock stake failed', t('Error'))
+    }
+    if (isSuccessLock) {
+      const msg = `Congratulation! Your staked amount has been locked.`
+      toastSuccess(msg, t('Success'))
+    }
+    if (isErrorLock) {
+      toastDanger('Sorry! Lock stake failed', t('Error'))
+    }
+    // eslint-disable-next-line
+  }, [isErrorLock, isSuccessLock, isSuccessRelock, isErrorRelock]);
+
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      const balance = Number(bigFormatEther(selectedValidator.actualStakedAmount || 0))
-      if (option === suggestOp || Number(balance) < adjustedFeeU2U) {
+      const balance = selectedValidator.actualStakedAmount
+      if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setstakeAmount('')
         validateAmount('')
       } else {
         setSuggestOp(option)
-        let amountCalculated = 0;
+        let amountCalculated: any = 0;
         switch (option) {
           case SuggestionOptions.TWENTY_FIVE:
-            amountCalculated = Number(balance) / 4;
+            amountCalculated = balance.div(BigNumber.from(4));
             break
           case SuggestionOptions.FIFTY:
-            amountCalculated = Number(balance) / 2;
+            amountCalculated = balance.div(BigNumber.from(2));
             break
           case SuggestionOptions.SEVENTY_FIVE:
-            amountCalculated = Number(balance) / 4 * 3;
+            amountCalculated = balance.mul(BigNumber.from(3)).div(BigNumber.from(4));
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance) - adjustedFeeU2U
+            amountCalculated = balance
             break
         }
-        setstakeAmount(amountCalculated.toString());
-        validateAmount(amountCalculated)
+        setstakeAmount(bigFormatEther(amountCalculated));
+        validateAmount(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)
@@ -224,8 +241,16 @@ export const LockForm = () => {
       </div>
       <div className="flex justify-center mt-10">
         {
-          account ? (
-            <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onLockStake}>{t("Lock")}</Button>
+          address ? (
+              <>
+                {
+                  !correctedChain ? (
+                      <SwitchNetworkButton />
+                      ) : (
+                      <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onLockStake}>{t("Lock")}</Button>
+                  )
+                }
+              </>
           ) : (
             <ConnectWalletButton />
           )
@@ -241,6 +266,6 @@ export const LockForm = () => {
   )
 }
 
-function setIsOpenModal(arg0: boolean) {
-  throw new Error("Function not implemented.")
-}
+// function setIsOpenModal(arg0: boolean) {
+//   throw new Error("Function not implemented.")
+// }

@@ -36,7 +36,7 @@ export const Home = () => {
           <div className="w-full py-3 flex justify-around flex-wrap gap-6">
             <div className="">
               <div className="text-xs text-neutral">{t('Total Supply (U2U)')}</div>
-              <div className="text-lg text-neutral font-semibold">10B U2U</div>
+              <div className="text-lg text-neutral font-semibold">9B U2U</div>
             </div>
             <div className="">
               <div className="text-xs text-neutral">{t('Epoch Reward (U2U)')}</div>
@@ -122,7 +122,7 @@ export const Home = () => {
         <div className="w-full py-3 px-[41px] flex justify-around flex-wrap gap-6">
           <div className="">
             <div className="text-base text-neutral font-semibold">{t('Total Supply (U2U)')}</div>
-            <div className="text-2xl text-neutral font-bold">10B U2U</div>
+            <div className="text-2xl text-neutral font-bold">9B U2U</div>
           </div>
           <div className="">
             <div className="text-base text-neutral font-semibold">{t('Epoch Reward (U2U)')}</div>

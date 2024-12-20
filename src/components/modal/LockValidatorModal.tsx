@@ -3,7 +3,9 @@ import { useTranslation } from "react-i18next"
 import { Validation } from "../../types"
 import { bigFormatEther, classNames, truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
-import { MIN_LOCKUP_DURATION } from "../../contants"
+import { appConfig } from "../../contants"
+import { useMemo } from "react"
+import { BigNumber } from "ethers"
 
 interface LockValidatorModallProps {
   isOpenModal: boolean
@@ -23,12 +25,17 @@ export const LockValidatorModal = ({
 
   const { t } = useTranslation()
 
+  const validationsFilter = useMemo(() => {
+    if (!validations || validations.length === 0) return [] 
+    return validations.filter(i => (BigNumber.from(0)).lt(i.stakedAmount))
+  }, [validations])
+
   return (
     <Modal isOpen={isOpenModal} scale={modalScale.md} setIsOpen={setIsOpenModal}>
       <div className="text-[24px] font-bold text-text text-center whitespace-nowrap">{t("Choose a Staked Validator")}</div>
       <div className="w-full mt-6 min-w-[500px]">
         {
-          validations && validations.length > 0 && validations.map((row: Validation, index: number) => {
+          validationsFilter && validationsFilter.length > 0 && validationsFilter.map((row: Validation, index: number) => {
 
             let maxDuration = () => {
               if (!row.validator || !row.validator.authLockInfo) return 0
@@ -36,7 +43,7 @@ export const LockValidatorModal = ({
               let now = Math.ceil((new Date()).getTime())
               if (_endTime < now) return 0
               let duration = Math.ceil((_endTime - now) / 86400000) - 1
-              if (duration < MIN_LOCKUP_DURATION) return 0
+              if (duration < appConfig.minLockupDuration) return 0
               return duration
             }
             return (

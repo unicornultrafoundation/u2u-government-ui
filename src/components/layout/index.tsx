@@ -1,9 +1,7 @@
-import { ReactNode, useEffect } from "react"
+import { ReactNode } from "react"
 import { LeftBar } from "../left-bar"
 import { Header } from "../header"
-import { useAuth } from "../../hooks";
-import { connectorLocalStorageKey } from "../../contants";
-import { ConnectorNames, classNames } from "../../utils";
+import { classNames } from "../../utils";
 import { isMobile } from 'mobile-device-detect';
 
 interface Props {
@@ -11,19 +9,19 @@ interface Props {
 }
 
 export const Layout = ({ children }: Props) => {
-  const { login } = useAuth()
-  useEffect(() => {
-    try {
-        const connectorID = window.localStorage.getItem(connectorLocalStorageKey);
-        if (connectorID) {
-          (async () => {
-            await login(connectorID as ConnectorNames)
-          })()
-        }
-      } catch (error) {
-    }
-    // eslint-disable-next-line
-  }, [])
+  // const { login } = useAuth()
+  // useEffect(() => {
+  //   try {
+  //       const connectorID = window.localStorage.getItem(connectorLocalStorageKey);
+  //       if (connectorID) {
+  //         (async () => {
+  //           await login(connectorID as ConnectorNames)
+  //         })()
+  //       }
+  //     } catch (error) {
+  //   }
+  //   // eslint-disable-next-line
+  // }, [])
 
   return (
     <div className="flex">

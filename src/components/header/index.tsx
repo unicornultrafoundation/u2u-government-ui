@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next"
-import { useWeb3React } from "@web3-react/core"
 import { Button, buttonScale, buttonType } from "../button"
-import { useAuth, useBalance } from "../../hooks"
+import { useAuth } from "../../hooks"
 import { truncate } from "../../utils"
 import { RenderNumberFormat } from "../text"
 import { useNavigate } from "react-router-dom"
@@ -15,11 +14,11 @@ import { toastSuccess } from "../toast"
 import { MenuMobile } from "./MenuMobile"
 import { Languages } from "./Languages"
 import Jazzicon from "react-jazzicon"
+import {useWeb3} from "../../hooks/useWeb3";
+import {SwitchNetworkButton} from "../switchNetwork";
 
 export const Header = () => {
   const { t } = useTranslation()
-  const { account, isActive } = useWeb3React()
-  const { balance } = useBalance()
   const navigate = useNavigate()
   const [isShowMobileMenu, setIsShowMobileMenu] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -31,6 +30,8 @@ export const Header = () => {
 
   const accountDetailsRef = useRef(null)
   const settingDetailsRef = useRef(null)
+
+  const { address, correctedChain, balance } = useWeb3();
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -74,13 +75,13 @@ export const Header = () => {
 
   if (isMobile) {
     return (
-      <div className="flex px-4 py-[10px] justify-between flex-wrap">
+      <div className="flex px-4 py-[10px] justify-between flex-wrap items-center">
         <button
           className="w-[44px] h-[44px] mb-2 rounded-full border-[1.5px] border-border-outline flex justify-center items-center cursor-pointer"
           onClick={() => setIsShowMobileMenu(true)}>
           <MenuIcon />
         </button>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Button
             variant={buttonType.secondary}
             className="font-semibold"
@@ -93,59 +94,68 @@ export const Header = () => {
             {t('Register')}
           </Button>
           {
-            isActive ? (
-              <div className="flex justify-end">
-                <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline">
-                  <div className="flex items-center gap-2">
-                    <Jazzicon diameter={36} seed={1} />
-                    <div>
-                      <div className="text-base text-text font-semibold">
-                        {truncate({ str: account || "", headCount: 5 })}
-                      </div>
-                      <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
-                    </div>
-                  </div>
-                  <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
+            address ? (
+                <>
                   {
-                    isShowAccountDetail &&
-                    <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50">
-                      <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
-                      <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
-                        <div className="flex items-center gap-2">
-                          <Jazzicon diameter={36} seed={1} />
-                          <div>
-                            <div className="text-base text-text font-semibold">
-                              {truncate({ str: account || "", headCount: 5 })}
+                    !correctedChain ? (
+                        <SwitchNetworkButton scale='sm' />
+                        ) : (
+                        <div className="flex justify-end">
+                          <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline">
+                            <div className="flex items-center gap-2">
+                              <Jazzicon diameter={36} seed={1} />
+                              <div>
+                                <div className="text-base text-text font-semibold">
+                                  {truncate({ str: address || "", headCount: 5 })}
+                                </div>
+                                <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                              </div>
                             </div>
-                            <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                            <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
+                            {
+                                isShowAccountDetail &&
+                                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50">
+                                  <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
+                                  <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
+                                    <div className="flex items-center gap-2">
+                                      <Jazzicon diameter={36} seed={1} />
+                                      <div>
+                                        <div className="text-base text-text font-semibold">
+                                          {truncate({ str: address || "", headCount: 5 })}
+                                        </div>
+                                        <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                                      </div>
+                                    </div>
+                                    <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(address || "")} />
+                                  </div>
+                                  <div className="py-3 px-6 border-b border-border-outline">
+                                    <div className="text-sm text-text-secondary">{t("Balance")}</div>
+                                    <div className="text-base font-semibold text-text">
+                                      <RenderNumberFormat amount={balance} className="mr-2" /><span>U2U</span>
+                                    </div>
+                                  </div>
+                                  <div className="py-3 px-6 border-b border-border-outline flex gap-4">
+                                    <GlobeIcon />
+                                    <a href={`${appConfig.explorer}address/${address}`} target="_blank" rel="noopener noreferrer">
+                                      <div className="text-base font-semibold text-text">{t("Explorer")}</div>
+                                    </a>
+                                  </div>
+                                  <div className="py-3 px-6 flex gap-4">
+                                    <LogoutIcon />
+                                    <div className="text-base font-semibold text-text cursor-pointer"
+                                         onClick={() => {
+                                           logout()
+                                           setIsShowAccountDetail(false)
+                                         }}>{t("Logout")}</div>
+                                  </div>
+                                </div>
+                            }
                           </div>
                         </div>
-                        <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(account || "")} />
-                      </div>
-                      <div className="py-3 px-6 border-b border-border-outline">
-                        <div className="text-sm text-text-secondary">{t("Balance")}</div>
-                        <div className="text-base font-semibold text-text">
-                          <RenderNumberFormat amount={balance} className="mr-2" /><span>U2U</span>
-                        </div>
-                      </div>
-                      <div className="py-3 px-6 border-b border-border-outline flex gap-4">
-                        <GlobeIcon />
-                        <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
-                          <div className="text-base font-semibold text-text">{t("Explorer")}</div>
-                        </a>
-                      </div>
-                      <div className="py-3 px-6 flex gap-4">
-                        <LogoutIcon />
-                        <div className="text-base font-semibold text-text cursor-pointer"
-                          onClick={() => {
-                            logout()
-                            setIsShowAccountDetail(false)
-                          }}>{t("Logout")}</div>
-                      </div>
-                    </div>
+
+                    )
                   }
-                </div>
-              </div>
+                </>
             ) : (
               <Button
                 className="font-semibold"
@@ -178,60 +188,68 @@ export const Header = () => {
         {t('Validator Register')}
       </Button>
       {
-        isActive ? (
-          <div className="flex justify-end">
-            <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
-              <div className="flex items-center gap-2">
-                <Jazzicon diameter={36} seed={1} />
-                <div>
-                  <div className="text-base text-text font-semibold">
-                    {truncate({ str: account || "", headCount: 5 })}
-                  </div>
-                  <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
-                </div>
-              </div>
-              <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
+        address ? (
+            <>
               {
-                isShowAccountDetail &&
-                <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50
-                ">
-                  <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
-                  <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
-                    <div className="flex items-center gap-2">
-                      <Jazzicon diameter={36} seed={1} />
-                      <div>
-                        <div className="text-base text-text font-semibold">
-                          {truncate({ str: account || "", headCount: 5 })}
+                !correctedChain ? (
+                    <SwitchNetworkButton className="max-w-[248px]" />
+                    ) : (
+                    <div className="flex justify-end">
+                      <div className="flex items-center justify-between py-1 pr-4 pl-2 rounded-[45px] gap-2 text-left relative border border-border-outline min-w-[248px]">
+                        <div className="flex items-center gap-2">
+                          <Jazzicon diameter={36} seed={1} />
+                          <div>
+                            <div className="text-base text-text font-semibold">
+                              {truncate({ str: address || "", headCount: 5 })}
+                            </div>
+                            <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                          </div>
                         </div>
-                        <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                        <ArrowDownIcon onClick={() => setIsShowAccountDetail(!isShowAccountDetail)} className="cursor-pointer" />
+                        {
+                            isShowAccountDetail &&
+                            <div ref={accountDetailsRef} className="absolute top-[60px] text-sm right-0 min-w-[320px] pt-2 bg-neutral-surface border border-border-outline shadow-1 rounded-[16px] z-50
+                ">
+                              <div className="text-lg font-semibold text-text-secondary px-6">{t("Connected")}</div>
+                              <div className="flex items-center justify-between border-b border-border-outline pt-1 px-6 pb-3">
+                                <div className="flex items-center gap-2">
+                                  <Jazzicon diameter={36} seed={1} />
+                                  <div>
+                                    <div className="text-base text-text font-semibold">
+                                      {truncate({ str: address || "", headCount: 5 })}
+                                    </div>
+                                    <div className="text-xs text-text-secondary">{appConfig.networkName}</div>
+                                  </div>
+                                </div>
+                                <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(address || "")} />
+                              </div>
+                              <div className="py-3 px-6 border-b border-border-outline">
+                                <div className="text-sm text-text-secondary">{t("Balance")}</div>
+                                <div className="text-base font-semibold text-text">
+                                  <RenderNumberFormat amount={balance} className="mr-2" /><span>U2U</span>
+                                </div>
+                              </div>
+                              <div className="py-3 px-6 border-b border-border-outline flex gap-4">
+                                <GlobeIcon />
+                                <a href={`${appConfig.explorer}address/${address}`} target="_blank" rel="noopener noreferrer">
+                                  <div className="text-base font-semibold text-text">{t("Explorer")}</div>
+                                </a>
+                              </div>
+                              <div className="py-3 px-6 flex gap-4">
+                                <LogoutIcon />
+                                <div className="text-base font-semibold text-text cursor-pointer"
+                                     onClick={() => {
+                                       logout()
+                                       setIsShowAccountDetail(false)
+                                     }}>{t("Logout")}</div>
+                              </div>
+                            </div>
+                        }
                       </div>
                     </div>
-                    <CopyIcon className="cursor-pointer" onClick={() => onCopyAdd(account || "")} />
-                  </div>
-                  <div className="py-3 px-6 border-b border-border-outline">
-                    <div className="text-sm text-text-secondary">{t("Balance")}</div>
-                    <div className="text-base font-semibold text-text">
-                      <RenderNumberFormat amount={balance} className="mr-2" /><span>U2U</span>
-                    </div>
-                  </div>
-                  <div className="py-3 px-6 border-b border-border-outline flex gap-4">
-                    <GlobeIcon />
-                    <a href={`${appConfig.explorer}address/${account}`} target="_blank" rel="noopener noreferrer">
-                      <div className="text-base font-semibold text-text">{t("Explorer")}</div>
-                    </a>
-                  </div>
-                  <div className="py-3 px-6 flex gap-4">
-                    <LogoutIcon />
-                    <div className="text-base font-semibold text-text cursor-pointer"
-                      onClick={() => {
-                        logout()
-                        setIsShowAccountDetail(false)
-                      }}>{t("Logout")}</div>
-                  </div>
-                </div>
+                )
               }
-            </div>
-          </div>
+            </>
         ) : (
           <div className="flex items-center justify-end gap-4">
             <Button

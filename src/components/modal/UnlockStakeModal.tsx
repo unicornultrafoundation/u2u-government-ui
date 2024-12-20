@@ -12,6 +12,8 @@ import { toastDanger, toastSuccess } from "../toast"
 import { AmountSelection, SuggestionOptions } from "../staking-calculator/AmountSelection"
 import { useNavigate } from "react-router-dom"
 import { useValidatorStore } from "../../store"
+import { BigNumber, ethers } from "ethers"
+import {formatUnits} from "viem";
 
 interface UnlockStakeModalProps {
   isOpenModal: boolean
@@ -36,16 +38,15 @@ export const UnlockStakeModal = ({
   const [suggestOp, setSuggestOp] = useState<SuggestionOptions>(SuggestionOptions.NONE)
 
 
-  const { unlockStake } = useUnlockStake()
+  const { unlockStake, isSuccess, isError } = useUnlockStake()
   const { calcPen } = useCalcPenalty()
-  const adjustedFeeU2U = 0.0000001 
 
 
   const handleInput = useCallback(async (value: any) => {
-    const _pen = await calcPen(validatorId ? Number(validatorId) : 0, Number(value), lockedAmount)
-    setPennalty(bigFormatEther(_pen || 0))
+    const _pen = await calcPen(validatorId ? Number(validatorId) : 0, (value))
+    setPennalty(formatUnits(BigInt(_pen?.toString() || 0),18))
      // eslint-disable-next-line
-  }, [lockedAmount, validatorId])
+  }, [validatorId])
 
 
 
@@ -54,8 +55,8 @@ export const UnlockStakeModal = ({
       setAmountErr(t('This field is required'));
       return false;
     }
-    
-    if (Number(value) > Number(bigFormatEther(lockedAmount))) {
+    const parseValue =  ethers.utils.parseEther(value)
+    if (!lockedAmount.gte(BigNumber.from(parseValue.toString()))) {
       setAmountErr(t('Insufficient balance'));
       return false;
     }
@@ -68,53 +69,67 @@ export const UnlockStakeModal = ({
     setLoading(true)
     const params: UnlockStakeParams = {
       toValidatorID: Number(validatorId),
-      amount: Number(amount)
+      amount: amount
     }
     try {
-      const { status, transactionHash } = await unlockStake(params)
-      if (status === 1) {
-        const msg = `Congratulation! Your locked amount has been unlocked.`
-        toastSuccess(msg, t('Success'))
-        setIsOpenModal(false)
-      } else {
-        toastDanger('Sorry! Unlock stake failed', t('Error'))
-      }
-      console.log("Lock tx: ", transactionHash)
+      await unlockStake(params)
+      // if (status === 1) {
+      //   const msg = `Congratulation! Your locked amount has been unlocked.`
+      //   toastSuccess(msg, t('Success'))
+      //   setIsOpenModal(false)
+      // } else {
+      //   toastDanger('Sorry! Unlock stake failed', t('Error'))
+      // }
+      // console.log("Lock tx: ", transactionHash)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Unlock stake failed', t('Error'))
+    } finally {
+      setLoading(false)
+      setAmount('')
     }
-    setLoading(false)
-    setAmount('')
     // eslint-disable-next-line
   }, [amount, validatorId])
 
+  useEffect(() => {
+    if (isSuccess) {
+      const msg = `Congratulation! Your locked amount has been unlocked.`
+      toastSuccess(msg, t('Success'))
+      setIsOpenModal(false)
+    }
+    if (isError) {
+      toastDanger('Sorry! Unlock stake failed', t('Error'))
+    }
+    // eslint-disable-next-line
+  }, [isSuccess, isError]);
+
   const handleOnclickSuggest = useCallback((option: SuggestionOptions) => {
     try {
-      const balance = bigFormatEther(lockedAmount)
-      if (option === suggestOp || Number(balance) < adjustedFeeU2U) {
+      const balance = lockedAmount
+      if (option === suggestOp) {
         setSuggestOp(SuggestionOptions.NONE)
         setAmount('')
         validateAmount('')
       } else {
         setSuggestOp(option)
-        let amountCalculated = 0;
+        let amountCalculated: any = 0;
         switch (option) {
           case SuggestionOptions.TWENTY_FIVE:
-            amountCalculated = Number(balance) / 4;
+            amountCalculated = balance.div(BigNumber.from(4));
             break
           case SuggestionOptions.FIFTY:
-            amountCalculated = Number(balance) / 2;
+            amountCalculated = balance.div(BigNumber.from(2));
             break
           case SuggestionOptions.SEVENTY_FIVE:
-            amountCalculated = Number(balance) / 4 * 3;
+            amountCalculated = balance.mul(BigNumber.from(3)).div(BigNumber.from(4));
             break
           case SuggestionOptions.MAX:
-            amountCalculated = Number(balance) - adjustedFeeU2U
+            amountCalculated = balance
             break
         }
-        setAmount(amountCalculated.toString());
-        validateAmount(amountCalculated)
+        setAmount(bigFormatEther(amountCalculated));
+        validateAmount(bigFormatEther(amountCalculated))
+        handleInput(bigFormatEther(amountCalculated))
       }
     } catch (error) {
       console.error(error)
@@ -164,7 +179,7 @@ export const UnlockStakeModal = ({
         <div className="text-base text-text">{t("Penalty")}</div>
         <div className="flex gap-1">
           <div className="text-base font-semibold text-error">
-          <RenderNumberFormat amount={penalty} fractionDigits={6} />
+          <RenderNumberFormat amount={penalty} fractionDigits={8} />
           </div>
           <div className="text-base text-text">U2U</div>
         </div>

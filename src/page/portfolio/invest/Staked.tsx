@@ -8,6 +8,7 @@ import { TableLimit } from "../../../contants"
 import { useDelegator } from "../../../hooks"
 import { useLockedStakeStore } from "../../../store"
 import { useNavigate } from "react-router-dom"
+import { BigNumber } from "ethers"
 
 export const Staked = () => {
   const { t } = useTranslation()
@@ -27,17 +28,23 @@ export const Staked = () => {
     setSkip(_skip)
   }
 
+  const validationsFilter = useMemo(() => {
+    if (!validations || validations.length === 0) return [] 
+    return validations.filter(i => (BigNumber.from(0)).lt(i.stakedAmount))
+  }, [validations])
+
+
   useEffect(() => {
-    if (validations && validations.length > 0) {
-      if (validations.length > TableLimit) {
-        setClientRecord(validations.slice(skip, skip + TableLimit))
+    if (validationsFilter && validationsFilter.length > 0) {
+      if (validationsFilter.length > TableLimit) {
+        setClientRecord(validationsFilter.slice(skip, skip + TableLimit))
       } else {
-        setClientRecord(validations)
+        setClientRecord(validationsFilter)
       }
     } else {
       setClientRecord([])
     }
-  }, [validations, skip])
+  }, [validationsFilter, skip])
 
   
 

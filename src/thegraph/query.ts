@@ -1,4 +1,6 @@
 import { TableLimit } from "../contants";
+import { QueryAPRPayload } from "../types";
+import { nowTime } from "../utils";
 import { apolloClient, apolloStakingClient, apolloU2UNetworkClient } from "./client";
 import { Schema } from "./schema";
 
@@ -38,7 +40,8 @@ const queryWithdrawalRequest = (delegator: string) => apolloClient.query({
 const queryLockedStake = (delegator: string) => apolloClient.query({
   query: Schema().LOCKE_STAKE,
   variables: {
-    delegatorAddress: delegator
+    delegatorAddress: delegator,
+    timeNow: Math.round(nowTime()/1000)
   },
   fetchPolicy: "no-cache"
 })
@@ -71,8 +74,9 @@ const queryValidatorApr = (valId: number, stakingAmount: string) => apolloStakin
   fetchPolicy: "no-cache"
 })
 
-const queryValidatorsApr = (vals: number[], amount = "1000000000000000000000", duration = 0) => apolloStakingClient.query({
-  query: Schema().VALIDATORS_APR(vals, amount, duration),
+
+const queryValidatorsApr = (vals: QueryAPRPayload[]) => apolloStakingClient.query({
+  query: Schema().VALIDATORS_APR(vals),
   fetchPolicy: "no-cache"
 })
 

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client"
+import { QueryAPRPayload } from "../../types";
 
 const DELEGATIONS_GQL = `
           id
@@ -35,6 +36,7 @@ const VALIDATIONS_GQL = `
         validator {${VALIDATOR_GQL}}
         stakedAmount
         totalLockStake
+        lockedEndtime
 `
 
 const EPOCH_OF_VAL_GQL = `
@@ -129,9 +131,11 @@ export const Schema = () => {
       }
     `,
     LOCKE_STAKE: gql`
-      query LockedUp($delegatorAddress: String!) {
+      query LockedUp($delegatorAddress: String!, $timeNow:  Int!) {
         lockedUps (where:{
-            delegator: $delegatorAddress
+            delegator: $delegatorAddress,
+            lockedAmount_gt: "0",
+            endTime_gt: $timeNow
           }) {
             delegator {
               id
@@ -187,14 +191,14 @@ export const Schema = () => {
         )
       }
     `,
-    VALIDATORS_APR(vals: any[], amount: string, duration: number) {
+    VALIDATORS_APR(vals: QueryAPRPayload[]) {
       let queryString = `query stakingApr {`;
       queryString += vals.map(
         (val) => `
-          apr${val}: calculateApr(
-            validatorId: ${val}
-            amount: "${amount}"
-            duration: ${duration}
+          apr${val.validator}: calculateApr(
+            validatorId: ${val.validator}
+            amount: "${val.amount}"
+            duration: ${val.duration}
           )
         `
       );

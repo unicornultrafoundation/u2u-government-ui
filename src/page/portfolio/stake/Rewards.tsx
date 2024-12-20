@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import { useClaimRewards, useDelegator, usePendingReward, useRestakeRewards } from "../../../hooks"
 import { ClaimRewardsParams, Delegator, RestakeRewardsParams, Validation } from "../../../types"
 import { classNames, exploreAddress, truncate } from "../../../utils"
@@ -59,7 +59,7 @@ const RenderReStakeButton = ({ validatorID }: {
 }) => {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
-  const { restake } = useRestakeRewards()
+  const { restake, isSuccess: isSuccessRestake, isError: isErrorRestake } = useRestakeRewards()
   const onRestakedRewards = useCallback(async () => {
     if (!validatorID) return;
     const params: RestakeRewardsParams = {
@@ -67,21 +67,25 @@ const RenderReStakeButton = ({ validatorID }: {
     }
     try {
       setLoading(true)
-      const { status, transactionHash } = await restake(params)
-      if (status === 1) {
-        const msg = `Congratulation! Restake rewards success`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Restake rewards failed', t('Error'))
-      }
-      console.log("Claim rewards tx: ", transactionHash)
+      await restake(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Restake rewards failed', t('Error'))
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, [validatorID, t])
+
+  useEffect(() => {
+    if (isSuccessRestake) {
+      const msg = `Congratulation! Restake rewards success`
+      toastSuccess(msg, t('Success'))
+    }
+    if (isErrorRestake) {
+      toastDanger('Sorry! Restake rewards failed', t('Error'))
+    }
+  }, [isSuccessRestake, isErrorRestake, t]);
   return (
     <Button
       className="whitespace-nowrap"
@@ -98,7 +102,7 @@ const RenderClaimButton = ({ validatorID }: {
   const { t } = useTranslation()
 
   const [loading, setLoading] = useState(false)
-  const { claimRewards } = useClaimRewards()
+  const { claimRewards, isSuccess, isError } = useClaimRewards()
 
   const onClaimedRewards = useCallback(async () => {
     if (!validatorID) return;
@@ -107,21 +111,24 @@ const RenderClaimButton = ({ validatorID }: {
     }
     try {
       setLoading(true)
-      const { status, transactionHash } = await claimRewards(params)
-      if (status === 1) {
-        const msg = `Congratulation! Claim rewards success`
-        toastSuccess(msg, t('Success'))
-      } else {
-        toastDanger('Sorry! Claim rewards failed', t('Error'))
-      }
-      console.log("Claim rewards tx: ", transactionHash)
+      await claimRewards(params)
     } catch (error) {
       console.log("error: ", error);
       toastDanger('Sorry! Claim rewards failed', t('Error'))
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
-    // eslint-disable-next-line 
-  }, [validatorID, t])
+  }, [validatorID, t, claimRewards])
+
+  useEffect(() => {
+    if (isSuccess) {
+      const msg = `Congratulation! Claim rewards success`
+      toastSuccess(msg, t('Success'))
+    }
+    if (isError) {
+      toastDanger('Sorry! Claim rewards failed', t('Error'))
+    }
+  }, [isSuccess, isError, t]);
   return (
     <Button
       loading={loading}

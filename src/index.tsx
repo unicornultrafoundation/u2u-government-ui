@@ -1,4 +1,5 @@
 import React from 'react';
+import '@rainbow-me/rainbowkit/styles.css';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './i18n';
