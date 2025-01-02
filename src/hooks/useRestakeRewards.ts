@@ -12,7 +12,7 @@ export const useRestakeRewards = () => {
       ...contracts.staking,
       functionName: 'restakeRewards',
       args: [params.toValidatorID],
-      gas: BigInt(GAS_LIMIT_HARD),
+
     });
     return waitForTransaction(txhash);
   };

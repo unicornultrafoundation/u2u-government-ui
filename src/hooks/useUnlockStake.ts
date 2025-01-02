@@ -15,7 +15,7 @@ export const useUnlockStake = () => {
       ...contracts.staking,
       functionName: 'unlockStake',
       args: [params.toValidatorID, delAmountDec.toString()],
-      gas: BigInt(GAS_LIMIT_HARD),
+      
     });
     return waitForTransaction(txhash);
   };

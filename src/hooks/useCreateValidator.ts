@@ -18,7 +18,7 @@ export const useCreateValidator = () => {
       ...contracts.staking,
       functionName: 'createValidator',
       args: [pubkeyBytes as any],
-      gas: BigInt(GAS_LIMIT_HARD),
+      
       value: delAmountDec.toBigInt(),
     });
     return waitForTransaction(txhash);
