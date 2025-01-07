@@ -26,17 +26,19 @@ export const ValidatorStakeModal = ({
   const { t } = useTranslation()
 
   return (
-    <Modal isOpen={isOpenModal} scale={modalScale.lg} setIsOpen={setIsOpenModal}>
+    <Modal isOpen={isOpenModal} scale={modalScale.xl} setIsOpen={setIsOpenModal}>
       <div className="text-[24px] font-bold text-text text-center whitespace-nowrap">{t("Choose a Validator")}</div>
-      <div className="w-full mt-6 min-w-[600px]">
+      <div className="w-full mt-6 min-w-[700px]">
         {
           validators.map((row: Validator, index: number) => {
             return (
               <div className={classNames(
                 "w-full flex px-4 py-2 items-center justify-between border border-border-outline rounded-[8px] mb-2 cursor-pointer hover:bg-neutral-surface-hover",
-                selected.valId === row.valId ? "bg-neutral-surface-hover" : "")}
+                selected.valId === row.valId ? "bg-neutral-surface-hover" : "",
+              row.isMaxPool ? "opacity-50" : "")}
                 key={index}
                 onClick={() => {
+                  if (row.isMaxPool) return
                   setSelected(row)
                   setIsOpenModal(false)
                 }}>
@@ -50,29 +52,35 @@ export const ValidatorStakeModal = ({
                   </div>
                 </div>
                 <div className="flex gap-8">
-                  <RenderMaxLock validatorId={Number(row.valId)} />
+                  <RenderMaxLock validatorId={Number(row.valId)}/>
                   <div>
                     <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Min.Apr (%)")}</div>
                     <div className="text-base text-text whitespace-nowrap">
-                      <RenderNumberFormat amount={row.minApr} fractionDigits={2} />
+                      <RenderNumberFormat amount={row.minApr} fractionDigits={2}/>
                     </div>
                   </div>
                   <div>
                     <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Max.Apr (%)")}</div>
                     <div className="text-base text-text whitespace-nowrap">
-                      <RenderNumberFormat amount={row.maxApr} fractionDigits={2} />
+                      <RenderNumberFormat amount={row.maxApr} fractionDigits={2}/>
                     </div>
                   </div>
                   <div>
                     <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("VP (%)")}</div>
                     <div className="text-base text-text whitespace-nowrap">
-                      <RenderNumberFormat amount={Number(row.votingPower) / 10000} fractionDigits={2} />
+                      <RenderNumberFormat amount={Number(row.votingPower) / 10000} fractionDigits={2}/>
                     </div>
                   </div>
                   <div>
                     <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Staked (U2U)")}</div>
                     <div className="text-base text-text whitespace-nowrap">
-                      <RenderNumberFormat amount={bigFormatEther(row.totalStakedAmount || 0) || 0} fractionDigits={0} />
+                      <RenderNumberFormat amount={bigFormatEther(row.totalStakedAmount || 0) || 0} fractionDigits={0}/>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[14px] text-text-secondary whitespace-nowrap">{t("Status")}</div>
+                    <div className="text-base text-text whitespace-nowrap">
+                      <div className={`text-xs text-neutral px-3 text-center ${row.isMaxPool ? 'bg-red-500' : 'bg-success'}  rounded-[40px] h-[20px] leading-5 whitespace-nowrap`}>{row.isMaxPool ? 'Max Cap' : 'Available'}</div>
                     </div>
                   </div>
                 </div>
@@ -88,7 +96,7 @@ export const ValidatorStakeModal = ({
 const RenderMaxLock = ({validatorId}: {
   validatorId: number
 }) => {
-  const { t } = useTranslation()
+  const {t} = useTranslation()
   const [valAuthLockStake] = useLockedStakeStore(state => [
     state.valAuthLockStake
   ])

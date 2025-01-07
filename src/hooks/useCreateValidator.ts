@@ -1,7 +1,7 @@
 
 import {CreateValidatorParams} from "../types";
 import { ethers } from "ethers";
-import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {contracts} from "../contants";
 import {useWriteContract} from "wagmi";
 import {useWaitForTransaction} from "./useWaitForTransaction";
 

@@ -1,6 +1,6 @@
 
 import { ethers } from "ethers";
-import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {contracts} from "../contants";
 import { simulateContract } from '@wagmi/core'
 import {wagmiConfig} from "../contants/wagmi";
 
