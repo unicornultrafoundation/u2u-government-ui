@@ -115,7 +115,7 @@ export const LeftBar = () => {
               <img src={Images.twitterIcon} alt="" />
             </div>
           </a>
-          <a href="https://t.me/UnicornUltra" target="_blank" rel="noopener noreferrer">
+          <a href="https://t.me/u2u_xyzchat" target="_blank" rel="noopener noreferrer">
             <div className="flex items-center w-[28px] h-[28px] justify-center">
               <img src={Images.telegramIcon} alt="u2u" />
             </div>

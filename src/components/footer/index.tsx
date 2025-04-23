@@ -40,7 +40,7 @@ export const Footer = () => {
               <i className="fa fa-twitter"></i>
             </div>
           </a>
-          <a href="https://t.me/UnicornUltra" target="_blank" rel="noopener noreferrer">
+          <a href="https://t.me/u2u_xyzchat" target="_blank" rel="noopener noreferrer">
             <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
               <i className="fa fa-telegram"></i>
             </div>
