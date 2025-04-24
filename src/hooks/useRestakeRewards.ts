@@ -1,5 +1,5 @@
 import {RestakeRewardsParams} from "../types";
-import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {contracts} from "../contants";
 import {useWriteContract} from "wagmi";
 import {useWaitForTransaction} from "./useWaitForTransaction";
 
@@ -12,7 +12,7 @@ export const useRestakeRewards = () => {
       ...contracts.staking,
       functionName: 'restakeRewards',
       args: [params.toValidatorID],
-      gas: BigInt(GAS_LIMIT_HARD),
+
     });
     return waitForTransaction(txhash);
   };

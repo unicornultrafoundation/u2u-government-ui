@@ -36,6 +36,7 @@ export interface Validator {
   maxDuration?: number
   maxApr: number
   minApr: number
+  isMaxPool: boolean
 }
 
 export interface Validation {

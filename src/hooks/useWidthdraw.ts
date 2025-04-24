@@ -1,5 +1,5 @@
 import {WithdrawParams} from "../types";
-import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {contracts} from "../contants";
 import {useWriteContract} from "wagmi";
 import {useWaitForTransaction} from "./useWaitForTransaction";
 
@@ -13,7 +13,7 @@ export const useWidthdraw = () => {
       ...contracts.staking,
       functionName: 'withdraw',
       args: [params.toValidatorID, params.wrID],
-      gas: BigInt(GAS_LIMIT_HARD),
+      
     });
     return waitForTransaction(txhash);
   };

@@ -5,6 +5,7 @@ import { DataProcessor } from "./dataProccesser"
 import { BigNumber } from "ethers"
 import { useLockedStakeStore, useValidatorStore } from "../../store"
 import { LockedStake, QueryAPRPayload, Validator } from "../../types"
+import {formatUnits} from "viem";
 
 export const useFetchAllValidator = () => {
   const [updateAllValidator, allValidators] = useValidatorStore(state => [
@@ -71,9 +72,16 @@ export const useFetchAllValidator = () => {
         const valPromises = vals.map((v: any) => {
           let max = maxApr[`apr${v.validatorId}`]
           let min = minApr[`apr${v.validatorId}`]
-          return DataProcessor.validator(v, totalNetworkStaked, Number(max), Number(min))
+          let isMaxPool = false
+          // console.log(BigNumber.from(v.selfStakedAmount))
+
+          const maxPool = Number(formatUnits(v.selfStaked, 18)) * 10
+          const totalStaked = Number(formatUnits(v.totalStakedAmount, 18))
+          if(totalStaked > maxPool) isMaxPool = true
+          return DataProcessor.validator(v, totalNetworkStaked, Number(max), Number(min), isMaxPool)
         })
-        vals = await Promise.all(valPromises)        
+        vals = await Promise.all(valPromises)
+        vals.sort((a: Validator, b: Validator) => (a.isMaxPool === b.isMaxPool) ? 0 : a.isMaxPool ? 1 : -1);
         updateAllValidator(vals)
       }
     })()

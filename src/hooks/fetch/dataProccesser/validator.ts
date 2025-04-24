@@ -4,7 +4,7 @@ import { delegation } from "./delegation"
 import { fetchValidatorInfo } from "../../../utils"
 import { Images } from "../../../images"
 
-export const validator  = async (data: any, totalStaked: BigNumber, aprMax: number, aprMin: number): Promise<Validator> => {  
+export const validator  = async (data: any, totalStaked: BigNumber, aprMax: number, aprMin: number, isMaxPool: boolean = false): Promise<Validator> => {
   if (!data) return {} as Validator
   const valInfo = await fetchValidatorInfo(data.auth)
   let valAvartar = valInfo && data.auth ? `https://raw.githubusercontent.com/unicornultrafoundation/explorer-assets/master/validators_info/${data.auth.toLowerCase()}/logo.png` : Images.U2ULogoPNG
@@ -34,6 +34,7 @@ export const validator  = async (data: any, totalStaked: BigNumber, aprMax: numb
     maxDuration: data.maxDuration,
     authLockInfo: data.authLockInfo,
     maxApr: aprMax,
-    minApr: aprMin
+    minApr: aprMin,
+    isMaxPool: isMaxPool
   }
 }

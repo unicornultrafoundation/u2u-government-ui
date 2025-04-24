@@ -1,6 +1,6 @@
 import { DelegateParams } from "../types"
 import { ethers } from "ethers"
-import {contracts, GAS_LIMIT_HARD} from "../contants"
+import {contracts} from "../contants"
 import {useWriteContract} from "wagmi";
 import {useWaitForTransaction} from "./useWaitForTransaction";
 
@@ -14,7 +14,7 @@ export const useDelegate = () => {
       ...contracts.staking,
       functionName: 'delegate',
       args: [params.toValidatorID],
-      gas: BigInt(GAS_LIMIT_HARD),
+      
       value: delAmountDec.toBigInt(),
     });
     return waitForTransaction(txhash);

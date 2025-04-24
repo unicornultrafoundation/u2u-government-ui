@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next"
 import { Images } from "../../images"
 import {Connector, useAccount, useConnect, useDisconnect} from "wagmi";
 import { WalletButton } from "@rainbow-me/rainbowkit"
-import InjectedIcon from "../../images/icon-injected.svg";
 
 interface WalletLoginModalProps {
   isOpenModal: boolean

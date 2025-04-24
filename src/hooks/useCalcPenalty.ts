@@ -1,6 +1,6 @@
 
 import { ethers } from "ethers";
-import {contracts, GAS_LIMIT_HARD} from "../contants";
+import {contracts} from "../contants";
 import { simulateContract } from '@wagmi/core'
 import {wagmiConfig} from "../contants/wagmi";
 
@@ -13,7 +13,7 @@ export const useCalcPenalty = () => {
         ...contracts.staking,
         functionName: 'unlockStake',
         args: [validator, delAmountDec.toString()],
-        gas: BigInt(GAS_LIMIT_HARD),
+        
       });
       return result?.result;
     } catch (error) {

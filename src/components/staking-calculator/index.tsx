@@ -23,6 +23,7 @@ export const StakingCalculator = ({
   validators,
   balance: u2uBalance
 }: StakingCalculatorProps) => {
+  console.log(validators)
 
   const { t } = useTranslation()
   // Local state
@@ -181,7 +182,7 @@ export const StakingCalculator = ({
                   !correctedChain ? (
                       <SwitchNetworkButton />
                       ) : (
-                      <Button loading={isLoading} className="w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
+                      <Button disabled={validators[0].isMaxPool} loading={isLoading} className="disabled:bg-opacity-50 w-full" scale={buttonScale.lg} onClick={onDelegate}>{t("Delegate")}</Button>
                   )
                 }
               </>

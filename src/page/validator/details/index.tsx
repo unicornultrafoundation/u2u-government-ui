@@ -26,7 +26,7 @@ export const ValidatorDetails = () => {
     votingPower,
     totalDelegator,
     apr,
-    avatar
+    avatar,
   } = useMemo(() => validator, [validator])
 
   const { rewards } = useFetchValidatorEpochRewards(valId ? Number(valId) : 0)
