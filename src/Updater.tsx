@@ -7,7 +7,8 @@ import {
   useFetchLockedStake,
   useFetchStakingStats,
   useFetchWithdrawRequest,
-  useTotalSupply
+  useTotalSupply,
+  usePriceU2U
 } from "./hooks"
 
 export const Updater = () => {
@@ -15,6 +16,7 @@ export const Updater = () => {
   useFetchStakingStats()
   useFetchLastEpoch()
   useTotalSupply()
+  usePriceU2U()
   useChangeLanguage()
   useFetchDelegator()
   useFetchWithdrawRequest()
