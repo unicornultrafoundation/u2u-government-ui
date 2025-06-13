@@ -20,8 +20,8 @@ import { appConfig } from "./config"
 //     symbol: 'U2U',
 //   },
 //   rpcUrls: {
-//     public: { http: ['https://rpc-nebulas-testnet.uniultra.xyz/'] },
-//     default: { http: ['https://rpc-nebulas-testnet.uniultra.xyz/'] },
+//     public: { http: ['https://rpc-nebulas-testnet.u2u.xyz/'] },
+//     default: { http: ['https://rpc-nebulas-testnet.u2u.xyz/'] },
 //   },
 //   blockExplorers: {
 //     etherscan: { name: 'Nebulas Testnet', url: 'https://testnet.u2uscan.xyz/' },

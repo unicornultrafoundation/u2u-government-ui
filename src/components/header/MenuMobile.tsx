@@ -69,7 +69,7 @@ export const MenuMobile = ({ isShow, setIsShow }: MenuMobileProps) => {
         </div>
         <div className="text-sm text-text">© 2023 Unicorn Ultra (U2U). All rights reserved</div>
         <div className="flex item-center justify-between mt-4">
-          <a href="https://uniultra.xyz" target="_blank" rel="noopener noreferrer">
+          <a href="https://u2u.xyz" target="_blank" rel="noopener noreferrer">
             <div className="flex items-center w-[28px] h-[28px] justify-center">
               <img src={Images.u2uIcon} alt="u2u" />
             </div>
@@ -84,7 +84,7 @@ export const MenuMobile = ({ isShow, setIsShow }: MenuMobileProps) => {
               <img src={Images.youtubeIcon} alt="u2u" />
             </div>
           </a>
-          <a href="https://twitter.com/uniultra_xyz" target="_blank" rel="noopener noreferrer">
+          <a href="https://x.com/u2u_xyz" target="_blank" rel="noopener noreferrer">
             <div className="flex items-center w-[28px] h-[28px] justify-center">
               <img src={Images.twitterIcon} alt="" />
             </div>

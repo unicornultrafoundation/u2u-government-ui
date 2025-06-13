@@ -20,8 +20,8 @@ const appConfigs: {[k: string]: AppConfig} = {
     chainID: 4439,
     networkName: "U2U Dev Net",
     tokenName: "U2U Dev",
-    rpc: "https://rpc-devnet.uniultra.xyz/",
-    explorer: "https://rpc-nebulas-testnet.uniultra.xyz/",
+    rpc: "https://rpc-devnet.u2u.xyz/",
+    explorer: "https://rpc-nebulas-testnet.u2u.xyz/",
     sfcSubgraph: "http://localhost:8000/subgraphs/name/u2u/sfc-subgraph",
     u2uNetworkSubgraph: "http://localhost:8000/subgraphs/name/u2u/sfc-network",
     stakingContract: "0xfc00face00000000000000000000000000000000",
@@ -33,13 +33,13 @@ const appConfigs: {[k: string]: AppConfig} = {
     chainID: 2484,
     networkName: "U2U Nebulas Testnet",
     tokenName: "U2U",
-    rpc: "https://rpc-nebulas-testnet.uniultra.xyz/",
+    rpc: "https://rpc-nebulas-testnet.u2u.xyz/",
     explorer: "https://testnet.u2uscan.xyz/",
     sfcSubgraph: "https://subgraph-testnet.u2u.xyz/subgraphs/name/u2u/sfc-subgraph-v2",
-    u2uNetworkSubgraph: "https://subgraph.uniultra.xyz/subgraphs/name/u2u/sfc-network",
+    u2uNetworkSubgraph: "https://subgraph.u2u.xyz/subgraphs/name/u2u/sfc-network",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 1800,
-    stakingGraphql: "https://testnet-staking-graphql.uniultra.xyz/graphql",
+    stakingGraphql: "https://testnet-staking-graphql.u2u.xyz/graphql",
     minLockupDuration: 1
   },
   "39" : {
@@ -48,11 +48,11 @@ const appConfigs: {[k: string]: AppConfig} = {
     tokenName: "U2U",
     rpc: "https://rpc-mainnet.u2u.xyz/",
     explorer: "https://u2uscan.xyz/",
-    sfcSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-subgraph-v3",
-    u2uNetworkSubgraph: "https://graph.uniultra.xyz/subgraphs/name/u2u/sfc-network-v3",
+    sfcSubgraph: "https://graph.u2u.xyz/subgraphs/name/u2u/sfc-subgraph-v3",
+    u2uNetworkSubgraph: "https://graph.u2u.xyz/subgraphs/name/u2u/sfc-network-v3",
     stakingContract: "0xfc00face00000000000000000000000000000000",
     withdrawPeriodTime: 604800,
-    stakingGraphql: "https://staking-graphql.uniultra.xyz/graphql",
+    stakingGraphql: "https://staking-graphql.u2u.xyz/graphql",
     minLockupDuration: 14
   }
 }

@@ -20,7 +20,7 @@ export const Footer = () => {
         </div>
         <div className="text-left text-sm font-semibold mb-2">Find us on:</div>
         <div className="flex item-center gap-4">
-          <a href="https://uniultra.xyz" target="_blank" rel="noopener noreferrer">
+          <a href="https://u2u.xyz" target="_blank" rel="noopener noreferrer">
             <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
               <i className="fa fa fa-globe"></i>
             </div>
@@ -35,7 +35,7 @@ export const Footer = () => {
               <i className="fa fa-youtube"></i>
             </div>
           </a>
-          <a href="https://twitter.com/uniultra_xyz" target="_blank" rel="noopener noreferrer">
+          <a href="https://x.com/u2u_xyz" target="_blank" rel="noopener noreferrer">
             <div className="w-[35px] h-[35px] rounded-lg bg-pale leading-[35px] text-green text-lg">
               <i className="fa fa-twitter"></i>
             </div>
