@@ -13,11 +13,13 @@ export const useCreateValidator = () => {
 
   const create = async (params: CreateValidatorParams) => {
     const delAmountDec = ethers.utils.parseEther(params.amount.toString());
-    const pubkeyBytes: Uint8Array = ethers.utils.arrayify(params.pubkey);
+    // const pubkeyBytes: Uint8Array = ethers.utils.arrayify(params.pubkey);
+
+    // console.log("pubkeyBytes: ", pubkeyBytes);
     const txhash = await method.writeContractAsync({
       ...contracts.staking,
       functionName: 'createValidator',
-      args: [pubkeyBytes as any],
+      args: [params.pubkey as any],
       gas: BigInt(GAS_LIMIT_HARD),
       value: delAmountDec.toBigInt(),
     });

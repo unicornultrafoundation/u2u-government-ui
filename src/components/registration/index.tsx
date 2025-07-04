@@ -8,6 +8,7 @@ import { isMobile } from 'mobile-device-detect';
 import { classNames } from "../../utils"
 import {useWeb3} from "../../hooks/useWeb3";
 import {SwitchNetworkButton} from "../switchNetwork";
+import {toastDanger, toastSuccess} from "../toast";
 
 export const ValidatorRegistrationComponent = () => {
   const { t } = useTranslation()
@@ -35,10 +36,12 @@ export const ValidatorRegistrationComponent = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      toastSuccess(`Congratulation! Validator registration success`)
       const msg = `Congratulation! Validator registration success`
       console.log(msg)
     }
     if (isError) {
+      toastDanger(`Validator registration fail`)
       console.log("Validator registration fail: ", isError);
     }
     // eslint-disable-next-line
