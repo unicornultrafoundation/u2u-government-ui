@@ -14,7 +14,6 @@ export const useRelockStake = () => {
       ...contracts.staking,
       functionName: 'relockStake',
       args: [params.toValidatorID, params.lockupDuration, amountDec.toString()],
-      gas: BigInt(GAS_LIMIT_HARD),
     });
     return waitForTransaction(txhash);
   };

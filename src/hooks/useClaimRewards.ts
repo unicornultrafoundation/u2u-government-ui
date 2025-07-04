@@ -13,7 +13,6 @@ export const useClaimRewards = () => {
       ...contracts.staking,
       functionName: 'claimRewards',
       args: [params.toValidatorID],
-      gas: BigInt(GAS_LIMIT_HARD),
     });
     return waitForTransaction(txhash);
   };

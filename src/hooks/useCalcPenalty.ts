@@ -13,7 +13,6 @@ export const useCalcPenalty = () => {
         ...contracts.staking,
         functionName: 'unlockStake',
         args: [validator, delAmountDec.toString()],
-        gas: BigInt(GAS_LIMIT_HARD),
       });
       return result?.result;
     } catch (error) {

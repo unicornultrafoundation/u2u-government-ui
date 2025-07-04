@@ -13,7 +13,6 @@ export const useWidthdraw = () => {
       ...contracts.staking,
       functionName: 'withdraw',
       args: [params.toValidatorID, params.wrID],
-      gas: BigInt(GAS_LIMIT_HARD),
     });
     return waitForTransaction(txhash);
   };

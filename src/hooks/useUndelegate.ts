@@ -16,7 +16,6 @@ export const useUndelegate = () => {
       ...contracts.staking,
       functionName: 'undelegate',
       args: [params.toValidatorID, _wrID, delAmountDec.toString()],
-      gas: BigInt(GAS_LIMIT_HARD),
     });
     return waitForTransaction(txhash);
   };
