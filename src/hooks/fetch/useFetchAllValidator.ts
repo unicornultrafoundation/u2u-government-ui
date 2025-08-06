@@ -5,6 +5,7 @@ import { DataProcessor } from "./dataProccesser"
 import { BigNumber } from "ethers"
 import { useLockedStakeStore, useValidatorStore } from "../../store"
 import { LockedStake, QueryAPRPayload, Validator } from "../../types"
+import {bigFormatEther} from "../../utils";
 
 export const useFetchAllValidator = () => {
   const [updateAllValidator, allValidators] = useValidatorStore(state => [
@@ -73,7 +74,12 @@ export const useFetchAllValidator = () => {
           let min = minApr[`apr${v.validatorId}`]
           return DataProcessor.validator(v, totalNetworkStaked, Number(max), Number(min))
         })
-        vals = await Promise.all(valPromises)        
+        vals = await Promise.all(valPromises)
+        vals.sort((a: any, b: any) => {
+          const aStaked = bigFormatEther(a.totalStakedAmount || 0) || 0
+          const bStaked = bigFormatEther(b.totalStakedAmount || 0) || 0
+          return Number(bStaked) - Number(aStaked)
+        })
         updateAllValidator(vals)
       }
     })()
